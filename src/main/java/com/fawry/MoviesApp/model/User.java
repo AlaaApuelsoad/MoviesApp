@@ -3,15 +3,20 @@ package com.fawry.MoviesApp.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "_user")
-public class User extends AuditEntity{
+public class User extends AuditEntity implements UserDetails {
 
     @Id
     @SequenceGenerator(allocationSize = 1,name = "user_sequence",sequenceName = "user_sequence",initialValue = 100)
@@ -22,7 +27,6 @@ public class User extends AuditEntity{
     @Column(nullable = false,length = 50)
     private String firstName;
 
-    @Setter
     @Column(nullable = false,length = 50)
     private String lastName;
 
@@ -32,7 +36,7 @@ public class User extends AuditEntity{
     @Column(nullable = false,length = 100,unique = true)
     private String email;
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false)
     private String password;
 
     private String imagePath;
@@ -52,48 +56,46 @@ public class User extends AuditEntity{
     @JsonBackReference("userRoleReference")
     private Role role;
 
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(()-> role.getRoleName());
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public void setSaltPassword(String saltPassword) {
-        this.saltPassword = saltPassword;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-
-    public void setVerified(boolean verified) {
-        isVerified = verified;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", saltPassword='" + saltPassword + '\'' +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", isVerified=" + isVerified +
+                ", isDeleted=" + isDeleted +
+                ", role=" + role +
+                '}';
     }
 }

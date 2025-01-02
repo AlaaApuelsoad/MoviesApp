@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ApplicationInitialize {
 
 
@@ -22,12 +24,10 @@ public class ApplicationInitialize {
     private final UserRepository userRepository;
     @Value("${app.admin.password}")
     private String adminPassword;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final Utils utils;
     private static final Logger logger = LogManager.getLogger(ApplicationInitialize.class);
 
-    public ApplicationInitialize(RoleRepository roleRepository, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
-    }
 
     @PostConstruct
     private void init() {
@@ -36,8 +36,9 @@ public class ApplicationInitialize {
 
         roleNames.forEach(roleName -> {
             if (!roleRepository.existsByRoleName(roleName)) {
-                Role role = new Role();
-                role.setRoleName(roleName);
+                Role role = Role.builder()
+                        .roleName(roleName)
+                        .build();
                 roleRepository.save(role);
             } else {
                 logger.info("Role {} already exists.", roleName);
@@ -48,17 +49,20 @@ public class ApplicationInitialize {
     @PostConstruct
     public void createMainAdmin() {
         String adminUserName = "admin";
+        String saltPass = utils.generateUUIDCode();
 
         if (!userRepository.existsByUsername(adminUserName)) {
-            User adminUser = new User();
-            adminUser.setFirstName("Admin");
-            adminUser.setLastName("Admin");
-            adminUser.setUsername(adminUserName);
-            adminUser.setPassword(adminPassword);
-            adminUser.setEmail("admin@fawry.task.com");
-            adminUser.setVerified(true);
-            adminUser.setDeleted(false);
-            adminUser.setRole(roleRepository.findByRoleName("ADMIN"));
+            User adminUser = User.builder()
+                    .firstName("Admin")
+                    .lastName("Admin")
+                    .username(adminUserName)
+                    .password(bCryptPasswordEncoder.encode(adminPassword.concat(saltPass)))
+                    .email("admin@fawry.task.com")
+                    .isVerified(true)
+                    .isDeleted(false)
+                    .saltPassword(saltPass)
+                    .role(roleRepository.findByRoleName("ADMIN"))
+                    .build();
 
             userRepository.save(adminUser);
         } else {

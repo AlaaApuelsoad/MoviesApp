@@ -27,7 +27,4 @@ public class Role extends AuditEntity{
     @JsonManagedReference("userRoleReference")
     private Set<User> users;
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 }
