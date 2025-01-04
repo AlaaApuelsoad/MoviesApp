@@ -3,7 +3,9 @@ package com.fawry.MoviesApp.service;
 import com.fawry.MoviesApp.dto.AuthResponse;
 import com.fawry.MoviesApp.dto.LoginRequest;
 import com.fawry.MoviesApp.dto.UserRegisterDto;
+import com.fawry.MoviesApp.enums.VerificationStatus;
 import com.fawry.MoviesApp.jwt.JwtService;
+import com.fawry.MoviesApp.listener.UserRegisterEvent;
 import com.fawry.MoviesApp.mapper.UserMapper;
 import com.fawry.MoviesApp.model.Role;
 import com.fawry.MoviesApp.model.User;
@@ -12,6 +14,7 @@ import com.fawry.MoviesApp.repository.UserRepository;
 import com.fawry.MoviesApp.utils.UserUtils;
 import com.fawry.MoviesApp.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,15 +34,21 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserUtils userUtils;
+    private final ApplicationEventPublisher eventPublisher;
+    private final EmailService emailService;
 
     @Transactional
     public User userRegister(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("user");
         userUtils.userBuilder(user);
-        return userRepository.save(user);
+//        emailService.sendAccountVerificationEmail(user.getEmail(),user.getVerificationCode());
+        User savedUser = userRepository.save(user);
+        eventPublisher.publishEvent(new UserRegisterEvent(this,savedUser));
+        return savedUser;
     }
 
+    @Transactional
     public User createAdmin(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("admin");
@@ -81,4 +90,8 @@ public class UserService {
     }
 
 
+//    public VerificationStatus verifyUserAccount(String verificationCode) {
+//
+//
+//    }
 }
