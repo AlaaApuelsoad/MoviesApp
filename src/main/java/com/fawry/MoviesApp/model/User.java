@@ -39,6 +39,9 @@ public class User extends AuditEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false,length = 50)
+    private String type;
+
     private String imagePath;
 
     @Column(nullable = true,length = 50)

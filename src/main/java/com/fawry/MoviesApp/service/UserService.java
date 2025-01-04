@@ -9,6 +9,7 @@ import com.fawry.MoviesApp.model.Role;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.RoleRepository;
 import com.fawry.MoviesApp.repository.UserRepository;
+import com.fawry.MoviesApp.utils.UserUtils;
 import com.fawry.MoviesApp.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,20 +30,22 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserUtils userUtils;
 
     @Transactional
     public User userRegister(UserRegisterDto userRegisterDto) {
-        Role userRole = roleRepository.findByRoleName("USER");
-        String saltPassword = utils.generateUUIDCode();
-        String verificationCode = utils.generateUUIDCode();
-
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setSaltPassword(saltPassword);
-        user.setRole(userRole);
-        user.setPassword(bCryptPasswordEncoder.encode(userRegisterDto.getPassword().concat(saltPassword)));
-        user.setVerificationCode(verificationCode);
-
+        user.setType("user");
+        userUtils.userBuilder(user);
         return userRepository.save(user);
+    }
+
+    public User createAdmin(UserRegisterDto userRegisterDto) {
+        User user = userMapper.mapToUser(userRegisterDto);
+        user.setType("admin");
+        userUtils.userBuilder(user);
+        return userRepository.save(user);
+
     }
 
 
@@ -76,4 +79,6 @@ public class UserService {
         String emailRegex = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
         return userInput.matches(emailRegex);
     }
+
+
 }

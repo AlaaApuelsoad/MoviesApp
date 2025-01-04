@@ -60,8 +60,9 @@ public class ApplicationInitialize {
                     .email("admin@fawry.task.com")
                     .isVerified(true)
                     .isDeleted(false)
+                    .type("admin")
                     .saltPassword(saltPass)
-                    .role(roleRepository.findByRoleName("ADMIN"))
+                    .role(utils.findRoleByRoleName("ADMIN"))
                     .build();
 
             userRepository.save(adminUser);
@@ -69,4 +70,6 @@ public class ApplicationInitialize {
             logger.info("User {} already exists.", adminUserName);
         }
     }
+
+
 }

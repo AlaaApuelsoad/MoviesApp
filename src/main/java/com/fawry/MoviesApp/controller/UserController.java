@@ -4,9 +4,12 @@ import com.fawry.MoviesApp.dto.AuthResponse;
 import com.fawry.MoviesApp.dto.LoginRequest;
 import com.fawry.MoviesApp.dto.UserRegisterDto;
 import com.fawry.MoviesApp.model.User;
-import com.fawry.MoviesApp.repository.UserRepository;
 import com.fawry.MoviesApp.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +27,19 @@ public class UserController {
 
 
     @PostMapping("/register")
-    @Operation(summary = "User Account Register",description = "User Registration")
+    @Operation(summary = "User Account Register",description = "User Registration",tags = {"User Operations"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",description = "User Register Successful",content = {
+                    @Content(mediaType = "application/json",schema = @Schema(implementation = User.class))
+            }),
+            @ApiResponse(responseCode = "400",description = "Bad Request",content = @Content(schema = @Schema(type = "String"))),
+    })
     public ResponseEntity<User> userRegister(@RequestBody UserRegisterDto userRegisterDto) {
         return new ResponseEntity<>(userService.userRegister(userRegisterDto),HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "User login ",description = "User login")
+    @Operation(summary = "User login ",description = "User Can Login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(userService.login(loginRequest),HttpStatus.OK);
     }
