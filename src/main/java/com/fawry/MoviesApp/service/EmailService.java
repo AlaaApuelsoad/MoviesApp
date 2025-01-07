@@ -8,12 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.io.IOException;
 
@@ -29,8 +30,8 @@ public class EmailService {
     private static final Logger logger = LogManager.getLogger(EmailService.class);
 
 
-    @EventListener
-    @Async
+    @Async("asyncExecutor")
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendAccountVerificationEmail(UserRegisterEvent userRegisterEvent) {
         String to = userRegisterEvent.getEmail();
         try {

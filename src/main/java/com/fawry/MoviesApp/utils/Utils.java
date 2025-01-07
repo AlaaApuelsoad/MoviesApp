@@ -21,6 +21,9 @@ public class Utils {
         return UUID.randomUUID().toString().substring(0,CODE_LENGTH);
     }
 
+
+
+
     public Role findRoleByRoleName(String roleName){
         return roleRepository.findByRoleName(roleName).orElseThrow(
                 () -> new RuntimeException("Role not found")

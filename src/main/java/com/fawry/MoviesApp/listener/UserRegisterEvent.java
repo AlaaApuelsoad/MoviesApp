@@ -2,18 +2,17 @@ package com.fawry.MoviesApp.listener;
 
 import com.fawry.MoviesApp.model.User;
 import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
-
+import lombok.Setter;
 
 
 @Getter
-public class UserRegisterEvent extends ApplicationEvent {
+@Setter
+public class UserRegisterEvent  {
 
     private String email;
     private String verificationCode;
 
-    public UserRegisterEvent(Object source,User user) {
-        super(source);
+    public UserRegisterEvent(User user) {
         this.email = user.getEmail();
         this.verificationCode = user.getVerificationCode();
     }

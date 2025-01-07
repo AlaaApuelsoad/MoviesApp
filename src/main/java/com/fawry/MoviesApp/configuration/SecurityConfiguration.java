@@ -22,6 +22,7 @@ public class SecurityConfiguration {
     private static final String [] OPEN_URL = {
             "/users/register",
             "/users/login",
+            "/users/verify/account/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",

@@ -15,8 +15,13 @@ import com.fawry.MoviesApp.utils.UserUtils;
 import com.fawry.MoviesApp.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +49,7 @@ public class UserService {
         userUtils.userBuilder(user);
 //        emailService.sendAccountVerificationEmail(user.getEmail(),user.getVerificationCode());
         User savedUser = userRepository.save(user);
-        eventPublisher.publishEvent(new UserRegisterEvent(this,savedUser));
+        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
         return savedUser;
     }
 
@@ -82,6 +87,15 @@ public class UserService {
                 .token(token)
 //                .role(user.getRole().getRoleName())
                 .build();
+    }
+
+    public UserDetails getCredentials() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return (UserDetails) authentication.getPrincipal();
+        } else {
+            throw new AccessDeniedException("UnAuthorized");
+        }
     }
 
     private boolean isEmail(String userInput) {

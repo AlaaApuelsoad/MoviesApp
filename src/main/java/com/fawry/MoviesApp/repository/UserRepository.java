@@ -17,4 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("SELECT u FROM User u WHERE u.username = :userIdentifier OR u.email = :userIdentifier")
     Optional<User> findByUsernameOrEmail(@Param("userIdentifier") String userIdentifier);
+
+    @Transactional
+    @Query("SELECT u from User u WHERE u.verificationCode = :verificationCode")
+    Optional<User> findByVerificationCode(@Param("verificationCode") String verificationCode);
 }

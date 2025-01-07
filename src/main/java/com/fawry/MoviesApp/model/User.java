@@ -1,11 +1,13 @@
 package com.fawry.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,6 +51,9 @@ public class User extends AuditEntity implements UserDetails {
 
     @Column(length = 50)
     private String verificationCode;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime verificationCodeExpiryDate = LocalDateTime.now().plusSeconds(10);
 
     private boolean isVerified = false;
 

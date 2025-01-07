@@ -20,13 +20,17 @@ public class UserUtils {
 
         if (user.getType().equals("admin")) {
             user.setRole(utils.findRoleByRoleName("ADMIN"));
+            user.setVerified(true);
+            user.setVerificationCode(null);
+            user.setVerificationCodeExpiryDate(null);
         }
         if (user.getType().equals("user")) {
             user.setRole(utils.findRoleByRoleName("USER"));
+            user.setVerificationCode(verificationCode);
+            user.setVerified(false);
         }
+
         user.setSaltPassword(saltPassword);
-        user.setVerificationCode(verificationCode);
-        user.setVerified(true);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().concat(saltPassword)));
 
     }

@@ -20,7 +20,7 @@ public class MoviesAppApplication {
 	public CommandLineRunner init(){
 
 		return args -> {
-			System.out.println("Welcome to movies app");
+			System.out.println("Welcome to Fawry Movies App");
 		};
 	}
 

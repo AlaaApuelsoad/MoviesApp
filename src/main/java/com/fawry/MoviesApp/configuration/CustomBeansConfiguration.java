@@ -1,6 +1,7 @@
 package com.fawry.MoviesApp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +15,7 @@ public class CustomBeansConfiguration {
 //        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 //        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 //        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+        objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
 
     }
