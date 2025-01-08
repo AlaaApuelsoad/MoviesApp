@@ -1,6 +1,7 @@
 package com.fawry.MoviesApp.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fawry.MoviesApp.dto.MovieSearchResponse;
 import com.fawry.MoviesApp.dto.UserRegisterDto;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.OMDBService;
@@ -39,8 +40,9 @@ public class AdminController {
     }
 
     @GetMapping("/movies/load")
-    public ResponseEntity<String> moviesSearch(@RequestParam("title") String title) throws JsonProcessingException {
-        return new ResponseEntity<>(omdbService.searchMovies(title), HttpStatus.OK);
+    public ResponseEntity<MovieSearchResponse> moviesSearch
+            (@RequestParam("title") String title, @RequestParam("page") int pageNumber) throws JsonProcessingException {
+        return new ResponseEntity<>(omdbService.searchMovies(title,pageNumber), HttpStatus.OK);
     }
 
     @GetMapping("/hello")
