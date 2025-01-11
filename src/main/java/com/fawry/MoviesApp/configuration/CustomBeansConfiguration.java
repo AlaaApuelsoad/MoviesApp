@@ -14,9 +14,9 @@ public class CustomBeansConfiguration {
     @Bean
     public ObjectMapper objectMapperConfig() {
         ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
 

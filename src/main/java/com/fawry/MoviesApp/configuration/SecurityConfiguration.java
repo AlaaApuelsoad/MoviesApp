@@ -20,14 +20,13 @@ public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
     private static final String [] OPEN_URL = {
+            "/admin/dashboard/auth/login",
             "/users/register",
             "/users/login",
             "/users/verify/account/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/admin/**",
-            "/hello"
+            "/swagger-ui.html"
     };
 
 

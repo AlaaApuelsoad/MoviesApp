@@ -24,6 +24,7 @@ import java.util.function.Function;
 public class JwtService {
 
 
+
     private static String SECRET_KEY ;
     private final UserRepository userRepository;
     @Value("${app.security.jwt.expiration}")

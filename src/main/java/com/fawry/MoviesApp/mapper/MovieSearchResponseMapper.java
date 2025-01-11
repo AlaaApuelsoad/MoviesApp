@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class MovieResponseMapper {
+public class MovieSearchResponseMapper {
 
     private final MovieSearchResponse movieSearchResponse;
 
