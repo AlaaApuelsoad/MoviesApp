@@ -1,5 +1,7 @@
 package com.fawry.MoviesApp.utils;
 
+import com.fawry.MoviesApp.enums.ErrorCode;
+import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.model.Role;
 import com.fawry.MoviesApp.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +24,9 @@ public class Utils {
     }
 
 
-
-
     public Role findRoleByRoleName(String roleName){
         return roleRepository.findByRoleName(roleName).orElseThrow(
-                () -> new RuntimeException("Role not found")
+                () -> new CustomException(ErrorCode.ROLE_NOT_FOUND)
         );
     }
 

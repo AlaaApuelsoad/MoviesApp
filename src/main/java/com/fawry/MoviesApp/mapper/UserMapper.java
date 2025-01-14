@@ -2,6 +2,7 @@ package com.fawry.MoviesApp.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fawry.MoviesApp.dto.UserRegisterDto;
+import com.fawry.MoviesApp.dto.UserRegisterResponse;
 import com.fawry.MoviesApp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,10 @@ public class UserMapper {
 
     public User mapToUser(UserRegisterDto userRegisterDto) {
         return objectMapper.convertValue(userRegisterDto, User.class);
+    }
+
+    public UserRegisterResponse mapToUserRegisterResponse(User user) {
+        return objectMapper.convertValue(user, UserRegisterResponse.class);
     }
 
 

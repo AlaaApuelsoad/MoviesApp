@@ -46,14 +46,13 @@ public class User extends AuditEntity implements UserDetails {
 
     private String imagePath;
 
-    @Column(nullable = true,length = 50)
+    @Column(nullable = false, length = 50)
     private String saltPassword;
 
     @Column(length = 50)
     private String verificationCode;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime verificationCodeExpiryDate = LocalDateTime.now().plusSeconds(10);
+    private LocalDateTime verificationCodeExpiryDate = LocalDateTime.now().plusSeconds(90);
 
     private boolean isVerified = false;
 

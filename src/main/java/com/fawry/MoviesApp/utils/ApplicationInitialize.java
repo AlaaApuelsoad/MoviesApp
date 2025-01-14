@@ -29,8 +29,14 @@ public class ApplicationInitialize {
     private static final Logger logger = LogManager.getLogger(ApplicationInitialize.class);
 
 
+
     @PostConstruct
-    private void init() {
+    public void inti(){
+        createRoles();
+        createMainAdmin();
+    }
+
+    private void createRoles() {
 
         List<String> roleNames = Arrays.asList("ADMIN", "USER");
 
@@ -46,7 +52,6 @@ public class ApplicationInitialize {
         });
     }
 
-    @PostConstruct
     public void createMainAdmin() {
         String adminUserName = "admin";
         String saltPass = utils.generateUUIDCode();

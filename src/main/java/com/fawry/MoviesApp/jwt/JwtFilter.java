@@ -1,11 +1,14 @@
 package com.fawry.MoviesApp.jwt;
 
+import com.fawry.MoviesApp.enums.ErrorCode;
+import com.fawry.MoviesApp.exception.CustomException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,8 +54,24 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
 
-        }catch (Exception e) {
-            e.printStackTrace();
+        } catch (ExpiredJwtException e) {
+            handleJwtException(response, "Token Expired", HttpServletResponse.SC_UNAUTHORIZED);
+//            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+
+        } catch (SignatureException e) {
+            handleJwtException(response, "Invalid Token Signature", HttpServletResponse.SC_UNAUTHORIZED);
+//            throw new CustomException(ErrorCode.INVALID_TOKEN_SIGNATURE);
         }
+    }
+
+
+    private void handleJwtException(HttpServletResponse response, String message, int status) throws IOException {
+
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String jsonResponse = String.format("{\"error\": \"%s\", \"message\": \"%s\"}", "Authentication error", message);
+        response.getWriter().write(jsonResponse);
     }
 }

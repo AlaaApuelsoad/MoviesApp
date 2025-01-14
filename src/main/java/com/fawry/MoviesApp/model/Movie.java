@@ -3,6 +3,7 @@ package com.fawry.MoviesApp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -24,35 +25,35 @@ public class Movie extends AuditEntity{
     @Column(unique = true, nullable = false)
     private String imdbID;
     @Column(nullable = false)
-    private String Title;
+    private String title;
     @Column(nullable = false)
-    private String Year;
+    private String year;
     @Column(nullable = false)
-    private String Rated;
+    private String rated;
     @Column(nullable = false)
-    private String Released;
+    private String released;
     @Column(nullable = false)
-    private String Runtime;
+    private String runtime;
     @Column(nullable = false)
-    private String Genre;
+    private String genre;
     @Column(nullable = false)
-    private String Director;
+    private String director;
     @Column(nullable = false)
-    private String Writer;
+    private String writer;
 
     @Column(name = "actor",nullable = false)
     private String actors;
 
     @Lob
-    private String Plot;
+    private String plot;
 
     @Column(nullable = false)
-    private String Language;
+    private String language;
     @Column(nullable = false)
-    private String Country;
-    private String Awards;
+    private String country;
+    private String awards;
     @Column(nullable = false)
-    private String Poster;
+    private String poster;
 
     @ElementCollection
     @CollectionTable(name = "movie_source_ratings", joinColumns = @JoinColumn(name = "movie_id"))
@@ -63,13 +64,16 @@ public class Movie extends AuditEntity{
     @Column(nullable = false)
     private String imdbVotes;
     @Column(nullable = false)
-    private String Type;
+    private String type;
     @Column(nullable = false)
     private String DVD;
     @Column(nullable = false)
-    private String BoxOffice;
+    private String boxOffice;
     @Column(nullable = false)
-    private String Production;
+    private String production;
+
+    @Column(name = "added_at")
+    private LocalDate addedAt;
 
     private boolean isDeleted = false;
 

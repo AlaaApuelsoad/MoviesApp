@@ -1,6 +1,5 @@
 package com.fawry.MoviesApp.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,30 +15,28 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserRegisterDto {
 
-    @JsonProperty("firstName")
-    @NotBlank(message = "first name cannot be null")
-    @Size(min = 3, max = 50,message = "first name minimum length 3, maximum length is 50")
-    @Pattern(regexp = "^[a-zA-Z]+$",message = "first name is only in alphabets")
+    @NotBlank(message = "{firstName.validation.message}")
+    @Size(min = 3, max = 50,message = "{firstName.validation.message}")
+    @Pattern(regexp = "^[a-zA-Z]+$",message = "{firstName.validation.message}")
     private String firstName;
 
-    @NotBlank(message = "last name cannot be null")
-    @Size(min = 3, max = 50,message = "last name minimum length 5, maximum length is 50")
-    @Pattern(regexp = "^[a-zA-Z]+$",message = "last name is only in alphabets")
+    @NotBlank(message = "{lastName.validation.message}")
+    @Size(min = 3, max = 50,message = "{lastName.validation.message}")
+    @Pattern(regexp = "^[a-zA-Z]+$",message = "{lastName.validation.message}")
     private String lastName;
 
-    @NotBlank(message = "username cannot bu null")
-    @Size(min = 5,max = 50,message = "username minimum length 5, maximum length is 50")
-    @Pattern(regexp = "^[a-zA-Z]+$",message = "username is only in alphabets")
+    @NotBlank(message = "{username.validation.message}")
+    @Size(min = 5,max = 50,message = "{username.validation.message}")
+    @Pattern(regexp = "^[a-zA-Z]+$",message = "{username.validation.message}")
     private String username;
 
-    @NotBlank(message = "email cannot be null")
-    @Size(min = 15,max = 100)
-    @Pattern(regexp = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", message = "Please enter a valid email" +
-            " address in the format: username@example.com.")
+    @NotBlank(message = "{email.validation.message}")
+    @Size(min = 15,max = 100,message = "{email.validation.message}")
+    @Pattern(regexp = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", message = "{email.validation.message}")
     private String email;
 
-    @NotBlank(message = "password cannot be null")
-    @Size(min = 8, max = 50,message = "password minimum length 8 and maximum length 50")
+    @NotBlank(message = "{password.validation.message}")
+    @Size(min = 8, max = 50,message = "{password.validation.message}")
     private String password;
 
     @Override

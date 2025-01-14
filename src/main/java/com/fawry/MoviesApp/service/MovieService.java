@@ -2,7 +2,10 @@ package com.fawry.MoviesApp.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fawry.MoviesApp.dao.OMDBDao;
+import com.fawry.MoviesApp.dto.MovieInfoDetails;
 import com.fawry.MoviesApp.dto.ResponseMessage;
+import com.fawry.MoviesApp.enums.ErrorCode;
+import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.mapper.MovieMapper;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.repository.MovieRepository;
@@ -29,9 +32,19 @@ public class MovieService {
 
     @Transactional
     public ResponseMessage deleteMovieByImdbId(String imdbId) {
-        Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow();
+        Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
         movie.setDeleted(true);
         movieRepository.save(movie);
         return new ResponseMessage("Movie deleted successfully");
+    }
+
+    public MovieInfoDetails getMovieInfoByImdbID(String imdbID) {
+
+        return movieRepository.getMovieInfoDetailsByImdbId(imdbID).orElseThrow(
+                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
+        );
     }
 }

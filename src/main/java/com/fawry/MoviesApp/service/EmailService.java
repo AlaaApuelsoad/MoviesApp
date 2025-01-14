@@ -1,5 +1,7 @@
 package com.fawry.MoviesApp.service;
 
+import com.fawry.MoviesApp.enums.ErrorCode;
+import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.listener.UserRegisterEvent;
 import com.fawry.MoviesApp.utils.EmailTemplateUtility;
 import jakarta.mail.MessagingException;
@@ -49,12 +51,14 @@ public class EmailService {
 
         } catch (MailSendException e) {
             logger.error("Fail to send verification email to {} ", to + e);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (MessagingException e) {
             logger.error("Error creating MimeMessage for email to {}", to, e);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading email template", e);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         logger.info("Successfully sent verification email to {}", to);

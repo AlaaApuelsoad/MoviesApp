@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.model.User;
+import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.MovieService;
 import com.fawry.MoviesApp.dao.OMDBDao;
 import com.fawry.MoviesApp.service.UserService;
@@ -30,6 +31,7 @@ public class AdminController {
     private final UserService userService;
     private final OMDBDao omdbDao;
     private final MovieService movieService;
+    private final LoginService loginService;
 
 
     @PostMapping("/auth/login")
@@ -48,7 +50,7 @@ public class AdminController {
             }
     )
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new ResponseEntity<>(userService.login(loginRequest), HttpStatus.OK);
+        return new ResponseEntity<>(loginService.login(loginRequest), HttpStatus.OK);
     }
 
 
@@ -62,7 +64,7 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(type = "String")))
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<User> createAdmin(@Validated @RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<UserRegisterResponse> createAdmin(@Validated @RequestBody UserRegisterDto userRegisterDto) {
         return new ResponseEntity<>(userService.createAdmin(userRegisterDto), HttpStatus.CREATED);
     }
 
@@ -76,7 +78,7 @@ public class AdminController {
                     @ApiResponse(description = "Bad Request - Invalid parameters", responseCode = "400"),
                     @ApiResponse(description = "Internal Server Error", responseCode = "500")
             })
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MovieSearchResponse> moviesListSearch
             (@RequestParam(value = "title", required = false, defaultValue = "Dark") String title,
              @RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber) throws JsonProcessingException {
@@ -107,6 +109,7 @@ public class AdminController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseMessage.class))),
                     @ApiResponse(description = "Movie not found in the system", responseCode = "404"),
                     @ApiResponse(description = "Internal Server Error", responseCode = "500")})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponseMessage> deleteMovie(@PathVariable("imdbId") String imdbId) {
         return new ResponseEntity<>(movieService.deleteMovieByImdbId(imdbId), HttpStatus.OK);
     }

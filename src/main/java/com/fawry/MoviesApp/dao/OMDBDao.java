@@ -33,7 +33,7 @@ public class OMDBDao {
 
     }
 
-    public String getMovieByImdbId(String imdbId) throws JsonProcessingException {
+    public String getMovieByImdbId(String imdbId) {
         String url = BASE_URL+API_KEY+"&i="+imdbId;
         return restTemplate.getForObject(url, String.class);
     }
