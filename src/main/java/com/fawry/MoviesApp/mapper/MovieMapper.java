@@ -3,6 +3,8 @@ package com.fawry.MoviesApp.mapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fawry.MoviesApp.dto.MovieInfoDetails;
+import com.fawry.MoviesApp.dto.MovieListInfo;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.model.Rating;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieMapper {
 
-    public Movie mapToMovie(String json) throws JsonProcessingException {
+    private final ObjectMapper objectMapper;
 
-        ObjectMapper objectMapper = new ObjectMapper();
+    public Movie mapToMovie(String json) throws JsonProcessingException {
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
 
         Movie movie = new Movie();
@@ -56,6 +60,15 @@ public class MovieMapper {
         movie.setRatings(ratings);
         return movie;
 
+    }
+
+    public MovieInfoDetails mapToMovieInfoDetails(Movie movie){
+
+        return objectMapper.convertValue(movie, MovieInfoDetails.class);
+    }
+
+    public MovieListInfo mapToMovieInfoList(Movie movie){
+        return objectMapper.convertValue(movie, MovieListInfo.class);
     }
 
 

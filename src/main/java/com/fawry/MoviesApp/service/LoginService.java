@@ -10,6 +10,7 @@ import com.fawry.MoviesApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,16 +18,21 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
     public AuthResponse login(LoginRequest userLoginRequest) {
 
         User user = userRepository.findByUsernameOrEmail(userLoginRequest.getUsernameOrEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+                () -> new CustomException(ErrorCode.INVALID_CREDENTIALS)
         );
 
         String userPassword = userLoginRequest.getPassword().concat(user.getSaltPassword());
+
+        if (!bCryptPasswordEncoder.matches(userPassword, user.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+        }
         LoginRequest newLoginRequest = LoginRequest.builder()
                 .usernameOrEmail(userLoginRequest.getUsernameOrEmail())
                 .password(userPassword)
@@ -40,7 +46,7 @@ public class LoginService {
                 loginRequest.getPassword()));
 
         User user = userRepository.findByUsernameOrEmail(loginRequest.getUsernameOrEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+                () -> new CustomException(ErrorCode.INVALID_CREDENTIALS)
         );
         String userIdentifier = user.getUsername();
 

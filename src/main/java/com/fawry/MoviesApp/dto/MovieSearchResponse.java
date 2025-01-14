@@ -15,6 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieSearchResponse {
 
-    private List<MovieInfo> Search;
+    private List<MovieOMDBInfo> Search;
     private int totalMovies;
 }

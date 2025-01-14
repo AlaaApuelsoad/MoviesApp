@@ -1,7 +1,6 @@
 package com.fawry.MoviesApp.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fawry.MoviesApp.model.Rating;
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /*
-Show when user click on a movie
+Movie Information Details shown when a user click on a movie
  */
 
 @Getter
@@ -23,7 +22,7 @@ Show when user click on a movie
 public class MovieInfoDetails {
 
     private String imdbID;
-    @JsonProperty("Title")
+
     private String title;
     private String year;
     private String rated;
@@ -33,21 +32,23 @@ public class MovieInfoDetails {
     private String director;
     private String writer;
     private String actors;
+
     @Lob
     private String plot;
+
     private String language;
     private String country;
     private String awards;
     private String poster;
-    @JsonProperty("Website Ratings")
     private List<Rating> ratings;
     private String imdbRating;
     private String imdbVotes;
     private String type;
     private String boxOffice;
-    @JsonProperty("Added At")
+
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate addedAt;
+
 
 
 

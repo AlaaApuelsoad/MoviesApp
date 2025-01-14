@@ -18,4 +18,6 @@ public class CustomPageDto<T> {
     private int totalPages;
     private boolean isFirst;
     private boolean isLast;
+
+
 }

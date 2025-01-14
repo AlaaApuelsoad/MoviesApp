@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,4 +72,13 @@ public class GlobalExceptionHandling {
         return new ResponseEntity<>(ex.getMostSpecificCause().getMessage(), HttpStatus.BAD_REQUEST);
 
     }
+
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorLog> handleNoResourceFoundException(NoResourceFoundException ex) {
+        errorLog.setLevel("WARN");
+        errorLog.setMessage("Page Not Found");
+        return new ResponseEntity<>(errorLog, HttpStatus.NOT_FOUND);
+    }
+
 }

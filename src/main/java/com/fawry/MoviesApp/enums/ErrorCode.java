@@ -15,7 +15,9 @@ public enum ErrorCode {
     PERMISSION_DENIED("E005", "Permission denied", HttpStatus.UNAUTHORIZED),
     INTERNAL_SERVER_ERROR("E006", "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR),
     TOKEN_EXPIRED("E007", "Token expired", HttpStatus.UNAUTHORIZED),
-    INVALID_TOKEN_SIGNATURE("E008", "Invalid token signature", HttpStatus.UNAUTHORIZED);
+    INVALID_TOKEN_SIGNATURE("E008", "Invalid token signature", HttpStatus.UNAUTHORIZED),
+    INVALID_CREDENTIALS("E009", "Invalid username and password", HttpStatus.UNAUTHORIZED),
+    NO_DATA_FOUND("E010", "No data found", HttpStatus.NOT_FOUND);
 
 
     private final String code;

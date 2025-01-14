@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieInfo {
+public class MovieOMDBInfo {
 
     private String Title;
     private String Year;

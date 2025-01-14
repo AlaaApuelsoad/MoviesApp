@@ -35,7 +35,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String userIdentifier;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//            filterChain.doFilter(request, response);
+            handleJwtException(response,"No Token",HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
