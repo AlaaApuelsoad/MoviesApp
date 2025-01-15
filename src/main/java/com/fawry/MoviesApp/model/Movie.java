@@ -77,4 +77,7 @@ public class Movie extends AuditEntity{
 
     private boolean isDeleted = false;
 
+    @OneToMany(mappedBy = "movie")
+    private List<MemberRating> memberRatings;
+
 }

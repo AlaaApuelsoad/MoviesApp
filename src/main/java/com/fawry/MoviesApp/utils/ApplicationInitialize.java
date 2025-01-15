@@ -38,7 +38,7 @@ public class ApplicationInitialize {
 
     private void createRoles() {
 
-        List<String> roleNames = Arrays.asList("ADMIN", "USER");
+        List<String> roleNames = Arrays.asList("ADMIN", "MEMBER");
 
         roleNames.forEach(roleName -> {
             if (!roleRepository.existsByRoleName(roleName)) {

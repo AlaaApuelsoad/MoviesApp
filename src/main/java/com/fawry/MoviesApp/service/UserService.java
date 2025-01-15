@@ -27,10 +27,10 @@ public class UserService {
     @Transactional
     public UserRegisterResponse userRegister(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setType("user");
+        user.setType("member");
         userUtils.userBuilder(user);
         User savedUser = userRepository.save(user);
-        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
+//        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
         return userMapper.mapToUserRegisterResponse(savedUser);
     }
 
@@ -40,7 +40,6 @@ public class UserService {
         user.setType("admin");
         userUtils.userBuilder(user);
         return userMapper.mapToUserRegisterResponse(userRepository.save(user));
-
     }
 
 }

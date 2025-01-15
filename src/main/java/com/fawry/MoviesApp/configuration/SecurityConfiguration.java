@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,6 +25,7 @@ public class SecurityConfiguration {
             "/users/auth/login",
             "/users/verify/account/**",
             "/fawry/**",
+            "/ratings/movie/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"
@@ -36,9 +36,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(request->request.requestMatchers(OPEN_URL).permitAll()
-                .anyRequest().authenticated());
-        http.httpBasic(Customizer.withDefaults());
+        http.authorizeHttpRequests(request->request.requestMatchers(OPEN_URL)
+                .permitAll()
+                .anyRequest()
+                .authenticated());
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

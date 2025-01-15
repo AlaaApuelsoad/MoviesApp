@@ -4,6 +4,7 @@ import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.enums.VerificationStatus;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.LoginService;
+import com.fawry.MoviesApp.service.RatingService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,8 +60,14 @@ public class UserController {
 
     }
 
+
     @PostMapping("/auth/login")
     @Operation(summary = "User login ",description = "User Can Login")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",description = "Admin login successfully"),
+            @ApiResponse(responseCode = "201",description = "Invalid Credentials"),
+            @ApiResponse(responseCode = "500",description = "Internal Server Error")
+    })
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(loginService.login(loginRequest),HttpStatus.OK);
     }

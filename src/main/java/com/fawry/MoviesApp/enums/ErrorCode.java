@@ -13,7 +13,7 @@ public enum ErrorCode {
     MOVIE_NOT_FOUND("E003", "Movie not found", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND("E004", "Role not found", HttpStatus.NOT_FOUND),
     PERMISSION_DENIED("E005", "Permission denied", HttpStatus.UNAUTHORIZED),
-    INTERNAL_SERVER_ERROR("E006", "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR),
+    INTERNAL_SERVER_ERROR("E006", "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
     TOKEN_EXPIRED("E007", "Token expired", HttpStatus.UNAUTHORIZED),
     INVALID_TOKEN_SIGNATURE("E008", "Invalid token signature", HttpStatus.UNAUTHORIZED),
     INVALID_CREDENTIALS("E009", "Invalid username and password", HttpStatus.UNAUTHORIZED),

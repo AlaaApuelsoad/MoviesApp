@@ -63,6 +63,9 @@ public class User extends AuditEntity implements UserDetails {
     @JsonBackReference("userRoleReference")
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<MemberRating> memberRatings;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(()-> role.getRoleName());

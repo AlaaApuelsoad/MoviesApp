@@ -31,13 +31,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
+        String path = request.getRequestURI();
         String token;
         String userIdentifier;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            filterChain.doFilter(request, response);
-            handleJwtException(response,"No Token",HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(request, response);
             return;
         }
 
