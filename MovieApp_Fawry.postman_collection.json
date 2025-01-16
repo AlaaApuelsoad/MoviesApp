@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "63d0d979-f59f-4835-a2cb-af28a01ffb78",
+		"name": "MovieApp_Fawry",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34887952"
+	},
+	"item": [
+		{
+			"name": "AdminOperations",
+			"item": [
+				{
+					"name": "AdminLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usernameOrEmail\":\"admin\",\r\n    \"password\":\"admin123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5055/api/v1/admin/dashboard/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"dashboard",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAdmin",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyMjM4MCwiZXhwIjoxNzM3MTA4NzgwfQ.R9dHGQO3lbdf-1PnRn_eR7mO3q_LbKOc3DqRkFNemKE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"admin\",\r\n  \"lastName\": \"admin\",\r\n  \"username\": \"adminadmin\",\r\n  \"email\": \"admin2@fawry.task.com\",\r\n  \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5055/api/v1/admin/dashboard/create/admin",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"dashboard",
+								"create",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchForMoviesByNameFromOMDB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/admin/dashboard/movies/load/list?title=captain&page=2",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"dashboard",
+								"movies",
+								"load",
+								"list"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "captain"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddMovieToDB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/admin/dashboard/add/movie/tt1813757",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"dashboard",
+								"add",
+								"movie",
+								"tt1813757"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteMovieFromDB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/admin/dashboard/delete/movie/tt1813757",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"dashboard",
+								"delete",
+								"movie",
+								"tt1813757"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserOperation",
+			"item": [
+				{
+					"name": "UserRegister",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"alaa\",\r\n  \"lastName\": \"Apuelsoad\",\r\n  \"username\": \"alaaapuelsoad\",\r\n  \"email\": \"alaaapu135@gmail.com\",\r\n  \"password\": \"alaa1234\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5055/api/v1/users/register",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usernameOrEmail\":\"alaaapu135@gmail.com\",\r\n    \"password\":\"alaa1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5055/api/v1/users/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserVerifyAccount",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5055/api/v1/users/verify/account/dbdd6bc5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verify",
+								"account",
+								"dbdd6bc5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMovieInfoDetails",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/fawry/home/movies/get/tt1813757",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"fawry",
+								"home",
+								"movies",
+								"get",
+								"tt1813757"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchFormMovieByKeyword",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/fawry/home/movies/search?keyword=Schwentkejjk",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"fawry",
+								"home",
+								"movies",
+								"search"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "Schwentkejjk"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HomePageMovieList",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/fawry/home/page",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"fawry",
+								"home",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MemberRatingMovie",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNjk3NzgyMCwiZXhwIjoxNzM3MDY0MjIwfQ.N12OOn6VyPDdmFgfABGcIv7Xvnid26kuannaI-RF7eI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5055/api/v1/ratings/movie/tt010ss3923?ratingValue=1",
+							"host": [
+								"localhost"
+							],
+							"port": "5055",
+							"path": [
+								"api",
+								"v1",
+								"ratings",
+								"movie",
+								"tt010ss3923"
+							],
+							"query": [
+								{
+									"key": "ratingValue",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
