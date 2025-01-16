@@ -86,6 +86,19 @@ app.ombd.api.integration.key=your_omdb_api_key
 
 ---
 
+## Postman Collection
+
+To simplify API testing, a Postman collection is available. You can use this collection to test all the endpoints in the MoviesApp.
+
+### Steps to Import the Collection:
+1. Download the Postman collection from the repository: [MoviesApp Postman Collection](postman/MoviesApp.postman_collection.json).
+2. Open Postman.
+3. Click **Import** and select the downloaded `.json` file.
+
+Once imported, you'll have access to all the pre-configured requests for the MoviesApp APIs.
+
+---
+
 ## Email Functionality
 
 - Ensure you have provided a valid Gmail account and an App Password in the `application.properties` file.
