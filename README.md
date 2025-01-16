@@ -16,7 +16,7 @@ MoviesApp is a Spring Boot application for managing movies, user authentication,
 Before you begin, ensure you have the following installed on your system:
 
 - [Java 17](https://www.oracle.com/java/technologies/javase-downloads.html)
-- [PostgreSQL 14+](https://www.postgresql.org/download/)
+- [PostgreSQL](https://www.postgresql.org/download/)
 - [Maven](https://maven.apache.org/install.html)
 - [Postman](https://www.postman.com/downloads/) (for testing APIs)
 - A valid Gmail account with an [App Password](https://support.google.com/accounts/answer/185833?hl=en) for sending emails.
@@ -91,7 +91,7 @@ app.ombd.api.integration.key=your_omdb_api_key
 To simplify API testing, a Postman collection is available. You can use this collection to test all the endpoints in the MoviesApp.
 
 ### Steps to Import the Collection:
-1. you will find the postman collection in the project repo with name (MovieApp_Fawry.postman_collection.json).
+1. you will find the postman collection in the project repo with the name (MovieApp_Fawry.postman_collection.json).
 2. Open the file and Download it.
 3. Open Postman.
 4. Click **Import** and select the downloaded `.json` file.
@@ -118,6 +118,32 @@ Logs are stored in the `logs/` directory:
 
 
 ---
+
+# Next Steps
+
+## 1. **Enhancing User and Admin Services**
+   - **User Service Improvements**:
+     - Implement additional features for managing user profiles, such as the ability to update contact details and preferences.
+     - Implement **OAuth2** authentication to allow users to authenticate via third-party identity providers (e.g., **Google**, **GitHub**, **Facebook**, or custom OAuth2 providers).
+   
+   - **Admin Service Improvements**:
+     - Add functionality operations (e.g., trashbin for movies and admins to restore deleted movies and deleted admin).
+
+## 2. **Adding New Features**
+   - **User Preferences**: Implement a feature to allow users to customize their dashboard and notification settings.
+   - **Adding more features for a user by applying a movie wishlist, rating history for his movie rating, make upcoming movie subscriptions.
+
+## 3. **Performance Enhancement through Caching**
+   - **Implement Caching**:
+     - Apply caching strategies for frequently accessed data (e.g., user profiles, admin dashboards) using **Spring Cache** and popular providers like **Redis** or **EhCache**.
+   
+   - **Optimize Data Retrieval**: Use caching to store the results of expensive queries and reduce database load, significantly improving the performance of repeated API requests.
+
+## 4. **Logging Improvements**
+   - Extend logging with correlation IDs to track a specific request's lifecycle, which will be helpful for debugging and performance analysis.
+   - Include more detailed logging at critical points in user and admin services to provide better visibility into operations.
+   
+
 
 ## Author
 
