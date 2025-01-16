@@ -116,32 +116,6 @@ Logs are stored in the `logs/` directory:
 - Error logs: `logs/error.log`
 - Log retention and rotation are configured in `application.properties`.
 
----
-
-## Additional Information
-
-### Environment Variables
-You can replace sensitive properties in `application.properties` with environment variables:
-```properties
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
-spring.mail.username=${MAIL_USERNAME}
-spring.mail.password=${MAIL_PASSWORD}
-```
-
-Set the environment variables in your shell or IDE.
-
----
-
-## Contributing
-
-Contributions are welcome! Please fork the repository, make your changes, and submit a pull request.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 
@@ -152,5 +126,5 @@ Developed by **Alaa Eldin Apuelsoad**.
 ---
 
 ### Need Help?
-For any issues, please feel free to create an issue in this repository.
+Please feel free to contact me on alaaapu135@gmail.com
 
