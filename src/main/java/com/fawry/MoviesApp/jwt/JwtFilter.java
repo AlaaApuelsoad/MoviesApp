@@ -1,7 +1,5 @@
 package com.fawry.MoviesApp.jwt;
 
-import com.fawry.MoviesApp.enums.ErrorCode;
-import com.fawry.MoviesApp.exception.CustomException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -57,11 +55,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (ExpiredJwtException e) {
             handleJwtException(response, "Token Expired", HttpServletResponse.SC_UNAUTHORIZED);
-//            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
 
         } catch (SignatureException e) {
             handleJwtException(response, "Invalid Token Signature", HttpServletResponse.SC_UNAUTHORIZED);
-//            throw new CustomException(ErrorCode.INVALID_TOKEN_SIGNATURE);
         }
     }
 

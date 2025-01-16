@@ -7,6 +7,7 @@ import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.jwt.JwtService;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.UserRepository;
+import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,17 +21,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserUtils userUtils;
 
     public AuthResponse login(LoginRequest userLoginRequest) {
 
-        User user = userRepository.findByUsernameOrEmail(userLoginRequest.getUsernameOrEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.INVALID_CREDENTIALS)
-        );
-
+        User user = userUtils.getUser(userLoginRequest.getUsernameOrEmail());
+        validateAccountVerification(user);
         String userPassword = userLoginRequest.getPassword().concat(user.getSaltPassword());
 
         if (!bCryptPasswordEncoder.matches(userPassword, user.getPassword())) {
@@ -48,9 +47,7 @@ public class LoginService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(),
                 loginRequest.getPassword()));
 
-        User user = userRepository.findByUsernameOrEmail(loginRequest.getUsernameOrEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.INVALID_CREDENTIALS)
-        );
+        User user = userUtils.getUser(loginRequest.getUsernameOrEmail());
         String userIdentifier = user.getUsername();
 
         String token = jwtService.generateToken(userIdentifier);
@@ -65,6 +62,12 @@ public class LoginService {
             return (UserDetails) authentication.getPrincipal();
         } else {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+        }
+    }
+
+    private void validateAccountVerification(User user){
+        if (user != null && "member".equals(user .getType()) && !user.isVerified()){
+            throw new CustomException(ErrorCode.ACCOUNT_NOT_VERIFIED);
         }
     }
 

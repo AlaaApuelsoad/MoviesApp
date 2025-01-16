@@ -44,7 +44,6 @@ public class User extends AuditEntity implements UserDetails {
     @Column(nullable = false,length = 50)
     private String type;
 
-    private String imagePath;
 
     @Column(nullable = false, length = 50)
     private String saltPassword;
@@ -100,7 +99,6 @@ public class User extends AuditEntity implements UserDetails {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", imagePath='" + imagePath + '\'' +
                 ", saltPassword='" + saltPassword + '\'' +
                 ", verificationCode='" + verificationCode + '\'' +
                 ", isVerified=" + isVerified +

@@ -19,7 +19,11 @@ public class UserMapper {
     }
 
     public UserRegisterResponse mapToUserRegisterResponse(User user) {
-        return objectMapper.convertValue(user, UserRegisterResponse.class);
+        UserRegisterResponse userRegisterResponse = objectMapper.convertValue(user, UserRegisterResponse.class);
+        if ("admin".equals(user.getType())){
+            userRegisterResponse.setAccountVerify("verified admin");
+        }
+        return userRegisterResponse;
     }
 
 

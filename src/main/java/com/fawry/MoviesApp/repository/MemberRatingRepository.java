@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface MemberRatingRepository extends JpaRepository<MemberRating,Long> {
 
 
+
     @Query("SELECT m from MemberRating m WHERE m.user= :user AND m.movie= :movie")
     Optional<MemberRating> findByUserAndMovie(@Param("user") User user,@Param("movie") Movie movie);
 

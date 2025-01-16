@@ -30,7 +30,7 @@ public class UserService {
         user.setType("member");
         userUtils.userBuilder(user);
         User savedUser = userRepository.save(user);
-//        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
+        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
         return userMapper.mapToUserRegisterResponse(savedUser);
     }
 

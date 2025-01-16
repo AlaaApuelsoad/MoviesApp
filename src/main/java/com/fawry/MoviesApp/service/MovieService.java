@@ -31,6 +31,9 @@ public class MovieService {
 
     @Transactional
     public Movie addMovie(String imdbId) throws JsonProcessingException {
+        if (movieRepository.getMovieByImdbId(imdbId).isPresent()) {
+            throw new CustomException(ErrorCode.MOVIE_EXISTS);
+        }
 
         String movieResponse = omdbDao.getMovieByImdbId(imdbId);
         Movie movie = movieMapper.mapToMovie(movieResponse);
@@ -40,8 +43,11 @@ public class MovieService {
     @Transactional
     public ResponseMessage deleteMovieByImdbId(String imdbId) {
         Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
         );
+        if (movie.isDeleted()){
+            throw new CustomException(ErrorCode.ALREADY_DELETED);
+        }
 
         movie.setDeleted(true);
         movieRepository.save(movie);

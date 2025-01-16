@@ -27,10 +27,6 @@ public class HomeController {
     @Value("${app.fawry.page.size}")
     private int PAGE_SIZE;
 
-//    @GetMapping("/movies/get/{imdbID}")
-//    public ResponseEntity<MovieInfoDetails> getMovieDetails(@PathVariable("imdbID") String imdbID){
-//        return new ResponseEntity<>(movieService.getMovieInfoByImdbID(imdbID),HttpStatus.OK);
-//    }
 
     @GetMapping("/page")
     @Operation(summary = "Fawry Movie app home page",description = "Home page displays movies paginated")
@@ -39,7 +35,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "No data found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
-    public ResponseEntity<CustomPageDto<MovieListInfo>> getAllMovies(@RequestParam(defaultValue = "0") int pageNumber) {
+    public ResponseEntity<CustomPageDto<MovieListInfo>> getAllMoviesFromDB(@RequestParam(defaultValue = "0") int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
         return new ResponseEntity<>(movieService.getMoviePage(pageable),HttpStatus.OK);
 
@@ -52,7 +48,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "Movie Not Found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
-    public ResponseEntity<MovieInfoDetails> findMovie(@PathVariable("imdbID") String imdbID){
+    public ResponseEntity<MovieInfoDetails> getMovieByImdbID(@PathVariable("imdbID") String imdbID){
         return new ResponseEntity<>(movieService.getMovieByImdbId(imdbID),HttpStatus.OK);
     }
 
@@ -63,7 +59,7 @@ public class HomeController {
             content = @Content(schema = @Schema(implementation = CustomPageDto.class))),
             @ApiResponse(responseCode = "404",description = "No Data Found")
     })
-    public ResponseEntity<CustomPageDto<MovieListInfo>> searchMovies(
+    public ResponseEntity<CustomPageDto<MovieListInfo>> searchForMovies(
             @RequestParam("keyword") String keyword, @RequestParam(defaultValue = "0") int pageNumber){
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
         return new ResponseEntity<>(movieService.searchMovies(keyword,pageable),HttpStatus.OK);

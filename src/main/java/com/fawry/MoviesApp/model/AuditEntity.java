@@ -1,6 +1,8 @@
 package com.fawry.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuditEntity {
 
     @Column(name = "created_by_id", updatable = false)

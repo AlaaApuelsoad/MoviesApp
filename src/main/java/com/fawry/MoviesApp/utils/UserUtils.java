@@ -15,7 +15,6 @@ public class UserUtils {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Utils utils;
-    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
     public void userBuilder(User user) {

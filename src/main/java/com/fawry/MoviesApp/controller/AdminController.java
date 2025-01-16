@@ -53,8 +53,7 @@ public class AdminController {
         return new ResponseEntity<>(loginService.login(loginRequest), HttpStatus.OK);
     }
 
-
-    @PostMapping("/create")
+    @PostMapping("/create/admin")
     @Operation(summary = "Create admin", description = "Admin can create a new admin by providing necessary details.", tags = {"Admin Operations"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Admin Creation Successful", content = {
@@ -96,7 +95,8 @@ public class AdminController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500")
             }
     )
-    public ResponseEntity<Movie> addMovie(@PathVariable("imdbID") String imdbID) throws JsonProcessingException {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Movie> addMovieTODB(@PathVariable("imdbID") String imdbID) throws JsonProcessingException {
         return new ResponseEntity<>(movieService.addMovie(imdbID), HttpStatus.CREATED);
     }
 
@@ -110,9 +110,10 @@ public class AdminController {
                     @ApiResponse(description = "Movie not found in the system", responseCode = "404"),
                     @ApiResponse(description = "Internal Server Error", responseCode = "500")})
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ResponseMessage> deleteMovie(@PathVariable("imdbId") String imdbId) {
+    public ResponseEntity<ResponseMessage> deleteMovieFromDB(@PathVariable("imdbId") String imdbId) {
         return new ResponseEntity<>(movieService.deleteMovieByImdbId(imdbId), HttpStatus.OK);
     }
+
 
     @GetMapping("/hello")
     @PreAuthorize("hasAuthority('ADMIN')")
