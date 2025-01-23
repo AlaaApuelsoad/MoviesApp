@@ -18,4 +18,5 @@ public class MovieListInfo {
     private String year;
     @JsonProperty("poster")
     private String posterPath;
+    private String imdbID;
 }

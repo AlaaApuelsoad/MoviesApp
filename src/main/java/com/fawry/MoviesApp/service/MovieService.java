@@ -14,9 +14,12 @@ import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -77,11 +80,11 @@ public class MovieService {
         return pageMapper.customPageDto(moviePage.map(movieMapper::mapToMovieInfoList));
     }
 
-    public CustomPageDto<MovieListInfo> getMoviePage(Pageable pageable) {
-        Page<Movie> moviePage = movieRepository.findAll(pageable);
+    public CustomPageDto<MovieListInfo> getMoviePaginatedFromDB(Pageable pageable) {
+        Page<MovieListInfo> moviePage = movieRepository.getMoviesFromDB(pageable);
         if (moviePage.getContent().isEmpty()) {
             throw new CustomException(ErrorCode.NO_DATA_FOUND);
         }
-        return pageMapper.customPageDto(moviePage.map(movieMapper::mapToMovieInfoList));
+        return pageMapper.customPageDto(moviePage);
     }
 }

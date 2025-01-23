@@ -4,7 +4,6 @@ import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.enums.VerificationStatus;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.LoginService;
-import com.fawry.MoviesApp.service.RatingService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/users")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;

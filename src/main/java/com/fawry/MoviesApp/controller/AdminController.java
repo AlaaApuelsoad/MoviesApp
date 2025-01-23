@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/dashboard")
 @Tag(name = "Admin Dashboard", description = "Endpoints for managing the admin dashboard functionalities.")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
 
     private final UserService userService;
@@ -80,7 +81,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MovieSearchResponse> moviesListSearch
             (@RequestParam(value = "title", required = false, defaultValue = "Dark") String title,
-             @RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber) throws JsonProcessingException {
+             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber) throws JsonProcessingException {
         return new ResponseEntity<>(omdbDao.searchMovies(title, pageNumber), HttpStatus.OK);
     }
 

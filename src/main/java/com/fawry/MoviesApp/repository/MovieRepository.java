@@ -1,6 +1,7 @@
 package com.fawry.MoviesApp.repository;
 
 import com.fawry.MoviesApp.dto.MovieInfoDetails;
+import com.fawry.MoviesApp.dto.MovieListInfo;
 import com.fawry.MoviesApp.model.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,5 +39,9 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
             "LOWER(m.director) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(m.actors) LIKE LOWER(CONCAT('%', :keyword, '%')) ")
     Page<Movie> searchForMovie(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT new com.fawry.MoviesApp.dto.MovieListInfo(m.title, m.year, m.poster, m.imdbID) " +
+            "FROM Movie m WHERE m.isDeleted = false")
+    Page<MovieListInfo> getMoviesFromDB(Pageable pageable);
 
 }

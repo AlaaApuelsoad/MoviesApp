@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/fawry/home/",produces = "application/json")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class HomeController {
 
     private final MovieService movieService;
@@ -37,7 +38,7 @@ public class HomeController {
     })
     public ResponseEntity<CustomPageDto<MovieListInfo>> getAllMoviesFromDB(@RequestParam(defaultValue = "0") int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
-        return new ResponseEntity<>(movieService.getMoviePage(pageable),HttpStatus.OK);
+        return new ResponseEntity<>(movieService.getMoviePaginatedFromDB(pageable),HttpStatus.OK);
 
     }
 
