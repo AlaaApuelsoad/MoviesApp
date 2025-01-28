@@ -50,7 +50,7 @@ public class MovieService {
         Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
                 () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
         );
-        if (movie.isDeleted()){
+        if (movie.isDeleted()) {
             throw new CustomException(ErrorCode.ALREADY_DELETED);
         }
 
@@ -73,7 +73,7 @@ public class MovieService {
 
     @Transactional
     public CustomPageDto<MovieListInfo> searchMovies(String keyword, Pageable pageable) {
-        Page<Movie> moviePage = movieRepository.searchForMovie(keyword,pageable);
+        Page<Movie> moviePage = movieRepository.searchForMovie(keyword, pageable);
         if (moviePage.getContent().isEmpty()) {
             throw new CustomException(ErrorCode.NO_DATA_FOUND);
         }
@@ -92,6 +92,7 @@ public class MovieService {
     private int getMemberRatingForMovie(String imdbId) {
         String username = userUtils.getCredentials().getUsername();
         User user = userUtils.getUser(username);
-        return memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
+        Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
+        return rating != null ? rating : 0;
     }
 }

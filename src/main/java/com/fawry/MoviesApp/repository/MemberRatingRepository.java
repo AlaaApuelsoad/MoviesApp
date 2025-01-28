@@ -19,6 +19,6 @@ public interface MemberRatingRepository extends JpaRepository<MemberRating,Long>
     Optional<MemberRating> findByUserAndMovie(@Param("user") User user,@Param("movie") Movie movie);
 
     @Query("SELECT mr.rating FROM MemberRating mr WHERE mr.movie.imdbID = :imdbID AND mr.user.id = :userId")
-    int getMemberRatingForAMovie(@Param("imdbID") String imdbId, @Param("userId") long userId);
+    Integer getMemberRatingForAMovie(@Param("imdbID") String imdbId, @Param("userId") long userId);
 }
 
