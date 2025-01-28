@@ -1,5 +1,8 @@
 package com.fawry.MoviesApp.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -73,11 +76,23 @@ public class Movie extends AuditEntity{
     private String production;
 
     @Column(name = "added_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate addedAt;
 
     private boolean isDeleted = false;
 
     @OneToMany(mappedBy = "movie")
+    @JsonManagedReference("movieRatingReference")
     private List<MemberRating> memberRatings;
 
+
+    @Transient
+    public double getAverageRating() {
+        if (memberRatings == null || memberRatings.isEmpty()) {
+            return 0.0;
+        }
+        return memberRatings.stream()
+                .mapToInt(MemberRating::getRating)
+                .average().orElse(0.0);
+    }
 }

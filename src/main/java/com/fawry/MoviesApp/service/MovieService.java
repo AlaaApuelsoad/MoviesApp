@@ -11,15 +11,15 @@ import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.mapper.MovieMapper;
 import com.fawry.MoviesApp.mapper.PageMapper;
 import com.fawry.MoviesApp.model.Movie;
+import com.fawry.MoviesApp.model.User;
+import com.fawry.MoviesApp.repository.MemberRatingRepository;
 import com.fawry.MoviesApp.repository.MovieRepository;
+import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Service
@@ -30,6 +30,8 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
+    private final UserUtils userUtils;
+    private final MemberRatingRepository memberRatingRepository;
 
 
     @Transactional
@@ -57,21 +59,19 @@ public class MovieService {
         return new ResponseMessage("Movie deleted successfully");
     }
 
-    public MovieInfoDetails getMovieInfoByImdbID(String imdbID) {
 
-        return movieRepository.getMovieInfoDetailsByImdbId(imdbID).orElseThrow(
-                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
-        );
-    }
-
+    @Transactional
     public MovieInfoDetails getMovieByImdbId(String imdbId) {
 
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
         );
-        return movieMapper.mapToMovieInfoDetails(movie);
+        MovieInfoDetails movieInfoDetails = movieMapper.mapToMovieInfoDetails(movie);
+        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
+        return movieInfoDetails;
     }
 
+    @Transactional
     public CustomPageDto<MovieListInfo> searchMovies(String keyword, Pageable pageable) {
         Page<Movie> moviePage = movieRepository.searchForMovie(keyword,pageable);
         if (moviePage.getContent().isEmpty()) {
@@ -80,11 +80,18 @@ public class MovieService {
         return pageMapper.customPageDto(moviePage.map(movieMapper::mapToMovieInfoList));
     }
 
+    @Transactional
     public CustomPageDto<MovieListInfo> getMoviePaginatedFromDB(Pageable pageable) {
         Page<MovieListInfo> moviePage = movieRepository.getMoviesFromDB(pageable);
         if (moviePage.getContent().isEmpty()) {
             throw new CustomException(ErrorCode.NO_DATA_FOUND);
         }
         return pageMapper.customPageDto(moviePage);
+    }
+
+    private int getMemberRatingForMovie(String imdbId) {
+        String username = userUtils.getCredentials().getUsername();
+        User user = userUtils.getUser(username);
+        return memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
     }
 }

@@ -4,7 +4,7 @@ import com.fawry.MoviesApp.enums.VerificationStatus;
 import com.fawry.MoviesApp.listener.UserRegisterEvent;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.UserRepository;
-import com.fawry.MoviesApp.utils.Utils;
+import com.fawry.MoviesApp.utils.SystemUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ public class VerifyService {
 
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final Utils utils;
+    private final SystemUtils systemUtils;
     private static final Logger logger = LogManager.getLogger(VerifyService.class);
     private final EmailService emailService;
 
@@ -54,7 +54,7 @@ public class VerifyService {
     }
 
     public void resendVerificationEmail(User user) {
-        user.setVerificationCode(utils.generateUUIDCode());
+        user.setVerificationCode(systemUtils.generateUUIDCode());
         user.setVerificationCodeExpiryDate(LocalDateTime.now().plusSeconds(10));
         userRepository.save(user);
         emailService.sendAccountVerificationEmail(new UserRegisterEvent(user));

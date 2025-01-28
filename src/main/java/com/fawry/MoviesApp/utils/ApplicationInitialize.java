@@ -25,7 +25,7 @@ public class ApplicationInitialize {
     @Value("${app.admin.password}")
     private String adminPassword;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final Utils utils;
+    private final SystemUtils systemUtils;
     private static final Logger logger = LogManager.getLogger(ApplicationInitialize.class);
 
 
@@ -54,7 +54,7 @@ public class ApplicationInitialize {
 
     public void createMainAdmin() {
         String adminUserName = "admin";
-        String saltPass = utils.generateUUIDCode();
+        String saltPass = systemUtils.generateUUIDCode();
 
         if (!userRepository.existsByUsername(adminUserName)) {
             User adminUser = User.builder()
@@ -67,7 +67,7 @@ public class ApplicationInitialize {
                     .isDeleted(false)
                     .type("admin")
                     .saltPassword(saltPass)
-                    .role(utils.findRoleByRoleName("ADMIN"))
+                    .role(systemUtils.findRoleByRoleName("ADMIN"))
                     .build();
 
             userRepository.save(adminUser);

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class Utils {
+public class SystemUtils {
 
     private final RoleRepository roleRepository;
 

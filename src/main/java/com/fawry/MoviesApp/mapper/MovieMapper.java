@@ -10,6 +10,7 @@ import com.fawry.MoviesApp.model.Rating;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class MovieMapper {
         movie.setDVD(jsonNode.get("DVD").asText());
         movie.setBoxOffice(jsonNode.get("BoxOffice").asText());
         movie.setProduction(jsonNode.get("Production").asText());
+        movie.setAddedAt(LocalDate.now());
 
         List<Rating> ratings = new ArrayList<>();
         JsonNode ratingsJsonNode = jsonNode.get("Ratings");

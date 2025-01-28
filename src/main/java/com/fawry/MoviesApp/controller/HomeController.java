@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -49,6 +50,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "Movie Not Found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
+    @PreAuthorize("hasAuthority('MEMBER')")
     public ResponseEntity<MovieInfoDetails> getMovieByImdbID(@PathVariable("imdbID") String imdbID){
         return new ResponseEntity<>(movieService.getMovieByImdbId(imdbID),HttpStatus.OK);
     }

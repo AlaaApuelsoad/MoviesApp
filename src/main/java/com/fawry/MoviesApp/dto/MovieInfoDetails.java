@@ -1,6 +1,7 @@
 package com.fawry.MoviesApp.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fawry.MoviesApp.model.Rating;
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,8 @@ Movie Information Details shown when a user click on a movie
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class MovieInfoDetails {
 
     private String imdbID;
@@ -49,7 +50,7 @@ public class MovieInfoDetails {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate addedAt;
 
-
-
+    @JsonProperty("MemberRating")
+    private int memberRating;
 
 }

@@ -2,6 +2,7 @@ package com.fawry.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -63,6 +64,7 @@ public class User extends AuditEntity implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference("userRatingReference")
     private List<MemberRating> memberRatings;
 
     @Override

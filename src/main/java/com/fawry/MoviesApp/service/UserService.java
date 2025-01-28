@@ -2,7 +2,6 @@ package com.fawry.MoviesApp.service;
 
 import com.fawry.MoviesApp.dto.UserRegisterDto;
 import com.fawry.MoviesApp.dto.UserRegisterResponse;
-import com.fawry.MoviesApp.jwt.JwtService;
 import com.fawry.MoviesApp.listener.UserRegisterEvent;
 import com.fawry.MoviesApp.mapper.UserMapper;
 import com.fawry.MoviesApp.model.User;
@@ -10,7 +9,6 @@ import com.fawry.MoviesApp.repository.UserRepository;
 import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

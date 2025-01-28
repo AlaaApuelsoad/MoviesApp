@@ -20,14 +20,14 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
     @Query("SELECT m FROM Movie m WHERE m.imdbID= :imdbId")
     Optional<Movie> findByIdImdbId(@Param("imdbId") String imdbId);
 
-    @Transactional
-    @Query("SELECT new com.fawry.MoviesApp.dto.MovieInfoDetails (" +
-            "m.imdbID, m.title, m.year, m.rated, m.released, m.runtime, m.genre, " +
-            "m.director, m.writer, m.actors, m.plot, m.language, m.country, " +
-            "m.awards, m.poster, null , m.imdbRating, m.imdbVotes, m.type, " +
-            "m.boxOffice, m.addedAt ) " +
-            "FROM Movie m WHERE m.imdbID = :imdbId")
-    Optional<MovieInfoDetails> getMovieInfoDetailsByImdbId(@Param("imdbId") String imdbId);
+//    @Transactional
+//    @Query("SELECT new com.fawry.MoviesApp.dto.MovieInfoDetails (" +
+//            "m.imdbID, m.title, m.year, m.rated, m.released, m.runtime, m.genre, " +
+//            "m.director, m.writer, m.actors, m.plot, m.language, m.country, " +
+//            "m.awards, m.poster, null , m.imdbRating, m.imdbVotes, m.type, " +
+//            "m.boxOffice, m.addedAt ) " +
+//            "FROM Movie m WHERE m.imdbID = :imdbId")
+//    Optional<MovieInfoDetails> getMovieInfoDetailsByImdbId(@Param("imdbId") String imdbId);
 
     @Transactional
     @Query("SELECT m FROM Movie m WHERE m.imdbID = :imdbId")
@@ -40,7 +40,8 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
             "LOWER(m.actors) LIKE LOWER(CONCAT('%', :keyword, '%')) ")
     Page<Movie> searchForMovie(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT new com.fawry.MoviesApp.dto.MovieListInfo(m.title, m.year, m.poster, m.imdbID) " +
+    @Transactional
+    @Query("SELECT new com.fawry.MoviesApp.dto.MovieListInfo(m.title, m.year, m.poster, m.imdbID,m ) " +
             "FROM Movie m WHERE m.isDeleted = false")
     Page<MovieListInfo> getMoviesFromDB(Pageable pageable);
 
