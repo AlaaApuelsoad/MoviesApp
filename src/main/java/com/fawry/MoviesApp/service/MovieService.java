@@ -68,6 +68,7 @@ public class MovieService {
         );
         MovieInfoDetails movieInfoDetails = movieMapper.mapToMovieInfoDetails(movie);
         movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
+        movieInfoDetails.setAverageRating(movie.getAverageRating());
         return movieInfoDetails;
     }
 

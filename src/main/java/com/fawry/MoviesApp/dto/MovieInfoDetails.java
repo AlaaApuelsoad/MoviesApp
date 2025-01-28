@@ -53,4 +53,7 @@ public class MovieInfoDetails {
     @JsonProperty("MemberRating")
     private int memberRating;
 
+    @JsonProperty("MembersAverageRatings")
+    private double averageRating;
+
 }
