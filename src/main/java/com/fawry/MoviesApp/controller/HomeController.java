@@ -37,7 +37,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "No data found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
-    @PreAuthorize("hasAuthority('MEMBER')")
+    @PreAuthorize("hasAnyAuthority('MEMBER','ADMIN')")
     public ResponseEntity<CustomPageDto<MovieListInfo>> getAllMoviesFromDB(@RequestParam(defaultValue = "0") int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
         return new ResponseEntity<>(movieService.getMoviePaginatedFromDB(pageable),HttpStatus.OK);
