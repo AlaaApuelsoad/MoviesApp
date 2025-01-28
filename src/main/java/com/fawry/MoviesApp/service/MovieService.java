@@ -84,13 +84,18 @@ public class MovieService {
     @Transactional
     public CustomPageDto<MovieListInfo> getMoviePaginatedFromDB(Pageable pageable) {
         Page<MovieListInfo> moviePage = movieRepository.getMoviesFromDB(pageable);
+        moviePage.getContent().forEach(movieListInfo -> {
+            String imdbId = movieListInfo.getImdbID();
+            int memberRating = getMemberRatingForMovie(imdbId);
+            movieListInfo.setMemberRating(memberRating);
+        });
         if (moviePage.getContent().isEmpty()) {
             throw new CustomException(ErrorCode.NO_DATA_FOUND);
         }
         return pageMapper.customPageDto(moviePage);
     }
 
-    private int getMemberRatingForMovie(String imdbId) {
+    public int getMemberRatingForMovie(String imdbId) {
         String username = userUtils.getCredentials().getUsername();
         User user = userUtils.getUser(username);
         Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
