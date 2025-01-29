@@ -113,7 +113,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzgxODM2OSwiZXhwIjoxNzM3OTA0NzY5fQ.LjnSdth6uJyfgbwAmBp6Ct0OYtJTbfDE3J7R5m9N5nY",
 									"type": "string"
 								}
 							]
@@ -121,7 +121,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/admin/dashboard/movies/load/list?title=captain&page=2",
+							"raw": "localhost:5055/api/v1/admin/dashboard/movies/load/list?title=super&pageNumber=1",
 							"host": [
 								"localhost"
 							],
@@ -138,11 +138,11 @@
 							"query": [
 								{
 									"key": "title",
-									"value": "captain"
+									"value": "super"
 								},
 								{
-									"key": "page",
-									"value": "2"
+									"key": "pageNumber",
+									"value": "1"
 								}
 							]
 						}
@@ -157,7 +157,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczODEwMzkzMywiZXhwIjoxNzM4MTkwMzMzfQ.Z92NXFDSO-ZwOqJsLkBF3uXmMJlaqaZ4XXPoq0HrBRo",
 									"type": "string"
 								}
 							]
@@ -165,7 +165,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/admin/dashboard/add/movie/tt1813757",
+							"raw": "localhost:5055/api/v1/admin/dashboard/add/movie/tt1877822",
 							"host": [
 								"localhost"
 							],
@@ -177,7 +177,7 @@
 								"dashboard",
 								"add",
 								"movie",
-								"tt1813757"
+								"tt1877822"
 							]
 						}
 					},
@@ -191,7 +191,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzAyNTAwNywiZXhwIjoxNzM3MTExNDA3fQ.4sgZVZFV89WZmle376ecBkJ1oE29ynmjtajn6IGAU-M",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNzY2ODE5MCwiZXhwIjoxNzM3NzU0NTkwfQ.xc0NwFvr6P9gaJfvLvBKFVdATxrGcnNE7Dv2IlcPh-M",
 									"type": "string"
 								}
 							]
@@ -199,7 +199,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/admin/dashboard/delete/movie/tt1813757",
+							"raw": "http://localhost:5055/api/v1/admin/dashboard/delete/movie/tt1813757",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
@@ -318,12 +319,19 @@
 					"name": "getMovieInfoDetails",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiYWxhYWFwdWVsc29hZCIsImlhdCI6MTczODEwMTMzMCwiZXhwIjoxNzM4MTg3NzMwfQ.-bMArZ9InnN8oq_zlmdnTLWqdYQpT_Ohm2o4Sm7qeVA",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/fawry/home/movies/get/tt1813757",
+							"raw": "localhost:5055/api/v1/fawry/home/movies/get/tt1877822",
 							"host": [
 								"localhost"
 							],
@@ -335,7 +343,7 @@
 								"home",
 								"movies",
 								"get",
-								"tt1813757"
+								"tt1877822"
 							]
 						}
 					},
@@ -377,12 +385,19 @@
 					"name": "HomePageMovieList",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczODEwNjI1OSwiZXhwIjoxNzM4MTkyNjU5fQ.3OALQU-ZQrxdfVXZKLH13116ZGs5S0Z9BFcTyM89Kbc",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/fawry/home/page",
+							"raw": "localhost:5055/api/v1/fawry/home/page?pageNumber=1",
 							"host": [
 								"localhost"
 							],
@@ -393,6 +408,12 @@
 								"fawry",
 								"home",
 								"page"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -406,7 +427,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTczNjk3NzgyMCwiZXhwIjoxNzM3MDY0MjIwfQ.N12OOn6VyPDdmFgfABGcIv7Xvnid26kuannaI-RF7eI",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiYWxhYWFwdWVsc29hZCIsImlhdCI6MTczODEwNDAyMywiZXhwIjoxNzM4MTkwNDIzfQ.0FLNeptYxcDjknmnIC2HdNQa7A5tjrU4-kLh3yKFr2M",
 									"type": "string"
 								}
 							]
@@ -414,7 +435,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5055/api/v1/ratings/movie/tt010ss3923?ratingValue=1",
+							"raw": "localhost:5055/api/v1/ratings/movie/tt1877822?ratingValue=5",
 							"host": [
 								"localhost"
 							],
@@ -424,12 +445,12 @@
 								"v1",
 								"ratings",
 								"movie",
-								"tt010ss3923"
+								"tt1877822"
 							],
 							"query": [
 								{
 									"key": "ratingValue",
-									"value": "1"
+									"value": "5"
 								}
 							]
 						}
