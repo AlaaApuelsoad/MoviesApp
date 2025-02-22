@@ -1,6 +1,5 @@
 package com.fawry.MoviesApp.jwt;
 
-import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
