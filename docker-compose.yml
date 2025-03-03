@@ -1,0 +1,19 @@
+services:
+  movie_app:
+    image: movie_app_backend
+    container_name: movie_app_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5055:5055"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/movies_app
+      SPRING_DATASOURCE_USERNAME: spring
+      SPRING_DATASOURCE_PASSWORD: 123456
+    networks:
+      - aabouelsoud
+
+networks:
+  aabouelsoud:
+    external: true
