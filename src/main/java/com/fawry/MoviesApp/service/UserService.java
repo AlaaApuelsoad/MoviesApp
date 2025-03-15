@@ -22,7 +22,7 @@ public class UserService {
     private final UserUtils userUtils;
     private final ApplicationEventPublisher eventPublisher;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public UserRegisterResponse userRegister(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("member");
@@ -32,7 +32,7 @@ public class UserService {
         return userMapper.mapToUserRegisterResponse(savedUser);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public UserRegisterResponse createAdmin(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("admin");
