@@ -12,37 +12,17 @@ import java.io.*;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * The {@code SystemPropertiesConfiguration} class is responsible for extracting application properties
- * from the Spring Environment and saving them to an external file.
- *
- * <p>
- * This component runs automatically after bean initialization (using {@code @PostConstruct}).
- * It writes all loaded properties from the application context into a file at a specific location.
- * </p>
- */
 @Component
 @RequiredArgsConstructor
 public class SystemPropertiesConfiguration {
 
-    /**
-     * Environment in Spring:
-     * <p>
-     * The {@link Environment} interface represents the current environment
-     * in which the Spring application is running. It provides access to
-     * application properties, system properties, and environment variables.
-     * </p>
-     */
 
-    /**
-     * Spring {@link Environment} instance to access application properties.
+    /*
+    Environment interface represents the current environment in which the spring application is running, provides access
+    to application properties, system properties, and environment variables.
      */
     private final Environment environment;
 
-    /**
-     * Reads configuration properties from the application context and writes them to an external file.
-     * This method is executed automatically after bean initialization due to the {@code @PostConstruct} annotation.
-     */
     @PostConstruct
     public void configReader() {
         // Define the file path where properties will be saved
