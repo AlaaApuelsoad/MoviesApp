@@ -12,17 +12,6 @@ services:
       SPRING_DATASOURCE_USERNAME: spring
       SPRING_DATASOURCE_PASSWORD: 123456
 
-      ##MailConfiguration
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: alaaapu135@gmail.com
-      SPRING_MAIL_PASSWORD: kikpdyqzeboupznj
-      SPRING_MAIL_PROPERTIES_MAIL.SMTP.AUTH: "true"
-      SPRING_MAIL_PROPERTIES_MAIL.SMTP.STARTTLS.ENABLE: "true"
-      SPRING_MAIL_PROPERTIES_MAIL.SMTP.STARTTLS.REQUIRED: "true"
-      SPRING_MAIL_PROPERTIES_MAIL.SMTP.SSL.TRUST: smtp.gmail.com
-
-
     networks:
       - aabouelsoud
     volumes:
