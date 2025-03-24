@@ -25,8 +25,10 @@ public class SystemPropertiesConfiguration {
 
     @PostConstruct
     public void configReader() {
-        // Define the file path where properties will be saved
-        //dir file inside the container will be mapping to dir file in the host
+        /* Define the file path where properties will be saved
+        dir file inside the container will be mapping to dir file in the host
+        with docker compose will be inside the container /root/systemProperties.properties--mapped in docker compose file
+         */
         String filePath = System.getProperty("user.home")+"/systemProperties.properties";
         System.out.println("userhome-->"+System.getProperty("user.home"));
         System.out.println(filePath);

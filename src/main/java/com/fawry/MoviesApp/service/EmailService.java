@@ -32,7 +32,7 @@ public class EmailService {
     private static final Logger logger = LogManager.getLogger(EmailService.class);
 
 
-    @Async("asyncExecutor")
+    @Async("executor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendAccountVerificationEmail(UserRegisterEvent userRegisterEvent) {
         String to = userRegisterEvent.getEmail();
@@ -50,18 +50,18 @@ public class EmailService {
             mailSender.send(message);
 
         } catch (MailSendException e) {
-            logger.error("Fail to send verification email to {} ", to + e);
+            logger.error("Fail to send verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName(), e);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (MessagingException e) {
-            logger.error("Error creating MimeMessage for email to {}", to, e);
+            logger.error("Error creating MimeMessage for email to {},--- thread--> {}", to,Thread.currentThread().getName(), e);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
-        logger.info("Successfully sent verification email to {}", to);
+        System.out.println("sending email to: "+to+"---> thread:"+Thread.currentThread().getName());
+        logger.info("Successfully sent verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName());
     }
 
 }
