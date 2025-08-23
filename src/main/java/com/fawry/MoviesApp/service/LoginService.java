@@ -6,7 +6,6 @@ import com.fawry.MoviesApp.enums.ErrorCode;
 import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.jwt.JwtService;
 import com.fawry.MoviesApp.model.User;
-import com.fawry.MoviesApp.repository.UserRepository;
 import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

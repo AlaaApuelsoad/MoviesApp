@@ -1,43 +1,52 @@
 package com.fawry.MoviesApp;
 
-import org.springframework.boot.CommandLineRunner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableAsync
+@EnableCaching
 public class MoviesAppApplication {
+	private static final Logger logger = LogManager.getLogger(MoviesAppApplication.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(MoviesAppApplication.class, args);
-		ExecutorService executorService = Executors.newFixedThreadPool(3);
-		for (int i = 0; i < 6; i++) {
-			final int finalI = i;
-			executorService.submit(()->{
-				System.out.println("Task " + finalI + " is running on thread " + Thread.currentThread().getName());
-				try {
-					Thread.sleep(6000);
-				}catch (InterruptedException e){
-					e.printStackTrace();
-				}
-			});
+		for (String arg : args) {//print argument passed
+			System.out.println("Command Line Argument");
+			System.out.println("Argument Passed: " + arg);
 		}
-		executorService.shutdown();
+
+		ApplicationContext context = SpringApplication.run(MoviesAppApplication.class, args);
+		Environment environment = context.getEnvironment();
+		System.out.println("Application started successfully on port: " + environment.getProperty("server.port"));
+		String [] activeProfiles = environment.getActiveProfiles();
+		for (String profile : activeProfiles) {
+			System.out.println("Application Running with Configuration based on profile: " + profile);
+		}
+
+		DataSource dataSource = context.getBean(DataSource.class);
+		try (Connection connection = dataSource.getConnection()){
+			DatabaseMetaData metaData = connection.getMetaData();
+			System.out.println("Database connection established");
+			System.out.println("Connected to database: " + metaData.getDatabaseProductName());
+			System.out.println("Database version: " + metaData.getDatabaseProductVersion());
+			System.out.println("Database driver: " + metaData.getDriverName());
+			System.out.println("Database driver version: " + metaData.getDriverVersion());
+			System.out.println("Database URL: " + metaData.getURL());
+			System.out.println("Database user: " + metaData.getUserName());
+		}catch (Exception e){
+			logger.info("error", e);
+		}
 	}
-
-	@Bean
-	public CommandLineRunner init(){
-
-		return args -> {
-			System.out.println("Welcome to Fawry Movies App.");
-		};
-	}
-
 }

@@ -29,9 +29,7 @@ public class SystemPropertiesConfiguration {
         dir file inside the container will be mapping to dir file in the host
         with docker compose will be inside the container /root/systemProperties.properties--mapped in docker compose file
          */
-        String filePath = System.getProperty("user.home")+"/systemProperties.properties";
-        System.out.println("userhome-->"+System.getProperty("user.home"));
-        System.out.println(filePath);
+        String filePath = System.getProperty("user.home")+ File.separator+ ".application-properties";
         System.out.println("===== Loaded Properties =====");
         createExternalPropertyFile(filePath);
 
@@ -66,17 +64,17 @@ public class SystemPropertiesConfiguration {
     }
 
     public void createExternalPropertyFile(String filePath){
+        System.out.println("Generating External Properties File: " + filePath);
         try {
             File propertyFile = new File(filePath);
 
             File parentDir = propertyFile.getParentFile();
-            System.out.println("parentDir: " + parentDir);
             if (!parentDir.exists()) {
                 boolean dirCreated = parentDir.mkdirs();
                 if (dirCreated) {
-                    System.out.println("Directory created"+parentDir.getAbsolutePath());
+                    System.out.println("Directory created "+parentDir.getAbsolutePath());
                 }else {
-                    System.out.println("Directory not created"+parentDir.getAbsolutePath());
+                    System.out.println("Directory not created "+parentDir.getAbsolutePath());
                     return;
                 }
             }
@@ -85,10 +83,10 @@ public class SystemPropertiesConfiguration {
                 System.out.println("Property file does not exist");
                 boolean created = propertyFile.createNewFile();
                 if (created){
-                    System.out.println("Property file created"+propertyFile.getAbsolutePath());
+                    System.out.println("Property file created "+propertyFile.getAbsolutePath());
                     System.out.println("Property file path: " + propertyFile.getAbsolutePath());
                 }else {
-                    System.out.println("Property file already exists"+propertyFile.getAbsolutePath());
+                    System.out.println("Property file already exists "+propertyFile.getAbsolutePath());
                 }
             }
         }catch (Exception e){

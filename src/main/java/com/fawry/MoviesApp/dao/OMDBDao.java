@@ -13,6 +13,7 @@ import com.fawry.MoviesApp.dto.MovieSearchResponse;
 import com.fawry.MoviesApp.mapper.MovieSearchResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,11 +27,11 @@ public class OMDBDao {
     private String API_KEY;
     private static final String BASE_URL = "https://www.omdbapi.com/?type=movie&apikey=";
 
+    @Cacheable(value = "movieDetails", key = "#pageNumber")
     public MovieSearchResponse searchMovies(String title,int pageNumber) throws JsonProcessingException {
         String url = BASE_URL+API_KEY+"&s="+title+"&page="+pageNumber;
         String response = restTemplate.getForObject(url, String.class);
         return movieSearchResponseMapper.mapToMovieSearchResponse(response);
-
     }
 
     public String getMovieByImdbId(String imdbId) {

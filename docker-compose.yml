@@ -9,26 +9,13 @@ services:
       - "5055:5055"
 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/movies_app
-      SPRING_DATASOURCE_USERNAME: spring
-      SPRING_DATASOURCE_PASSWORD: 123456
-
-      ##MailConfiguration
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: alaaapu135@gmail.com
-      SPRING_MAIL_PASSWORD: tcjtoqxzutpbvhma
-      SPRING_MAIL_PROPERTIES_MAIL__SMTP__AUTH: "true"
-      SPRING_MAIL_PROPERTIES_MAIL__SMTP__STARTTLS__ENABLE: "true"
-      SPRING_MAIL_PROPERTIES_MAIL__SMTP__STARTTLS__REQUIRED: "true"
-      SPRING_MAIL_PROPERTIES_MAIL__SMTP__SSL__TRUST: smtp.gmail.com
+      SPRING_PROFILES_ACTIVE: ${ACTIVE_PROFILE}
+      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
 
     networks:
       - aabouelsoud
-    volumes:
-      - "${HOME}/.systemproperties:/root/"
-      - "${USERPROFILE}/.systemproperties:/root/"
-
 
 networks:
   aabouelsoud:
