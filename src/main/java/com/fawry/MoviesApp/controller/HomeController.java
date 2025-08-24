@@ -51,7 +51,6 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "Movie Not Found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
-    @PreAuthorize("hasAuthority('MEMBER')")
     public ResponseEntity<MovieInfoDetails> getMovieByImdbID(@PathVariable("imdbID") String imdbID){
         return new ResponseEntity<>(movieService.getMovieByImdbId(imdbID),HttpStatus.OK);
     }

@@ -15,10 +15,4 @@ public class CustomException extends RuntimeException {
         this.errorCodeValue = errorCode.getCode();
     }
 
-    public CustomException(ErrorCode errorCode, Throwable cause) {
-        super(errorCode.getMessage(), cause);
-        this.errorCode = errorCode;
-        this.errorCodeValue = errorCode.getCode();
-    }
-
 }

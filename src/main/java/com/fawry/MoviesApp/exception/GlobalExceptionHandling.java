@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GlobalExceptionHandling {
 
-    private final ErrorLog errorLog;
+    private ErrorLog errorLog = new ErrorLog();
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandling.class);
 
 
@@ -56,7 +56,7 @@ public class GlobalExceptionHandling {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
