@@ -3,7 +3,9 @@ package com.fawry.MoviesApp.controller;
 import com.fawry.MoviesApp.dto.CustomPageDto;
 import com.fawry.MoviesApp.dto.MovieInfoDetails;
 import com.fawry.MoviesApp.dto.MovieListInfo;
+import com.fawry.MoviesApp.jwt.RequestContext;
 import com.fawry.MoviesApp.service.MovieService;
+import com.fawry.MoviesApp.utils.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(value = "/fawry/home/",produces = "application/json")
+@RequestMapping(value = AppConstants.HOME_ROUTE,produces = "application/json")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class HomeController {
@@ -66,6 +68,12 @@ public class HomeController {
             @RequestParam("keyword") String keyword, @RequestParam(defaultValue = "0") int pageNumber){
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
         return new ResponseEntity<>(movieService.searchMovies(keyword,pageable),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Request Context: " + RequestContext.getRequestContext();
     }
 
 

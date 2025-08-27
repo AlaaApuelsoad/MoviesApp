@@ -20,7 +20,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -32,6 +31,15 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String token;
         String userIdentifier;
+        String contextUUID;
+
+        if (request.getHeader("Context-UUID") == null){
+            contextUUID = RequestContext.generateUUID();
+            request.setAttribute("Context-UUID", contextUUID);
+            RequestContext.setRequestContext(contextUUID);
+            System.out.println("Context UUID: "+contextUUID);
+            response.setHeader("Context-UUID", contextUUID); //add context to the response
+        }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

@@ -6,6 +6,7 @@ import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
+import com.fawry.MoviesApp.utils.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(AppConstants.USER_ROUTE)
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {

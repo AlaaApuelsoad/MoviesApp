@@ -2,6 +2,7 @@ package com.fawry.MoviesApp.controller;
 
 import com.fawry.MoviesApp.dto.MovieRating;
 import com.fawry.MoviesApp.service.RatingService;
+import com.fawry.MoviesApp.utils.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/ratings")
+@RequestMapping(AppConstants.RATING_ROUTE)
 @RequiredArgsConstructor
 public class RatingController {
 

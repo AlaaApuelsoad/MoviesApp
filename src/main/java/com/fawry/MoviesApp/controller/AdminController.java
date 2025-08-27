@@ -8,6 +8,7 @@ import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.MovieService;
 import com.fawry.MoviesApp.dao.OMDBDao;
 import com.fawry.MoviesApp.service.UserService;
+import com.fawry.MoviesApp.utils.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/dashboard")
+@RequestMapping(AppConstants.ADMIN_DASHBOARD_ROUTE)
 @Tag(name = "Admin Dashboard", description = "Endpoints for managing the admin dashboard functionalities.")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
