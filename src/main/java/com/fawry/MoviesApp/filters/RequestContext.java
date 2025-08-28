@@ -1,4 +1,4 @@
-package com.fawry.MoviesApp.jwt;
+package com.fawry.MoviesApp.filters;
 
 public class RequestContext {
 
@@ -7,7 +7,6 @@ public class RequestContext {
     public static void setRequestContext(String requestContext) {
         RequestContext.requestContext.set(requestContext);
     }
-
 
     public static String getRequestContext() {
         return requestContext.get();

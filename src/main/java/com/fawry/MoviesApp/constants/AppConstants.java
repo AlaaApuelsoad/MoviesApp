@@ -1,4 +1,4 @@
-package com.fawry.MoviesApp.utils;
+package com.fawry.MoviesApp.constants;
 
 public interface AppConstants {
 

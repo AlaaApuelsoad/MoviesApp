@@ -4,7 +4,7 @@ import com.fawry.MoviesApp.dto.AuthResponse;
 import com.fawry.MoviesApp.dto.LoginRequest;
 import com.fawry.MoviesApp.enums.ErrorCode;
 import com.fawry.MoviesApp.exception.CustomException;
-import com.fawry.MoviesApp.jwt.JwtService;
+import com.fawry.MoviesApp.filters.JwtService;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;

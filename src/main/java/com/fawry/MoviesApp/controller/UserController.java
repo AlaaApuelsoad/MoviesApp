@@ -6,7 +6,7 @@ import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
-import com.fawry.MoviesApp.utils.AppConstants;
+import com.fawry.MoviesApp.constants.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

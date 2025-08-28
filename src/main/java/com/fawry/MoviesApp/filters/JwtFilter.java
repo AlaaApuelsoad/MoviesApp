@@ -1,4 +1,4 @@
-package com.fawry.MoviesApp.jwt;
+package com.fawry.MoviesApp.filters;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Order(value = 2)//after RequestIdFilter
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -28,18 +30,9 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        String path = request.getRequestURI();
         String token;
         String userIdentifier;
-        String contextUUID;
 
-        if (request.getHeader("Context-UUID") == null){
-            contextUUID = RequestContext.generateUUID();
-            request.setAttribute("Context-UUID", contextUUID);
-            RequestContext.setRequestContext(contextUUID);
-            System.out.println("Context UUID: "+contextUUID);
-            response.setHeader("Context-UUID", contextUUID); //add context to the response
-        }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -62,10 +55,10 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException e) {
-            handleJwtException(response, "Token Expired", HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Token Expired for RequestID: " + RequestContext.getRequestContext() , HttpServletResponse.SC_UNAUTHORIZED);
 
         } catch (SignatureException e) {
-            handleJwtException(response, "Invalid Token Signature", HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Invalid Token Signature for RequestID: " + RequestContext.getRequestContext(), HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 

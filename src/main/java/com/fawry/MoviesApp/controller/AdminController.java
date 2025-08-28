@@ -8,13 +8,15 @@ import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.MovieService;
 import com.fawry.MoviesApp.dao.OMDBDao;
 import com.fawry.MoviesApp.service.UserService;
-import com.fawry.MoviesApp.utils.AppConstants;
+import com.fawry.MoviesApp.constants.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +53,7 @@ public class AdminController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             }
     )
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return new ResponseEntity<>(loginService.login(loginRequest), HttpStatus.OK);
     }
 

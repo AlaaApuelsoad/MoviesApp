@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -29,6 +30,4 @@ public class SystemUtils {
                 () -> new CustomException(ErrorCode.ROLE_NOT_FOUND)
         );
     }
-
-
 }

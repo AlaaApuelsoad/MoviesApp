@@ -3,14 +3,16 @@ package com.fawry.MoviesApp.controller;
 import com.fawry.MoviesApp.dto.CustomPageDto;
 import com.fawry.MoviesApp.dto.MovieInfoDetails;
 import com.fawry.MoviesApp.dto.MovieListInfo;
-import com.fawry.MoviesApp.jwt.RequestContext;
+import com.fawry.MoviesApp.filters.RequestContext;
 import com.fawry.MoviesApp.service.MovieService;
-import com.fawry.MoviesApp.utils.AppConstants;
+import com.fawry.MoviesApp.constants.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -72,7 +74,7 @@ public class HomeController {
 
 
     @GetMapping("/hello")
-    public String hello() {
+    public String hello(HttpServletRequest request, HttpServletResponse httpServletResponse) {
         return "Request Context: " + RequestContext.getRequestContext();
     }
 

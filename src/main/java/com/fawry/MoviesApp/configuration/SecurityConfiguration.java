@@ -1,6 +1,6 @@
 package com.fawry.MoviesApp.configuration;
 
-import com.fawry.MoviesApp.jwt.JwtFilter;
+import com.fawry.MoviesApp.filters.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

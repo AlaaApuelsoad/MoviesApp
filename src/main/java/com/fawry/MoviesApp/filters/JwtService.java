@@ -1,4 +1,4 @@
-package com.fawry.MoviesApp.jwt;
+package com.fawry.MoviesApp.filters;
 
 import com.fawry.MoviesApp.repository.UserRepository;
 import io.jsonwebtoken.Claims;

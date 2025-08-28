@@ -2,7 +2,7 @@ package com.fawry.MoviesApp.controller;
 
 import com.fawry.MoviesApp.dto.MovieRating;
 import com.fawry.MoviesApp.service.RatingService;
-import com.fawry.MoviesApp.utils.AppConstants;
+import com.fawry.MoviesApp.constants.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
