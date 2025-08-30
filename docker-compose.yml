@@ -62,4 +62,8 @@ networks:
     external: true   # Reuse pre-created network (must exist already!)
 
 
-##to tun different .env file docker compose --env-file .env.prod up --build
+##To tun different .env file docker compose --env-file .env.prod up --build
+##Notes
+##Use service name (db) → when both DB and app run as Docker services in the same network.
+#Use localhost:hostPort (localhost:5433) → when the app runs locally outside Docker.
+#Never use the container name (postgres-db-container) in JDBC URL.
