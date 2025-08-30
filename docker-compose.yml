@@ -60,3 +60,6 @@ services:
 networks:
   aabouelsoud:
     external: true   # Reuse pre-created network (must exist already!)
+
+
+##to tun different .env file docker compose --env-file .env.prod up --build
