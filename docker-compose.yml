@@ -1,22 +1,62 @@
+version: "3.9"  # Docker Compose file format version
+
 services:
-  movie_app:
-    image: movie_app_backend
-    container_name: movie_app_container
-    build:
-      context: .
-      dockerfile: Dockerfile
+  # ---------------------------
+  # PostgreSQL Database Service
+  # ---------------------------
+  db:
+    image: postgres                         # Use official postgres image
+    container_name: postgres-db-container   # Name of the running container
+
     ports:
-      - "5055:5055"
+      - "5433:5432"   # Map host:container → access DB at localhost:5433
 
     environment:
-      SPRING_PROFILES_ACTIVE: ${ACTIVE_PROFILE}
-      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
+      POSTGRES_USER: postgres        # Database username
+      POSTGRES_PASSWORD: hggi        # Database password
+      POSTGRES_DB: movie_app         # Database name created at startup
+
+    networks:
+      - aabouelsoud                  # Attach to custom bridge network
+
+    healthcheck:                     # Ensures DB is ready before app starts
+      test: ["CMD-SHELL","pg_isready -U postgres -d movie_app"]
+      interval: 10s                  # Run check every 10 seconds
+      timeout: 5s                    # Fail if check takes more than 5s
+      retries: 5                     # Try 5 times before marking as unhealthy
+
+  # ---------------------------
+  # Spring Boot Backend Service
+  # ---------------------------
+  movie_app:
+    image: movie_app_backend                # App image (built from Dockerfile)
+    container_name: movie-app-container
+
+    build:                                  # Build context for the app
+      context: .                            # Current directory
+      dockerfile: Dockerfile                # Use specified Dockerfile
+
+    restart: on-failure                     # Restart app if it crashes
+
+    ports:
+      - "5055:5055"   # Expose app → access at http://localhost:5055
+
+    environment:                            # Spring Boot config values
+      SPRING_PROFILES_ACTIVE: ${ACTIVE_PROFILE}   # e.g. dev, prod
+      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}    # jdbc URL for DB
       SPRING_DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
 
-    networks:
-      - aabouelsoud
+    depends_on:                             # Ensure DB starts first
+      db:
+        condition: service_healthy          # Wait until DB healthcheck passes
 
+    networks:
+      - aabouelsoud                         # Same network as DB for comms
+
+# ---------------------------
+# Networks
+# ---------------------------
 networks:
   aabouelsoud:
-    external: true
+    external: true   # Reuse pre-created network (must exist already!)
