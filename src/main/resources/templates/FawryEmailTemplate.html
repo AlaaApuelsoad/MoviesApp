@@ -19,13 +19,11 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .header {
-            background-color: #ffd700; /* Yellow */
-            padding: 20px;
-            text-align: center;
-        }
         .header img {
-            max-width: 150px;
+            width: 100%;
+            max-height: 180px;
+            object-fit: contain; /* Keeps aspect ratio */
+            display: block;
         }
         .content {
             padding: 20px;
@@ -62,23 +60,26 @@
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <div class="header">
-            <!-- <img src="cid:fawry_logo" alt="Fawry Logo"> -->
-<!--             <img src="https://i.postimg.cc/Jn4nWKQY/fawry-logojpeg.jpg" alt="Fawry Logo" style="width: 150px; height: auto;">-->
-
-        </div>
-        <div class="content">
-            <h1>Welcome to Fawry Movies!</h1>
-            <p>Thank you for joining us! To start enjoying our services, please verify your account by clicking the button below.</p>
-            <div class="button">
-                <a href="{{verification_link}}" target="_blank">Verify Your Account</a>
-            </div>
-            <p>If you didn’t request this email, please ignore it.</p>
-        </div>
-        <div class="footer">
-            <p>&copy; 2025 Fawry Movies. All rights reserved.</p>
-        </div>
+<div class="email-container">
+    <!-- Header as full-width image -->
+    <div class="header">
+        <img src="cid:fawryLogo" alt="Fawry Logo">
     </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1>Welcome to Fawry Movies!</h1>
+        <p>Thank you for joining us! To start enjoying our services, please verify your account by clicking the button below.</p>
+        <div class="button">
+            <a href="{{verification_link}}" target="_blank">Verify Your Account</a>
+        </div>
+        <p>If you didn’t request this email, please ignore it.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Fawry Movies. All rights reserved.</p>
+    </div>
+</div>
 </body>
 </html>

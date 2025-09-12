@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -47,6 +49,8 @@ public class EmailService {
             message.setSubject("Fawry Movies Email Verification");
             helper.setTo(to);
             helper.setText(htmlContent, true);
+            ClassPathResource res = new ClassPathResource("static/4-2-Fawry.png");
+            helper.addInline("fawryLogo", res);
             mailSender.send(message);
 
         } catch (MailSendException e) {

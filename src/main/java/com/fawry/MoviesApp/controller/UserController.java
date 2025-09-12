@@ -7,16 +7,20 @@ import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
 import com.fawry.MoviesApp.constants.AppConstants;
+import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(AppConstants.USER_ROUTE)
@@ -35,7 +39,7 @@ public class UserController {
             @ApiResponse(responseCode = "201",description = "User Register Successful",content = @Content(schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "400",description = "Bad Request",content = @Content(schema = @Schema(type = "String"))),
     })
-    public ResponseEntity<UserRegisterResponse> userRegister(@Validated @RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<UserRegisterResponse> userRegister(@Validated @RequestBody UserRegisterDto userRegisterDto) throws MessagingException, TemplateException, IOException {
         return new ResponseEntity<>(userService.userRegister(userRegisterDto),HttpStatus.CREATED);
     }
 
