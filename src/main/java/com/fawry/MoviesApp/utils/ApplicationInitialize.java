@@ -62,7 +62,7 @@ public class ApplicationInitialize {
                     .lastName("Admin")
                     .username(adminUserName)
                     .password(bCryptPasswordEncoder.encode(adminPassword.concat(saltPass)))
-                    .email("admin@fawry.task.com")
+                    .email("admin@fawry.com")
                     .isVerified(true)
                     .isDeleted(false)
                     .type("admin")

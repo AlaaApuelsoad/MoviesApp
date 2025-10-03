@@ -4,7 +4,6 @@ import com.fawry.MoviesApp.dto.AuthResponse;
 import com.fawry.MoviesApp.dto.LoginRequest;
 import com.fawry.MoviesApp.enums.ErrorCode;
 import com.fawry.MoviesApp.exception.CustomException;
-import com.fawry.MoviesApp.filters.JwtService;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class AuthenticationService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -27,7 +26,7 @@ public class LoginService {
 
     public AuthResponse login(LoginRequest userLoginRequest) {
 
-        User user = userUtils.getUser(userLoginRequest.getUsernameOrEmail());
+        User user = userUtils.getUser(userLoginRequest.getUsername());
         validateAccountVerification(user);
         String userPassword = userLoginRequest.getPassword().concat(user.getSaltPassword());
 
@@ -35,7 +34,7 @@ public class LoginService {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
         LoginRequest newLoginRequest = LoginRequest.builder()
-                .usernameOrEmail(userLoginRequest.getUsernameOrEmail())
+                .username(userLoginRequest.getUsername())
                 .password(userPassword)
                 .build();
         return authenticate(newLoginRequest);
@@ -43,10 +42,10 @@ public class LoginService {
 
     public AuthResponse authenticate(LoginRequest loginRequest) {
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(),
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
 
-        User user = userUtils.getUser(loginRequest.getUsernameOrEmail());
+        User user = userUtils.getUser(loginRequest.getUsername());
         String userIdentifier = user.getUsername();
 
         String token = jwtService.generateToken(userIdentifier);

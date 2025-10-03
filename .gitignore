@@ -30,4 +30,11 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
+/dev/**
+/logs/**
 .vscode/
+/.env
+/dev/dev.log
+/dev/dev.log.2025-09-27.0.txt
+/dev/dev.log.2025-10-03.0.txt
+/logs/error.log

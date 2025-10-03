@@ -9,6 +9,6 @@ import lombok.*;
 @Builder
 public class LoginRequest {
 
-    private String usernameOrEmail;
+    private String username;
     private String password;
 }

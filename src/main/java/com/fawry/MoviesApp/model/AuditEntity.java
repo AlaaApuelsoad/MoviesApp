@@ -2,6 +2,7 @@ package com.fawry.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fawry.MoviesApp.context.UserContextHolder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,15 +51,22 @@ public class AuditEntity {
 
     @PrePersist
     private void onCreate() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
-            this.createdBy = userDetails.getUsername();
-            this.createdById = getUserIdFromUserDetails(userDetails);
-        } else {
+        if (UserContextHolder.getLoggedInUserContext() != null) {
+            this.createdBy = UserContextHolder.getLoggedInUserContext().getUserName();
+            this.createdById = UserContextHolder.getLoggedInUserContext().getUserId();
+        }else {
             this.createdBy = "SYSTEM";
             this.createdById = 0L;
         }
+
+//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
+//            this.createdBy = userDetails.getUsername();
+//            this.createdById = getUserIdFromUserDetails(userDetails);
+//        } else {
+//            this.createdBy = "SYSTEM";
+//            this.createdById = 0L;
+//        }
+
         this.createdAt = LocalDateTime.now();
     }
 

@@ -4,30 +4,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.model.User;
-import com.fawry.MoviesApp.service.LoginService;
 import com.fawry.MoviesApp.service.MovieService;
 import com.fawry.MoviesApp.dao.OMDBDao;
 import com.fawry.MoviesApp.service.UserService;
-import com.fawry.MoviesApp.constants.AppConstants;
+import com.fawry.MoviesApp.constants.Navigation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(AppConstants.ADMIN_DASHBOARD_ROUTE)
+@RequestMapping(Navigation.ADMIN_DASHBOARD_ROUTE)
 @Tag(name = "Admin Dashboard", description = "Endpoints for managing the admin dashboard functionalities.")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
@@ -35,27 +31,6 @@ public class AdminController {
     private final UserService userService;
     private final OMDBDao omdbDao;
     private final MovieService movieService;
-    private final LoginService loginService;
-
-
-    @PostMapping("/auth/login")
-    @Operation(summary = "Admin Authentication",
-            description = "Allows an admin to log in by providing their credentials. Returns an authentication token upon successful login.",
-            responses = {
-                    @ApiResponse(
-                            description = "Login successful. Returns authentication token.", responseCode = "200",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
-                    ),
-                    @ApiResponse(description = "Invalid credentials or unauthorized access.", responseCode = "401",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-                    ),
-                    @ApiResponse(description = "Bad Request - Missing or invalid fields in the login request.", responseCode = "400",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-            }
-    )
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        return new ResponseEntity<>(loginService.login(loginRequest), HttpStatus.OK);
-    }
 
     @PostMapping("/create/admin")
     @Operation(summary = "Create admin", description = "Admin can create a new admin by providing necessary details.", tags = {"Admin Operations"})

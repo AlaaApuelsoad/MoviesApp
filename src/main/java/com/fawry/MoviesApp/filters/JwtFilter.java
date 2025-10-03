@@ -1,5 +1,7 @@
 package com.fawry.MoviesApp.filters;
 
+import com.fawry.MoviesApp.context.UserContextHolder;
+import com.fawry.MoviesApp.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -19,7 +21,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-@Order(value = 2)//after RequestIdFilter
+@Order(value = 2)//after CorrelationFilter
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -55,10 +57,10 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException e) {
-            handleJwtException(response, "Token Expired for RequestID: " + RequestContext.getRequestContext() , HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Token Expired for RequestID: " + UserContextHolder.getLoggedInUserContext() , HttpServletResponse.SC_UNAUTHORIZED);
 
         } catch (SignatureException e) {
-            handleJwtException(response, "Invalid Token Signature for RequestID: " + RequestContext.getRequestContext(), HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Invalid Token Signature for RequestID: " + UserContextHolder.getLoggedInUserContext(), HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 

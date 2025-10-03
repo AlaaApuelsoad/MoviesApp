@@ -3,10 +3,10 @@ package com.fawry.MoviesApp.controller;
 import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.enums.VerificationStatus;
 import com.fawry.MoviesApp.model.User;
-import com.fawry.MoviesApp.service.LoginService;
+import com.fawry.MoviesApp.service.AuthenticationService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.service.VerifyService;
-import com.fawry.MoviesApp.constants.AppConstants;
+import com.fawry.MoviesApp.constants.Navigation;
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,14 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(AppConstants.USER_ROUTE)
+@RequestMapping(Navigation.USER_ROUTE)
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;
     private final VerifyService verifyService;
-    private final LoginService loginService;
 
 
     @PostMapping(value = "/register",consumes = "application/json")
@@ -64,19 +63,4 @@ public class UserController {
         };
 
     }
-
-
-    @PostMapping("/auth/login")
-    @Operation(summary = "User login ",description = "User Can Login")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "Admin login successfully"),
-            @ApiResponse(responseCode = "201",description = "Invalid Credentials"),
-            @ApiResponse(responseCode = "500",description = "Internal Server Error")
-    })
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new ResponseEntity<>(loginService.login(loginRequest),HttpStatus.OK);
-    }
-
-
-
 }

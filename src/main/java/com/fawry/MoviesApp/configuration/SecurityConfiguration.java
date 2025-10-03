@@ -20,9 +20,8 @@ public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
     private static final String [] OPEN_URL = {
-            "/admin/dashboard/auth/login",
             "/users/register",
-            "/users/auth/login",
+            "/auth/**",
             "/users/verify/account/**",
             "/fawry/**",
             "/ratings/movie/**",

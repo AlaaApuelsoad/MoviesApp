@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RatingService {
 
-    private final LoginService loginService;
+    private final AuthenticationService authenticationService;
     private final UserUtils userUtils;
     private final MovieUtils movieUtils;
     private final MemberRatingRepository memberRatingRepository;
@@ -32,7 +32,7 @@ public class RatingService {
             throw new CustomException(ErrorCode.INVALID_INPUT);
         }
 
-        User user = userUtils.getUser(loginService.getUserCredentials().getUsername());
+        User user = userUtils.getUser(authenticationService.getUserCredentials().getUsername());
         Movie movie = movieUtils.getMovie(imdbId);
 
         Optional<MemberRating> existingRating = memberRatingRepository.findByUserAndMovie(user, movie);

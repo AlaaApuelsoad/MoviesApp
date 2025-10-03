@@ -1,5 +1,6 @@
 package com.fawry.MoviesApp.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Getter
@@ -10,5 +11,6 @@ import lombok.*;
 public class AuthResponse {
 
     private String token;
+    @JsonIgnore
     private String role;
 }

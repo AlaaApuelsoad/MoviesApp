@@ -62,7 +62,7 @@ public class User extends AuditEntity implements UserDetails {
     @JsonBackReference("userRoleReference")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     @JsonManagedReference("userRatingReference")
     private List<MemberRating> memberRatings;
 
