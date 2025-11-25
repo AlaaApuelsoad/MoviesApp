@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
     private static final String CORRELATION_ID = "X-CORRELATION-ID";
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         String correlationId = request.getHeader(CORRELATION_ID);
