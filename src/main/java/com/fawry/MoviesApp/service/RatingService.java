@@ -7,7 +7,7 @@ import com.fawry.MoviesApp.model.MemberRating;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.MemberRatingRepository;
-import com.fawry.MoviesApp.utils.MovieUtils;
+import com.fawry.MoviesApp.repository.MovieRepository;
 import com.fawry.MoviesApp.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class RatingService {
 
     private final AuthenticationService authenticationService;
     private final UserUtils userUtils;
-    private final MovieUtils movieUtils;
+    private final MovieRepository movieRepository;
     private final MemberRatingRepository memberRatingRepository;
 
 
@@ -33,7 +33,9 @@ public class RatingService {
         }
 
         User user = userUtils.getUser(authenticationService.getUserCredentials().getUsername());
-        Movie movie = movieUtils.getMovie(imdbId);
+        Movie movie =  movieRepository.getMovieByImdbId(imdbId).orElseThrow(
+                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
+        );
 
         Optional<MemberRating> existingRating = memberRatingRepository.findByUserAndMovie(user, movie);
 
