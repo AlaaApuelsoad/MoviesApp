@@ -5,9 +5,6 @@ import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +17,8 @@ public class UserUtils {
     private final UserRepository userRepository;
 
     public void userBuilder(User user) {
-        String saltPassword = systemUtils.generateUUIDCode();
-        String verificationCode = systemUtils.generateUUIDCode();
+        String saltPassword = SystemUtils.generateUUIDCode();
+        String verificationCode = SystemUtils.generateUUIDCode();
 
         if (user.getType().equals("admin")) {
             user.setRole(systemUtils.findRoleByRoleName("ADMIN"));
@@ -45,12 +42,4 @@ public class UserUtils {
         );
     }
 
-    public UserDetails getCredentials() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            return (UserDetails) authentication.getPrincipal();
-        } else {
-            return null;
-        }
-    }
 }

@@ -5,7 +5,7 @@ import com.fawry.MoviesApp.dto.*;
 import com.fawry.MoviesApp.model.Movie;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.service.MovieService;
-import com.fawry.MoviesApp.dao.OMDBDao;
+import com.fawry.MoviesApp.service.OmdbIntegrationService;
 import com.fawry.MoviesApp.service.UserService;
 import com.fawry.MoviesApp.constants.Navigation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final UserService userService;
-    private final OMDBDao omdbDao;
+    private final OmdbIntegrationService omdbIntegrationService;
     private final MovieService movieService;
 
     @PostMapping("/create/admin")
@@ -60,7 +60,7 @@ public class AdminController {
     public ResponseEntity<MovieSearchResponse> moviesListSearch
             (@RequestParam(value = "title", required = false, defaultValue = "Dark") String title,
              @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber) throws JsonProcessingException {
-        return new ResponseEntity<>(omdbDao.searchMovies(title, pageNumber), HttpStatus.OK);
+        return new ResponseEntity<>(omdbIntegrationService.searchMovies(title, pageNumber), HttpStatus.OK);
     }
 
     @GetMapping("/add/movie/{imdbID}")

@@ -33,7 +33,7 @@ public class RatingService {
         }
 
         User user = userUtils.getUser(authenticationService.getUserCredentials().getUsername());
-        Movie movie =  movieRepository.getMovieByImdbId(imdbId).orElseThrow(
+        Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
         );
 

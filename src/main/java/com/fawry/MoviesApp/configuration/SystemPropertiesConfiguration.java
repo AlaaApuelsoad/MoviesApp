@@ -26,10 +26,10 @@ public class SystemPropertiesConfiguration {
     @PostConstruct
     public void configReader() {
         /* Define the file path where properties will be saved
-        dir file inside the container will be mapping to dir file in the host
+        dir file inside the container will be mapping to a dir file in the host
         with docker compose will be inside the container /root/systemProperties.properties--mapped in docker compose file
          */
-        String filePath = System.getProperty("user.home")+ File.separator+ ".application-properties";
+        String filePath = System.getProperty("user.home") + File.separator+ ".application-properties";
         System.out.println("===== Loaded Properties =====");
         createExternalPropertyFile(filePath);
 
@@ -64,7 +64,7 @@ public class SystemPropertiesConfiguration {
     }
 
     public void createExternalPropertyFile(String filePath){
-        System.out.println("Generating External Properties File: " + filePath);
+        System.out.println("Creating External Properties File: " + filePath);
         try {
             File propertyFile = new File(filePath);
 

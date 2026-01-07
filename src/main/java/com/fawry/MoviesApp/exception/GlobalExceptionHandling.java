@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fawry.MoviesApp.context.LogContext;
 import com.fawry.MoviesApp.context.UserContextHolder;
-import com.fawry.MoviesApp.utils.EnvUtils;
+import com.fawry.MoviesApp.service.SystemPropertyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +30,7 @@ public class GlobalExceptionHandling {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandling.class);
     private final ObjectMapper mapper;
-    private final EnvUtils envUtils;
+    private final SystemPropertyService systemPropertyService;
 
     @ExceptionHandler(CustomException.class) //system exception
     public ResponseEntity<?> handleCustomException(CustomException ex, HttpServletRequest request) throws JsonProcessingException {
@@ -39,7 +39,7 @@ public class GlobalExceptionHandling {
                 .timestamp(LocalDateTime.now().toString())
                 .correlationId(MDC.get("X-Correlation-ID"))
                 .level("ERROR")
-                .environment(envUtils.getActiveProfile())
+                .environment(systemPropertyService.getActiveProfile())
                 .logger(logger.getName())
                 .thread(Thread.currentThread().getName())
                 .httpMethod(request.getMethod())
@@ -75,7 +75,7 @@ public class GlobalExceptionHandling {
                 .timestamp(LocalDateTime.now().toString())
                 .correlationId(MDC.get("X-Correlation-ID"))
                 .level("ERROR")
-                .environment(envUtils.getActiveProfile())
+                .environment(systemPropertyService.getActiveProfile())
                 .logger(logger.getName())
                 .thread(Thread.currentThread().getName())
                 .httpMethod(request.getMethod())

@@ -3,7 +3,7 @@ package com.fawry.MoviesApp.service;
 import com.fawry.MoviesApp.enums.ErrorCode;
 import com.fawry.MoviesApp.exception.CustomException;
 import com.fawry.MoviesApp.listener.UserRegisterEvent;
-import com.fawry.MoviesApp.utils.EmailTemplateUtility;
+import com.fawry.MoviesApp.utils.SystemUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -28,9 +27,9 @@ import java.io.IOException;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private final SystemUtils systemUtils;
     @Value("${app.verification.verify-url}")
     private String verifyUrl;
-    private final EmailTemplateUtility emailTemplateUtility;
     private static final Logger logger = LogManager.getLogger(EmailService.class);
 
 
@@ -45,7 +44,7 @@ public class EmailService {
 
 
             String verificationLink = verifyUrl + userRegisterEvent.getVerificationCode();
-            String htmlContent = emailTemplateUtility.accountVerificationEmailBuild(verificationLink);
+            String htmlContent = systemUtils.accountVerificationEmailBuild(verificationLink);
             message.setSubject("Fawry Movies Email Verification");
             helper.setTo(to);
             helper.setText(htmlContent, true);

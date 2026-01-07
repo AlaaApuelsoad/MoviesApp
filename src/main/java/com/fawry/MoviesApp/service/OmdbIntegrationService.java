@@ -6,38 +6,37 @@
  * </p>
  */
 
-package com.fawry.MoviesApp.dao;
+package com.fawry.MoviesApp.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fawry.MoviesApp.dto.MovieSearchResponse;
 import com.fawry.MoviesApp.mapper.MovieSearchResponseMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class OMDBDao {
+public class OmdbIntegrationService {
 
     private final RestTemplate restTemplate;
+    private final SystemPropertyService systemPropertyService;
     private final MovieSearchResponseMapper movieSearchResponseMapper;
-    @Value("${app.ombd.api.integration.key}")
-    private String API_KEY;
-    private static final String BASE_URL = "https://www.omdbapi.com/?type=movie&apikey=";
 
     @Cacheable(value = "movieDetails", key = "#pageNumber")
     public MovieSearchResponse searchMovies(String title,int pageNumber) throws JsonProcessingException {
-        String url = BASE_URL+API_KEY+"&s="+title+"&page="+pageNumber;
+        String url = systemPropertyService.getProperty("app.omdb.base-url") +
+                systemPropertyService.getProperty("app.ombd.api.integration.key") +
+                "&s=" + title + "&page=" + pageNumber;
         String response = restTemplate.getForObject(url, String.class);
         return movieSearchResponseMapper.mapToMovieSearchResponse(response);
     }
 
     public String getMovieByImdbId(String imdbId) {
-        String url = BASE_URL+API_KEY+"&i="+imdbId;
+        String url = systemPropertyService.getProperty("app.omdb.base-url") +
+                systemPropertyService.getProperty("app.ombd.api.integration.key") + "&i="+imdbId;
         return restTemplate.getForObject(url, String.class);
     }
-
 
 }

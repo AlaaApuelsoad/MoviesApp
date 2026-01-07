@@ -1,7 +1,6 @@
 package com.fawry.MoviesApp.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fawry.MoviesApp.dao.OMDBDao;
 import com.fawry.MoviesApp.dto.CustomPageDto;
 import com.fawry.MoviesApp.dto.MovieInfoDetails;
 import com.fawry.MoviesApp.dto.MovieListInfo;
@@ -21,12 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
 public class MovieService {
 
-    public final OMDBDao omdbDao;
+    public final OmdbIntegrationService omdbIntegrationService;
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
@@ -40,7 +41,7 @@ public class MovieService {
             throw new CustomException(ErrorCode.MOVIE_EXISTS);
         }
 
-        String movieResponse = omdbDao.getMovieByImdbId(imdbId);
+        String movieResponse = omdbIntegrationService.getMovieByImdbId(imdbId);
         Movie movie = movieMapper.mapToMovie(movieResponse);
         return movieRepository.save(movie);
     }
@@ -96,7 +97,7 @@ public class MovieService {
     }
 
     public int getMemberRatingForMovie(String imdbId) {
-        String username = userUtils.getCredentials().getUsername();
+        String username = Objects.requireNonNull(User.getCredentials()).getUsername();
         User user = userUtils.getUser(username);
         Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
         return rating != null ? rating : 0;

@@ -2,7 +2,6 @@ package com.fawry.MoviesApp.service;
 
 import com.fawry.MoviesApp.dto.UserRegisterDto;
 import com.fawry.MoviesApp.dto.UserRegisterResponse;
-import com.fawry.MoviesApp.listener.UserRegisterEvent;
 import com.fawry.MoviesApp.mapper.UserMapper;
 import com.fawry.MoviesApp.model.User;
 import com.fawry.MoviesApp.repository.UserRepository;

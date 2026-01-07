@@ -3,7 +3,7 @@ package com.fawry.MoviesApp.interceptors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fawry.MoviesApp.context.LogContext;
 import com.fawry.MoviesApp.context.UserContextHolder;
-import com.fawry.MoviesApp.utils.EnvUtils;
+import com.fawry.MoviesApp.service.SystemPropertyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class LogInterceptor implements org.springframework.web.servlet.HandlerIn
 
     private static final Logger logger = LoggerFactory.getLogger(LogInterceptor.class);
     private final ObjectMapper mapper;
-    private final EnvUtils envUtils;
+    private final SystemPropertyService systemPropertyService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -43,7 +43,7 @@ public class LogInterceptor implements org.springframework.web.servlet.HandlerIn
                     .timestamp(LocalDateTime.now().toString())
                     .correlationId(MDC.get("X-Correlation-ID"))
                     .level("INFO")
-                    .environment(envUtils.getActiveProfile())
+                    .environment(systemPropertyService.getActiveProfile())
                     .logger(logger.getName())
                     .thread(Thread.currentThread().getName())
                     .httpMethod(request.getMethod())

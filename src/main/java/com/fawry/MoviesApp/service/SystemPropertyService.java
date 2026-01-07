@@ -1,4 +1,4 @@
-package com.fawry.MoviesApp.utils;
+package com.fawry.MoviesApp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EnvUtils {
+public class SystemPropertyService {
 
     private final Environment environment;
 
