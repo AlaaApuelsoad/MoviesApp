@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserUtils {
+public class UserHelper {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SystemUtils systemUtils;
