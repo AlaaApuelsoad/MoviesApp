@@ -30,7 +30,6 @@ public class GlobalExceptionHandling {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandling.class);
     private final ObjectMapper mapper;
-    private final SystemPropertyService systemPropertyService;
 
     @ExceptionHandler(CustomException.class) //system exception
     public ResponseEntity<?> handleCustomException(CustomException ex, HttpServletRequest request) throws JsonProcessingException {
@@ -39,7 +38,7 @@ public class GlobalExceptionHandling {
                 .timestamp(LocalDateTime.now().toString())
                 .correlationId(MDC.get("X-Correlation-ID"))
                 .level("ERROR")
-                .environment(systemPropertyService.getActiveProfile())
+                .environment(SystemPropertyService.getActiveProfile())
                 .logger(logger.getName())
                 .thread(Thread.currentThread().getName())
                 .httpMethod(request.getMethod())
@@ -75,7 +74,7 @@ public class GlobalExceptionHandling {
                 .timestamp(LocalDateTime.now().toString())
                 .correlationId(MDC.get("X-Correlation-ID"))
                 .level("ERROR")
-                .environment(systemPropertyService.getActiveProfile())
+                .environment(SystemPropertyService.getActiveProfile())
                 .logger(logger.getName())
                 .thread(Thread.currentThread().getName())
                 .httpMethod(request.getMethod())
