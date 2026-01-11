@@ -13,7 +13,7 @@ import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
-import com.alaa.MoviesApp.utils.UserUtils;
+import com.alaa.MoviesApp.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
-    private final UserUtils userUtils;
+    private final UserHelper userHelper;
     private final MemberRatingRepository memberRatingRepository;
 
 
@@ -98,7 +98,7 @@ public class MovieService {
 
     public int getMemberRatingForMovie(String imdbId) {
         String username = Objects.requireNonNull(User.getCredentials()).getUsername();
-        User user = userUtils.getUser(username);
+        User user = userHelper.getUser(username);
         Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
         return rating != null ? rating : 0;
     }

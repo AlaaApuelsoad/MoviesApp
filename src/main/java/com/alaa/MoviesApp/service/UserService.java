@@ -5,7 +5,7 @@ import com.alaa.MoviesApp.dto.UserRegisterResponse;
 import com.alaa.MoviesApp.mapper.UserMapper;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.UserRepository;
-import com.alaa.MoviesApp.utils.UserUtils;
+import com.alaa.MoviesApp.utils.UserHelper;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserUtils userUtils;
+    private final UserHelper userHelper;
     private final ApplicationEventPublisher eventPublisher;
     private final EmailService2 emailService2;
 
@@ -30,7 +30,7 @@ public class UserService {
     public UserRegisterResponse userRegister(UserRegisterDto userRegisterDto) throws MessagingException, TemplateException, IOException {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("member");
-        userUtils.userBuilder(user);
+        userHelper.userBuilder(user);
         User savedUser = userRepository.save(user);
         emailService2.sendEmail();
 //        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
@@ -41,7 +41,7 @@ public class UserService {
     public UserRegisterResponse createAdmin(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("admin");
-        userUtils.userBuilder(user);
+        userHelper.userBuilder(user);
         return userMapper.mapToUserRegisterResponse(userRepository.save(user));
     }
 

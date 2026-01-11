@@ -27,4 +27,15 @@ public class Role extends AuditEntity{
     @JsonManagedReference("userRoleReference")
     private Set<User> users;
 
+    public enum RoleEnum {
+        ADMIN("ADMIN"),
+        MEMBER("MEMBER");
+
+        private String name;
+
+        RoleEnum(String name) {
+            this.name = name;
+        }
+    }
+
 }

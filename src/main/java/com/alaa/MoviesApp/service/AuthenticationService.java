@@ -5,7 +5,7 @@ import com.alaa.MoviesApp.dto.LoginRequest;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.CustomException;
 import com.alaa.MoviesApp.model.User;
-import com.alaa.MoviesApp.utils.UserUtils;
+import com.alaa.MoviesApp.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +22,11 @@ public class AuthenticationService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserUtils userUtils;
+    private final UserHelper userHelper;
 
     public AuthResponse login(LoginRequest userLoginRequest) {
 
-        User user = userUtils.getUser(userLoginRequest.getUsername());
+        User user = userHelper.getUser(userLoginRequest.getUsername());
         validateAccountVerification(user);
         String userPassword = userLoginRequest.getPassword().concat(user.getSaltPassword());
 
@@ -45,7 +45,7 @@ public class AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
 
-        User user = userUtils.getUser(loginRequest.getUsername());
+        User user = userHelper.getUser(loginRequest.getUsername());
         String userIdentifier = user.getUsername();
 
         String token = jwtService.generateToken(userIdentifier);
