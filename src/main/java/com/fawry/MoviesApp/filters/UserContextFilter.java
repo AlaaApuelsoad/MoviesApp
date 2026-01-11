@@ -15,8 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
-@Order(3)
+//@Component
+//@Order(3)
 public class UserContextFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -24,7 +24,7 @@ public class UserContextFilter extends OncePerRequestFilter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated()){
-            User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             //fill user context
             LoggedInUserContext context = LoggedInUserContext.builder()
                     .userId(loggedInUser.getId())

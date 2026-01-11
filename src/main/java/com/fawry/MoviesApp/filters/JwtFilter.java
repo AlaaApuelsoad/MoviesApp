@@ -21,7 +21,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-@Order(value = 2)//after CorrelationFilter
+@Order(value = 2)
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
