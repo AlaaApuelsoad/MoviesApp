@@ -20,21 +20,22 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class OmdbIntegrationService {
 
+    private final SystemPropertyService systemPropertyService;
     private final RestTemplate restTemplate;
     private final MovieSearchResponseMapper movieSearchResponseMapper;
 
     @Cacheable(value = "movieDetails", key = "#pageNumber")
     public MovieSearchResponse searchMovies(String title,int pageNumber) throws JsonProcessingException {
-        String url = SystemPropertyService.getProperty("app.omdb.base-url") +
-                SystemPropertyService.getProperty("app.ombd.api.integration.key") +
+        String url = systemPropertyService.getProperty("app.omdb.base-url") +
+                systemPropertyService.getProperty("app.ombd.api.integration.key") +
                 "&s=" + title + "&page=" + pageNumber;
         String response = restTemplate.getForObject(url, String.class);
         return movieSearchResponseMapper.mapToMovieSearchResponse(response);
     }
 
     public String getMovieByImdbId(String imdbId) {
-        String url = SystemPropertyService.getProperty("app.omdb.base-url") +
-                SystemPropertyService.getProperty("app.ombd.api.integration.key") + "&i="+imdbId;
+        String url = systemPropertyService.getProperty("app.omdb.base-url") +
+                systemPropertyService.getProperty("app.ombd.api.integration.key") + "&i="+imdbId;
         return restTemplate.getForObject(url, String.class);
     }
 

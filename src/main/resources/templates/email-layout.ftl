@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fawry Movies Email</title>
+    <title>Movies Email</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,7 +63,7 @@
 
     <!-- Footer -->
     <div class="footer">
-        <p>&copy; 2025 Fawry Movies. All rights reserved.</p>
+        <p>&copy; 2025 Movies App. All rights reserved.</p>
     </div>
 </div>
 </body>

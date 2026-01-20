@@ -40,7 +40,7 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
     Page<Movie> searchForMovie(@Param("keyword") String keyword, Pageable pageable);
 
     @Transactional
-    @Query("SELECT new com.fawry.MoviesApp.dto.MovieListInfo(m.title, m.year, m.poster, m.imdbID,m ) " +
+    @Query("SELECT new com.alaa.MoviesApp.dto.MovieListInfo(m.title, m.year, m.poster, m.imdbID,m ) " +
             "FROM Movie m WHERE m.isDeleted = false")
     Page<MovieListInfo> getMoviesFromDB(Pageable pageable);
 

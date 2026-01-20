@@ -19,9 +19,10 @@ import java.util.UUID;
 public class SystemUtils {
 
     private final RoleRepository roleRepository;
+    private final SystemPropertyService systemPropertyService;
 
     public String accountVerificationEmailBuild(String verificationLink) throws IOException {
-        Path path = Paths.get(SystemPropertyService.getProperty("app.template.Account.Verification"));
+        Path path = Paths.get(systemPropertyService.getProperty("app.template.Account.Verification"));
         String templateContent = Files.readString(path);
         return templateContent.replace("{{verification_link}}",verificationLink);
     }
