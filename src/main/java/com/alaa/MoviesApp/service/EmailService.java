@@ -3,13 +3,11 @@ package com.alaa.MoviesApp.service;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.CustomException;
 import com.alaa.MoviesApp.listener.UserRegisterEvent;
-import com.alaa.MoviesApp.utils.SystemUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,6 +18,10 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Year;
 
 
 @Component
@@ -27,15 +29,13 @@ import java.io.IOException;
 public class EmailService {
 
     private final JavaMailSender mailSender;
-    private final SystemUtils systemUtils;
-    @Value("${app.verification.verify-url}")
-    private String verifyUrl;
+    private final SystemPropertyService systemPropertyService;
     private static final Logger logger = LogManager.getLogger(EmailService.class);
 
-
-    @Async("executor")
+    @Async("Notification-Async")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendAccountVerificationEmail(UserRegisterEvent userRegisterEvent) {
+        String verifyUrl = systemPropertyService.getProperty("app.verification.verify-url");
         String to = userRegisterEvent.getEmail();
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -44,12 +44,12 @@ public class EmailService {
 
 
             String verificationLink = verifyUrl + userRegisterEvent.getVerificationCode();
-            String htmlContent = systemUtils.accountVerificationEmailBuild(verificationLink);
-            message.setSubject("Fawry Movies Email Verification");
+            String htmlContent = this.EmailBuilder(verificationLink);
+            message.setSubject("Movies App Email Verification");
             helper.setTo(to);
             helper.setText(htmlContent, true);
-            ClassPathResource res = new ClassPathResource("static/4-2-Fawry.png");
-            helper.addInline("fawryLogo", res);
+//            ClassPathResource res = new ClassPathResource("static/4-2-Fawry.png");
+//            helper.addInline("Logo", res);
             mailSender.send(message);
 
         } catch (MailSendException e) {
@@ -67,4 +67,10 @@ public class EmailService {
         logger.info("Successfully sent verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName());
     }
 
+    private String EmailBuilder(String verificationLink) throws IOException {
+        Path path = Paths.get(systemPropertyService.getProperty("app.template.Account.Verification"));
+        String templateContent = Files.readString(path);
+        return templateContent.replace("{{verification_link}}",verificationLink)
+                .replace("{{year}}",String.valueOf(Year.now().getValue()));
+    }
 }

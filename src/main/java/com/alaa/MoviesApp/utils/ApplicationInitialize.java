@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationInitialize {
 
+    private final SystemPropertyService systemPropertyService;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -58,8 +59,8 @@ public class ApplicationInitialize {
                     .firstName("Admin")
                     .lastName("Admin")
                     .username(adminUserName)
-                    .password(bCryptPasswordEncoder.encode(SystemPropertyService.getProperty("app.admin.password").concat(saltPass)))
-                    .email("admin@fawry.com")
+                    .password(bCryptPasswordEncoder.encode(systemPropertyService.getProperty("app.admin.password").concat(saltPass)))
+                    .email(systemPropertyService.getProperty("app.admin.email"))
                     .isVerified(true)
                     .isDeleted(false)
                     .type("admin")

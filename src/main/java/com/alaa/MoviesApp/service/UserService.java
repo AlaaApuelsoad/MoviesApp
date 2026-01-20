@@ -2,6 +2,7 @@ package com.alaa.MoviesApp.service;
 
 import com.alaa.MoviesApp.dto.UserRegisterDto;
 import com.alaa.MoviesApp.dto.UserRegisterResponse;
+import com.alaa.MoviesApp.listener.UserRegisterEvent;
 import com.alaa.MoviesApp.mapper.UserMapper;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserHelper userHelper;
     private final ApplicationEventPublisher eventPublisher;
-    private final EmailService2 emailService2;
+
 
     @Transactional(rollbackFor = Exception.class)
     public UserRegisterResponse userRegister(UserRegisterDto userRegisterDto) throws MessagingException, TemplateException, IOException {
@@ -32,8 +33,7 @@ public class UserService {
         user.setType("member");
         userHelper.userBuilder(user);
         User savedUser = userRepository.save(user);
-        emailService2.sendEmail();
-//        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
+        eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
         return userMapper.mapToUserRegisterResponse(savedUser);
     }
 
