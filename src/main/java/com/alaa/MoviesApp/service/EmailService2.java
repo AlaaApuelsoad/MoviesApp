@@ -10,10 +10,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.StringReader;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +55,7 @@ public class EmailService2 {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo("alaaapu135@gmail.com");
-        helper.setSubject("Verify Your Account - Fawry Movies");
+        helper.setSubject("Verify Your Account - Movies App");
         helper.setText(emailBody, true);
         ClassPathResource logo = new ClassPathResource("static/4-2-Fawry.png");
         helper.addInline("logoImage", logo);

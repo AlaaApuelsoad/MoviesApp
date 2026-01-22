@@ -8,7 +8,6 @@ import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
-import com.alaa.MoviesApp.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +19,9 @@ import java.util.Optional;
 public class RatingService {
 
     private final AuthenticationService authenticationService;
-    private final UserHelper userHelper;
     private final MovieRepository movieRepository;
     private final MemberRatingRepository memberRatingRepository;
+    private final UserService userService;
 
 
     @Transactional
@@ -32,7 +31,7 @@ public class RatingService {
             throw new CustomException(ErrorCode.INVALID_INPUT);
         }
 
-        User user = userHelper.getUser(authenticationService.getUserCredentials().getUsername());
+        User user = userService.getUser(authenticationService.getUserCredentials().getUsername());
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
         );
