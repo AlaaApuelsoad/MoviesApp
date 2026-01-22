@@ -13,6 +13,7 @@ import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final ApplicationEventPublisher eventPublisher;
     private final SystemUtils systemUtils;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder BCryptPasswordEncoder;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -67,7 +68,7 @@ public class UserService {
         }
 
         user.setSaltPassword(saltPassword);
-        user.setPassword(passwordEncoder.encode(user.getPassword().concat(saltPassword)));
+        user.setPassword(BCryptPasswordEncoder.encode(user.getPassword().concat(saltPassword)));
     }
 
     public User getUser(String userIdentifier){
