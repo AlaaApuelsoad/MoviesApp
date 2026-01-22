@@ -54,7 +54,7 @@ public class VerifyService {
     }
 
     public void resendVerificationEmail(User user) {
-        user.setVerificationCode(systemUtils.generateUUIDCode());
+        user.setVerificationCode(SystemUtils.generateUUIDCode());
         user.setVerificationCodeExpiryDate(LocalDateTime.now().plusSeconds(10));
         userRepository.save(user);
         emailService.sendAccountVerificationEmail(new UserRegisterEvent(user));
