@@ -3,8 +3,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -17,27 +16,25 @@ import freemarker.template.Template;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService2 {
+@RequiredArgsConstructor
+public class FreeMakerEmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    private Configuration freeMarkerConfigurer;
+    private final JavaMailSender mailSender;
+    private final Configuration freeMarkerConfigurer;
 
     private String prepareEmailBody() throws IOException, TemplateException {
-        // Layout template
+
         Template emailLayoutTemplate = freeMarkerConfigurer.getTemplate("email-layout.ftl");
         Map<String, String> emailLayoutInput = new HashMap<>();
 
-
         // Static English & Arabic content
         emailLayoutInput.put("englishContent",
-                "<h2>Welcome to Fawry Movies!</h2>" +
+                "<h2>Welcome to Movies App!</h2>" +
                         "<p>Thank you for joining us! Please verify your account to start enjoying our services.</p>"
         );
 
         emailLayoutInput.put("arabicContent",
-                "<h2>مرحباً بك في فوري موفيز!</h2>" +
+                "<h2>مرحباً بك في موفيز!</h2>" +
                         "<p>شكراً لانضمامك إلينا! يرجى تفعيل حسابك للبدء في استخدام خدماتنا.</p>"
         );
 
@@ -47,7 +44,7 @@ public class EmailService2 {
         return stringWriter.toString();
     }
 
-    public void sendEmail() throws MessagingException, IOException, TemplateException {
+    public void sendEmailNotification() throws MessagingException, IOException, TemplateException {
         String emailBody = prepareEmailBody();
 
         // Send email
@@ -57,8 +54,8 @@ public class EmailService2 {
         helper.setTo("alaaapu135@gmail.com");
         helper.setSubject("Verify Your Account - Movies App");
         helper.setText(emailBody, true);
-        ClassPathResource logo = new ClassPathResource("static/4-2-Fawry.png");
-        helper.addInline("logoImage", logo);
+//        ClassPathResource logo = new ClassPathResource("static/4-2-Fawry.png");
+//        helper.addInline("logoImage", logo);
 
         mailSender.send(message);
     }
