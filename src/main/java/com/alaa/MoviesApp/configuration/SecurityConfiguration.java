@@ -23,7 +23,7 @@ public class SecurityConfiguration {
             "/users/register",
             "/auth/**",
             "/users/verify/account/**",
-            "/fawry/**",
+            "/home/**",
             "/ratings/movie/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",

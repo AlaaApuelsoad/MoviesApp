@@ -14,7 +14,7 @@ import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -82,6 +82,9 @@ public class MovieService {
         return pageMapper.customPageDto(moviePage.map(omdbMovieMapper::mapToMovieInfoList));
     }
 
+    @Cacheable(
+            value = "movies",key = "#pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()"
+    )
     @Transactional
     public CustomPageDto<MovieListInfo> getMoviePaginatedFromDB(Pageable pageable) {
         Page<MovieListInfo> moviePage = movieRepository.getMoviesFromDB(pageable);
