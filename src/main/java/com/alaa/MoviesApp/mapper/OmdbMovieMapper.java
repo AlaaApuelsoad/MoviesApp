@@ -97,8 +97,12 @@ public class OmdbMovieMapper {
         return modelMapper.map(movie,MovieInfoDetails.class);
     }
 
-    public MovieListInfo mapToMovieInfoList(Movie movie) throws JsonProcessingException {
-        return modelMapper.map(movie, MovieListInfo.class);
+    public MovieListInfo mapToMovieInfoList(Movie movie) {
+        try {
+            return modelMapper.map(movie, MovieListInfo.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

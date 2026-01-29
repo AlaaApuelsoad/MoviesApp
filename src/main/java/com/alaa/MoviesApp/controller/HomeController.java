@@ -5,6 +5,7 @@ import com.alaa.MoviesApp.dto.MovieInfoDetails;
 import com.alaa.MoviesApp.dto.MovieListInfo;
 import com.alaa.MoviesApp.service.MovieService;
 import com.alaa.MoviesApp.constants.Navigation;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,7 +53,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "Movie Not Found"),
             @ApiResponse(responseCode = "500",description = "Internal Server Error")
     })
-    public ResponseEntity<MovieInfoDetails> getMovieByImdbID(@PathVariable String imdbID) {
+    public ResponseEntity<MovieInfoDetails> getMovieByImdbID(@PathVariable String imdbID) throws JsonProcessingException {
         return new ResponseEntity<>(movieService.getMovieByImdbId(imdbID),HttpStatus.OK);
     }
 
@@ -64,7 +65,7 @@ public class HomeController {
             @ApiResponse(responseCode = "404",description = "No Data Found")
     })
     public ResponseEntity<CustomPageDto<MovieListInfo>> searchForMovies(
-            @RequestParam("keyword") String keyword, @RequestParam(defaultValue = "0") int pageNumber){
+            @RequestParam("keyword") String keyword, @RequestParam(defaultValue = "0") int pageNumber) throws JsonProcessingException {
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE);
         return new ResponseEntity<>(movieService.searchMovies(keyword,pageable),HttpStatus.OK);
     }

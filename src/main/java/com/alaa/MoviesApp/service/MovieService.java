@@ -61,9 +61,8 @@ public class MovieService {
     }
 
 
-    @SneakyThrows
     @Transactional
-    public MovieInfoDetails getMovieByImdbId(String imdbId) {
+    public MovieInfoDetails getMovieByImdbId(String imdbId) throws JsonProcessingException {
 
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
@@ -74,7 +73,6 @@ public class MovieService {
         return movieInfoDetails;
     }
 
-    @SneakyThrows
     @Transactional
     public CustomPageDto<MovieListInfo> searchMovies(String keyword, Pageable pageable) {
         Page<Movie> moviePage = movieRepository.searchForMovie(keyword, pageable);

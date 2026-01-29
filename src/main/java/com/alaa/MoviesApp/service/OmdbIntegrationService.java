@@ -22,7 +22,6 @@ public class OmdbIntegrationService {
 
     private final SystemPropertyService systemPropertyService;
     private final RestTemplate restTemplate;
-    private final MovieSearchResponseMapper movieSearchResponseMapper;
     private final OmdbMovieMapper omdbMovieMapper;
 
     @Cacheable(value = "movieDetails", key = "#pageNumber")
