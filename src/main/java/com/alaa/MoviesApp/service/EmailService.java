@@ -1,7 +1,7 @@
 package com.alaa.MoviesApp.service;
 
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
+import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.listener.UserRegisterEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -53,14 +53,14 @@ public class EmailService {
 
         } catch (MailSendException e) {
             logger.error("Fail to send verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName(), e);
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (MessagingException e) {
             logger.error("Error creating MimeMessage for email to {},--- thread--> {}", to,Thread.currentThread().getName(), e);
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         } catch (IOException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         System.out.println("sending email to: "+to+"---> thread:"+Thread.currentThread().getName());
         logger.info("Successfully sent verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName());

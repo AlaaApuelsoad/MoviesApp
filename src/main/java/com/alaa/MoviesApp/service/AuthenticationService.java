@@ -3,7 +3,7 @@ package com.alaa.MoviesApp.service;
 import com.alaa.MoviesApp.dto.AuthResponse;
 import com.alaa.MoviesApp.dto.LoginRequest;
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
+import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +30,7 @@ public class AuthenticationService {
         String userPassword = userLoginRequest.getPassword().concat(user.getSaltPassword());
 
         if (!bCryptPasswordEncoder.matches(userPassword, user.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+            throw new BusinessException(ErrorCode.INVALID_CREDENTIALS);
         }
         LoginRequest newLoginRequest = LoginRequest.builder()
                 .username(userLoginRequest.getUsername())
@@ -59,13 +59,13 @@ public class AuthenticationService {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             return (UserDetails) authentication.getPrincipal();
         } else {
-            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+            throw new BusinessException(ErrorCode.INVALID_CREDENTIALS);
         }
     }
 
     private void validateAccountVerification(User user){
         if (user != null && "member".equals(user .getType()) && !user.isVerified()){
-            throw new CustomException(ErrorCode.ACCOUNT_NOT_VERIFIED);
+            throw new BusinessException(ErrorCode.ACCOUNT_NOT_VERIFIED);
         }
     }
 

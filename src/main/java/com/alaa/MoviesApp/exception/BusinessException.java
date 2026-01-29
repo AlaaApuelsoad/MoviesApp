@@ -4,12 +4,12 @@ import com.alaa.MoviesApp.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
     private final ErrorCode errorCode;
     private final String errorCodeValue;
 
-    public CustomException(ErrorCode errorCode) {
+    public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         this.errorCodeValue = errorCode.getCode();

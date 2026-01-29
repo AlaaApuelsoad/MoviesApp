@@ -1,7 +1,7 @@
 package com.alaa.MoviesApp.utils;
 
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
+import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.model.Role;
 import com.alaa.MoviesApp.repository.RoleRepository;
 import com.alaa.MoviesApp.service.SystemPropertyService;
@@ -23,7 +23,7 @@ public class SystemUtils {
 
     public Role findRoleByRoleName(String roleName){
         return roleRepository.findByRoleName(roleName).orElseThrow(
-                () -> new CustomException(ErrorCode.ROLE_NOT_FOUND)
+                () -> new BusinessException(ErrorCode.ROLE_NOT_FOUND)
         );
     }
 }

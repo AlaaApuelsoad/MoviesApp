@@ -32,8 +32,8 @@ public class GlobalExceptionHandling {
     private final ObjectMapper mapper;
     private final SystemPropertyService systemPropertyService;
 
-    @ExceptionHandler(CustomException.class) //system exception
-    public ResponseEntity<?> handleCustomException(CustomException ex, HttpServletRequest request) throws JsonProcessingException {
+    @ExceptionHandler(BusinessException.class) //system exception
+    public ResponseEntity<?> handleCustomException(BusinessException ex, HttpServletRequest request) throws JsonProcessingException {
 
         LogContext logContext = LogContext.builder()
                 .timestamp(LocalDateTime.now().toString())

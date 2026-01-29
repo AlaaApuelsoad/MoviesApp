@@ -8,9 +8,9 @@
 
 package com.alaa.MoviesApp.service;
 
+import com.alaa.MoviesApp.mapper.OmdbMovieMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.alaa.MoviesApp.dto.MovieSearchResponse;
-import com.alaa.MoviesApp.mapper.MovieSearchResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,7 @@ public class OmdbIntegrationService {
     private final SystemPropertyService systemPropertyService;
     private final RestTemplate restTemplate;
     private final MovieSearchResponseMapper movieSearchResponseMapper;
+    private final OmdbMovieMapper omdbMovieMapper;
 
     @Cacheable(value = "movieDetails", key = "#pageNumber")
     public MovieSearchResponse searchMovies(String title,int pageNumber) throws JsonProcessingException {
@@ -30,7 +31,7 @@ public class OmdbIntegrationService {
                 systemPropertyService.getProperty("app.ombd.api.integration.key") +
                 "&s=" + title + "&page=" + pageNumber;
         String response = restTemplate.getForObject(url, String.class);
-        return movieSearchResponseMapper.mapToMovieSearchResponse(response);
+        return omdbMovieMapper.mapSearchResponse(response);
     }
 
     public String getMovieByImdbId(String imdbId) {

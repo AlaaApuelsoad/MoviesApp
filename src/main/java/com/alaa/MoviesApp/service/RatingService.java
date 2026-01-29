@@ -2,7 +2,7 @@ package com.alaa.MoviesApp.service;
 
 import com.alaa.MoviesApp.dto.MovieRating;
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
+import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.model.MemberRating;
 import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
@@ -28,12 +28,12 @@ public class RatingService {
     public MovieRating userRatingMovie(int ratingValue, String imdbId) {
 
         if (imdbId == null || imdbId.isBlank() || ratingValue < 0 || ratingValue > 5) {
-            throw new CustomException(ErrorCode.INVALID_INPUT);
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
 
         User user = userService.getUser(authenticationService.getUserCredentials().getUsername());
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
-                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
+                () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
 
         Optional<MemberRating> existingRating = memberRatingRepository.findByUserAndMovie(user, movie);

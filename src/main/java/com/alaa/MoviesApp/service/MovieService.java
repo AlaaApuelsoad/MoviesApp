@@ -6,14 +6,15 @@ import com.alaa.MoviesApp.dto.MovieInfoDetails;
 import com.alaa.MoviesApp.dto.MovieListInfo;
 import com.alaa.MoviesApp.dto.ResponseMessage;
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
-import com.alaa.MoviesApp.mapper.MovieMapper;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.mapper.OmdbMovieMapper;
 import com.alaa.MoviesApp.mapper.PageMapper;
 import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class MovieService {
 
     public final OmdbIntegrationService omdbIntegrationService;
     private final MovieRepository movieRepository;
-    private final MovieMapper movieMapper;
+    private final OmdbMovieMapper omdbMovieMapper;
     private final PageMapper pageMapper;
     private final MemberRatingRepository memberRatingRepository;
     private final UserService userService;
@@ -37,21 +38,21 @@ public class MovieService {
     @Transactional
     public Movie addMovie(String imdbId) throws JsonProcessingException {
         if (movieRepository.getMovieByImdbId(imdbId).isPresent()) {
-            throw new CustomException(ErrorCode.MOVIE_EXISTS);
+            throw new BusinessException(ErrorCode.MOVIE_EXISTS);
         }
 
         String movieResponse = omdbIntegrationService.getMovieByImdbId(imdbId);
-        Movie movie = movieMapper.mapToMovie(movieResponse);
+        Movie movie = omdbMovieMapper.mapToMovie(movieResponse);
         return movieRepository.save(movie);
     }
 
     @Transactional
     public ResponseMessage deleteMovieByImdbId(String imdbId) {
         Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
-                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
+                () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
         if (movie.isDeleted()) {
-            throw new CustomException(ErrorCode.ALREADY_DELETED);
+            throw new BusinessException(ErrorCode.ALREADY_DELETED);
         }
 
         movie.setDeleted(true);
@@ -60,25 +61,27 @@ public class MovieService {
     }
 
 
+    @SneakyThrows
     @Transactional
     public MovieInfoDetails getMovieByImdbId(String imdbId) {
 
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
-                () -> new CustomException(ErrorCode.MOVIE_NOT_FOUND)
+                () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
-        MovieInfoDetails movieInfoDetails = movieMapper.mapToMovieInfoDetails(movie);
+        MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
         movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
         return movieInfoDetails;
     }
 
+    @SneakyThrows
     @Transactional
     public CustomPageDto<MovieListInfo> searchMovies(String keyword, Pageable pageable) {
         Page<Movie> moviePage = movieRepository.searchForMovie(keyword, pageable);
         if (moviePage.getContent().isEmpty()) {
-            throw new CustomException(ErrorCode.NO_DATA_FOUND);
+            throw new BusinessException(ErrorCode.NO_DATA_FOUND);
         }
-        return pageMapper.customPageDto(moviePage.map(movieMapper::mapToMovieInfoList));
+        return pageMapper.customPageDto(moviePage.map(omdbMovieMapper::mapToMovieInfoList));
     }
 
     @Transactional
@@ -90,7 +93,7 @@ public class MovieService {
             movieListInfo.setMemberRating(memberRating);
         });
         if (moviePage.getContent().isEmpty()) {
-            throw new CustomException(ErrorCode.NO_DATA_FOUND);
+            throw new BusinessException(ErrorCode.NO_DATA_FOUND);
         }
         return pageMapper.customPageDto(moviePage);
     }

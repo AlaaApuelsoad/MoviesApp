@@ -3,7 +3,7 @@ package com.alaa.MoviesApp.service;
 import com.alaa.MoviesApp.dto.UserRegisterDto;
 import com.alaa.MoviesApp.dto.UserRegisterResponse;
 import com.alaa.MoviesApp.enums.ErrorCode;
-import com.alaa.MoviesApp.exception.CustomException;
+import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.listener.UserRegisterEvent;
 import com.alaa.MoviesApp.mapper.UserMapper;
 import com.alaa.MoviesApp.model.User;
@@ -14,7 +14,6 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +72,7 @@ public class UserService {
 
     public User getUser(String userIdentifier){
         return userRepository.findByUsernameOrEmail(userIdentifier).orElseThrow(
-                ()-> new CustomException(ErrorCode.INVALID_CREDENTIALS)
+                ()-> new BusinessException(ErrorCode.INVALID_CREDENTIALS)
         );
     }
 

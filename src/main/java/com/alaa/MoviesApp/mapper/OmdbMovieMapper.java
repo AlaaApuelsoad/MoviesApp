@@ -1,5 +1,7 @@
 package com.alaa.MoviesApp.mapper;
 
+import com.alaa.MoviesApp.dto.MovieOMDBInfo;
+import com.alaa.MoviesApp.dto.MovieSearchResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,21 +15,22 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class MovieMapper {
+public class OmdbMovieMapper {
 
     private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
     public Movie mapToMovie(String json) throws JsonProcessingException {
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
+
         JsonNode jsonNode = objectMapper.readTree(json);
 
         Movie movie = new Movie();
-        movie.setTitle(jsonNode.get("Title").asText());
-        movie.setYear(jsonNode.get("Year").asText());
+        movie.setTitle(jsonNode.get("Title").asText(null));
+        movie.setYear(jsonNode.get("Year").asText(null));
         movie.setRated(jsonNode.get("Rated").asText());
         movie.setReleased(jsonNode.get("Released").asText());
         movie.setRuntime(jsonNode.get("Runtime").asText());
@@ -49,9 +52,15 @@ public class MovieMapper {
         movie.setProduction(jsonNode.get("Production").asText());
         movie.setAddedAt(LocalDate.now());
 
+        movie.setRatings(mapRatings(jsonNode.get("Ratings")));
+
+        return movie;
+
+    }
+
+    private List<Rating> mapRatings(JsonNode ratingsJsonNode) {
         List<Rating> ratings = new ArrayList<>();
-        JsonNode ratingsJsonNode = jsonNode.get("Ratings");
-        if (ratingsJsonNode != null & ratingsJsonNode.isArray()) {
+        if (!Objects.isNull(ratingsJsonNode) & ratingsJsonNode.isArray()) {
             for (JsonNode ratingJsonNode : ratingsJsonNode) {
                 Rating rating = new Rating();
                 rating.setSourceWebsite(ratingJsonNode.get("Source").asText());
@@ -59,18 +68,37 @@ public class MovieMapper {
                 ratings.add(rating);
             }
         }
-        movie.setRatings(ratings);
-        return movie;
-
+        return ratings;
     }
 
-    public MovieInfoDetails mapToMovieInfoDetails(Movie movie){
+    public MovieSearchResponse mapSearchResponse(String json) throws JsonProcessingException {
+        JsonNode node = objectMapper.readTree(json);
 
-        return objectMapper.convertValue(movie, MovieInfoDetails.class);
+        MovieSearchResponse response = new MovieSearchResponse();
+        response.setTotalMovies(node.path("totalResults").asInt());
+
+        List<MovieOMDBInfo> movies = new ArrayList<>();
+        for (JsonNode m : node.path("Search")) {
+            MovieOMDBInfo info = new MovieOMDBInfo();
+            info.setTitle(m.path("Title").asText());
+            info.setYear(m.path("Year").asText());
+            info.setType(m.path("Type").asText());
+            info.setImdbID(m.path("imdbID").asText());
+            info.setPoster(m.path("Poster").asText());
+            movies.add(info);
+        }
+
+        response.setSearch(movies);
+        return response;
     }
 
-    public MovieListInfo mapToMovieInfoList(Movie movie){
-        return objectMapper.convertValue(movie, MovieListInfo.class);
+
+    public MovieInfoDetails mapToMovieInfoDetails(Movie movie) throws JsonProcessingException {
+        return modelMapper.map(movie,MovieInfoDetails.class);
+    }
+
+    public MovieListInfo mapToMovieInfoList(Movie movie) throws JsonProcessingException {
+        return modelMapper.map(movie, MovieListInfo.class);
     }
 
 
