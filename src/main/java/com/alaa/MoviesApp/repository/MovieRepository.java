@@ -22,10 +22,18 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
     @Query("SELECT m FROM Movie m WHERE m.imdbID = :imdbId")
     Optional<Movie> getMovieByImdbId(@Param("imdbId") String imdbId);
 
-    @Query("SELECT m FROM Movie m WHERE " +
-            "LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(m.director) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(m.actors) LIKE LOWER(CONCAT('%', :keyword, '%')) ")
+    @Query(
+            value = """
+        SELECT *
+        FROM movie m
+        WHERE (
+            LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            OR LOWER(m.director) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            OR LOWER(m.actor) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        )
+        AND m.is_deleted = false
+        """,
+            nativeQuery = true)
     Page<Movie> searchForMovie(@Param("keyword") String keyword, Pageable pageable);
 
 }

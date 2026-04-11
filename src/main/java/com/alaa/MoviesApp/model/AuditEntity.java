@@ -38,6 +38,7 @@ public class AuditEntity {
     private String lastModifiedBy;
 
     @Column(name = "last_modified_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDateTime lastModifiedAt;
 
     @Column(name = "deleted_by_id")
@@ -47,6 +48,7 @@ public class AuditEntity {
     private String deletedBy;
 
     @Column(name = "deleted_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDateTime deletedAt;
 
     @PrePersist

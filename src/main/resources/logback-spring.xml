@@ -1,6 +1,6 @@
 <configuration scan="true">
 
-    <property name="LOG_DIR" value="${user.home}/app-logs"/>
+    <property name="LOG_DIR" value="${user.home}/movie-app-logs"/>
     <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex" class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
 

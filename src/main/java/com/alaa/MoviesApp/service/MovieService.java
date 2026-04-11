@@ -80,9 +80,6 @@ public class MovieService {
     @Transactional
     public AppResponse<List<Movie>> searchMovies(String keyword, int pageNumber) {
         Page<Movie> moviePage = movieRepository.searchForMovie(keyword, systemUtils.buildPageableObj(pageNumber));
-        if (moviePage.getContent().isEmpty()) {
-            throw new BusinessException(ErrorCode.NO_DATA_FOUND);
-        }
         MetaData metaData = PaginationMetaDataMapper.fromPage(moviePage);
         return AppResponseBuilder.buildResponse(
                 true,moviePage.getContent(),"Movies fetched successfully",HttpStatus.OK,null,metaData
