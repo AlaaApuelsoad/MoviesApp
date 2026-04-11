@@ -1,6 +1,6 @@
 package com.alaa.MoviesApp.service;
 
-import com.alaa.MoviesApp.dto.MovieRating;
+import com.alaa.MoviesApp.dto.AppResponse;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.model.MemberRating;
@@ -8,7 +8,9 @@ import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,7 @@ public class RatingService {
 
 
     @Transactional
-    public MovieRating userRatingMovie(int ratingValue, String imdbId) {
+    public AppResponse<?> userRatingMovie(int ratingValue, String imdbId) {
 
         if (imdbId == null || imdbId.isBlank() || ratingValue < 0 || ratingValue > 5) {
             throw new BusinessException(ErrorCode.INVALID_INPUT);
@@ -51,7 +53,8 @@ public class RatingService {
             memberRatingRepository.save(memberRating);
         }
 
-        return new MovieRating("Movie Rating successful",movie.getTitle(),ratingValue);
+        return AppResponseBuilder.buildResponse(
+                true,null,"Movie Rating successful", HttpStatus.OK,null,null);
     }
 
 }

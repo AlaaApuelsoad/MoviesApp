@@ -1,9 +1,8 @@
 package com.alaa.MoviesApp.interceptors;
 
+import com.alaa.MoviesApp.constants.AppConstant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.alaa.MoviesApp.context.LogContext;
-import com.alaa.MoviesApp.context.UserContextHolder;
-import com.alaa.MoviesApp.service.SystemPropertyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +17,13 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class LogInterceptor implements org.springframework.web.servlet.HandlerInterceptor {
+public class LoggingInterceptor implements org.springframework.web.servlet.HandlerInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(LogInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
     private final ObjectMapper mapper;
-    private final SystemPropertyService systemPropertyService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         return true;
     }
 
@@ -41,18 +39,13 @@ public class LogInterceptor implements org.springframework.web.servlet.HandlerIn
         if (ex == null){
             logContext = LogContext.builder()
                     .timestamp(LocalDateTime.now().toString())
-                    .correlationId(MDC.get("X-Correlation-ID"))
-                    .level("INFO")
-                    .environment(systemPropertyService.getActiveProfile())
+                    .correlationId(MDC.get(AppConstant.X_CORRELATION_ID))
                     .logger(logger.getName())
                     .thread(Thread.currentThread().getName())
                     .httpMethod(request.getMethod())
                     .uri(request.getRequestURI())
                     .responseStatus(response.getStatus())
-                    .responseTimMs(System.currentTimeMillis() - Long.parseLong(MDC.get("Start-Time")))
-                    .userId(UserContextHolder.getLoggedInUserContext().getUserId())
-                    .userName(UserContextHolder.getLoggedInUserContext().getUserName())
-                    .role(UserContextHolder.getLoggedInUserContext().getRole())
+                    .responseTimMs(System.currentTimeMillis() - Long.parseLong(MDC.get(AppConstant.REQUEST_START_TIME)))
                     .build();
 
 

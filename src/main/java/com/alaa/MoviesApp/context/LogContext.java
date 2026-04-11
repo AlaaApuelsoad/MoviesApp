@@ -16,9 +16,7 @@ public class LogContext {
     private String timestamp;
     private String correlationId;
     private String thread;
-    private String level;
     private String logger;
-    private String [] environment;
 
     private String httpMethod;
     private String uri;

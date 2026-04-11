@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <metaData charset="UTF-8">
     <title>Movies Email</title>
     <style>
         body {

@@ -1,6 +1,7 @@
 package com.alaa.MoviesApp.controller;
 
 import com.alaa.MoviesApp.constants.Navigation;
+import com.alaa.MoviesApp.dto.AppResponse;
 import com.alaa.MoviesApp.dto.AuthResponse;
 import com.alaa.MoviesApp.dto.LoginRequest;
 import com.alaa.MoviesApp.service.AuthenticationService;
@@ -26,25 +27,16 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-
-    //normal login
     @PostMapping("/login")
-    @Operation(summary = "User login ",description = "User Can Login")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "Admin login successfully"),
-            @ApiResponse(responseCode = "201",description = "Invalid Credentials"),
-            @ApiResponse(responseCode = "500",description = "Internal Server Error")
-    })
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AppResponse<AuthResponse>> login(@RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(authenticationService.login(loginRequest), HttpStatus.OK);
     }
 
 
-    //cookie
     @PostMapping("/login/cookie")
-    public ResponseEntity<Object> loginCookie(@RequestBody LoginRequest loginRequest, HttpServletResponse response){
-        AuthResponse authResponse = authenticationService.login(loginRequest);
-        ResponseCookie cookie = ResponseCookie.from("SEC-TOKEN",authResponse.getToken())
+    public ResponseEntity<AppResponse<AuthResponse>> loginCookie(@RequestBody LoginRequest loginRequest, HttpServletResponse response){
+        AppResponse<AuthResponse> appResponse = authenticationService.login(loginRequest);
+        ResponseCookie cookie = ResponseCookie.from("SEC-TOKEN",appResponse.getData().getToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

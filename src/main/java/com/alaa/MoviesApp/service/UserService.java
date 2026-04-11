@@ -1,5 +1,6 @@
 package com.alaa.MoviesApp.service;
 
+import com.alaa.MoviesApp.dto.AppResponse;
 import com.alaa.MoviesApp.dto.UserRegisterDto;
 import com.alaa.MoviesApp.dto.UserRegisterResponse;
 import com.alaa.MoviesApp.enums.ErrorCode;
@@ -8,16 +9,14 @@ import com.alaa.MoviesApp.listener.UserRegisterEvent;
 import com.alaa.MoviesApp.mapper.UserMapper;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.UserRepository;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import com.alaa.MoviesApp.utils.SystemUtils;
-import freemarker.template.TemplateException;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
 
 
 @Service
@@ -32,21 +31,23 @@ public class UserService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public UserRegisterResponse userRegister(UserRegisterDto userRegisterDto) throws MessagingException, TemplateException, IOException {
+    public AppResponse<UserRegisterResponse> userRegister(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("member");
         this.userBuilder(user);
         User savedUser = userRepository.save(user);
         eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
-        return userMapper.mapToUserRegisterResponse(savedUser);
+        return AppResponseBuilder.buildResponse(true,userMapper.mapToUserRegisterResponse(savedUser),
+                "User Registered", HttpStatus.OK,null,null);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public UserRegisterResponse createAdmin(UserRegisterDto userRegisterDto) {
+    public AppResponse<UserRegisterResponse> createAdmin(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setType("admin");
         this.userBuilder(user);
-        return userMapper.mapToUserRegisterResponse(userRepository.save(user));
+        return AppResponseBuilder.buildResponse(true,userMapper.mapToUserRegisterResponse(userRepository.save(user)),
+                "Admin user created successfully",HttpStatus.OK,null,null);
     }
 
 

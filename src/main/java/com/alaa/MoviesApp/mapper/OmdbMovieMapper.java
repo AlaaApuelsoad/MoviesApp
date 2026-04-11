@@ -1,12 +1,11 @@
 package com.alaa.MoviesApp.mapper;
 
 import com.alaa.MoviesApp.dto.MovieOMDBInfo;
-import com.alaa.MoviesApp.dto.MovieSearchResponse;
+import com.alaa.MoviesApp.dto.IntegrationSearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.alaa.MoviesApp.dto.MovieInfoDetails;
-import com.alaa.MoviesApp.dto.MovieListInfo;
 import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.Rating;
 import lombok.RequiredArgsConstructor;
@@ -71,10 +70,10 @@ public class OmdbMovieMapper {
         return ratings;
     }
 
-    public MovieSearchResponse mapSearchResponse(String json) throws JsonProcessingException {
+    public IntegrationSearch mapSearchResponse(String json) throws JsonProcessingException {
         JsonNode node = objectMapper.readTree(json);
 
-        MovieSearchResponse response = new MovieSearchResponse();
+        IntegrationSearch response = new IntegrationSearch();
         response.setTotalMovies(node.path("totalResults").asInt());
 
         List<MovieOMDBInfo> movies = new ArrayList<>();
@@ -92,18 +91,8 @@ public class OmdbMovieMapper {
         return response;
     }
 
-
     public MovieInfoDetails mapToMovieInfoDetails(Movie movie) throws JsonProcessingException {
         return modelMapper.map(movie,MovieInfoDetails.class);
     }
-
-    public MovieListInfo mapToMovieInfoList(Movie movie) {
-        try {
-            return modelMapper.map(movie, MovieListInfo.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
 }

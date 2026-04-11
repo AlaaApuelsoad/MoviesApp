@@ -1,25 +1,24 @@
 package com.alaa.MoviesApp.service;
 
+import com.alaa.MoviesApp.dto.*;
+import com.alaa.MoviesApp.mapper.PaginationMetaDataMapper;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.utils.SystemUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.alaa.MoviesApp.dto.CustomPageDto;
-import com.alaa.MoviesApp.dto.MovieInfoDetails;
-import com.alaa.MoviesApp.dto.MovieListInfo;
-import com.alaa.MoviesApp.dto.ResponseMessage;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.mapper.OmdbMovieMapper;
-import com.alaa.MoviesApp.mapper.PageMapper;
 import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
 import com.alaa.MoviesApp.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -30,24 +29,25 @@ public class MovieService {
     public final OmdbIntegrationService omdbIntegrationService;
     private final MovieRepository movieRepository;
     private final OmdbMovieMapper omdbMovieMapper;
-    private final PageMapper pageMapper;
     private final MemberRatingRepository memberRatingRepository;
     private final UserService userService;
+    private final SystemUtils systemUtils;
 
 
     @Transactional
-    public Movie addMovie(String imdbId) throws JsonProcessingException {
+    public AppResponse<Movie> addMovie(String imdbId) throws JsonProcessingException {
         if (movieRepository.getMovieByImdbId(imdbId).isPresent()) {
             throw new BusinessException(ErrorCode.MOVIE_EXISTS);
         }
 
         String movieResponse = omdbIntegrationService.getMovieByImdbId(imdbId);
         Movie movie = omdbMovieMapper.mapToMovie(movieResponse);
-        return movieRepository.save(movie);
+        return AppResponseBuilder.buildResponse(true,movieRepository.save(movie),"Movie Added Successfully",
+                HttpStatus.OK,null,null);
     }
 
     @Transactional
-    public ResponseMessage deleteMovieByImdbId(String imdbId) {
+    public AppResponse<?> deleteMovieByImdbId(String imdbId) {
         Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
@@ -57,12 +57,13 @@ public class MovieService {
 
         movie.setDeleted(true);
         movieRepository.save(movie);
-        return new ResponseMessage("Movie deleted successfully");
+        return AppResponseBuilder.buildResponse(true,null,"Movie Deleted Successfully",
+                HttpStatus.OK,null,null);
     }
 
 
     @Transactional
-    public MovieInfoDetails getMovieByImdbId(String imdbId) throws JsonProcessingException {
+    public AppResponse<MovieInfoDetails> getMovieByImdbId(String imdbId) throws JsonProcessingException {
 
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
@@ -70,33 +71,32 @@ public class MovieService {
         MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
         movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
-        return movieInfoDetails;
+        return AppResponseBuilder.buildResponse(
+                true,movieInfoDetails,"Movie details fetched successfully",HttpStatus.OK,
+                null,null);
+
     }
 
     @Transactional
-    public CustomPageDto<MovieListInfo> searchMovies(String keyword, Pageable pageable) {
-        Page<Movie> moviePage = movieRepository.searchForMovie(keyword, pageable);
+    public AppResponse<List<Movie>> searchMovies(String keyword, int pageNumber) {
+        Page<Movie> moviePage = movieRepository.searchForMovie(keyword, systemUtils.buildPageableObj(pageNumber));
         if (moviePage.getContent().isEmpty()) {
             throw new BusinessException(ErrorCode.NO_DATA_FOUND);
         }
-        return pageMapper.customPageDto(moviePage.map(omdbMovieMapper::mapToMovieInfoList));
+        MetaData metaData = PaginationMetaDataMapper.fromPage(moviePage);
+        return AppResponseBuilder.buildResponse(
+                true,moviePage.getContent(),"Movies fetched successfully",HttpStatus.OK,null,metaData
+        );
     }
 
-    @Cacheable(
-            value = "movies",key = "#pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()"
-    )
     @Transactional
-    public CustomPageDto<MovieListInfo> getMoviePaginatedFromDB(Pageable pageable) {
-        Page<MovieListInfo> moviePage = movieRepository.getMoviesFromDB(pageable);
-        moviePage.getContent().forEach(movieListInfo -> {
-            String imdbId = movieListInfo.getImdbID();
-            int memberRating = getMemberRatingForMovie(imdbId);
-            movieListInfo.setMemberRating(memberRating);
-        });
-        if (moviePage.getContent().isEmpty()) {
-            throw new BusinessException(ErrorCode.NO_DATA_FOUND);
-        }
-        return pageMapper.customPageDto(moviePage);
+    public AppResponse<List<Movie>> getAllMovies(int pageNumber) {
+        Page<Movie> movies = movieRepository.getAllMovies(systemUtils.buildPageableObj(pageNumber));
+        MetaData metaData = PaginationMetaDataMapper.fromPage(movies);
+        return AppResponseBuilder.buildResponse(
+                true, movies.getContent(), "Movies fetched successfully", HttpStatus.OK,
+                null, metaData
+        );
     }
 
     public int getMemberRatingForMovie(String imdbId) {

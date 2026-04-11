@@ -1,40 +1,41 @@
 package com.alaa.MoviesApp.filters;
 
+import com.alaa.MoviesApp.constants.AppConstant;
 import com.alaa.MoviesApp.context.UserContextHolder;
 import com.alaa.MoviesApp.utils.SystemUtils;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.IOException;
+
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(value = 1)
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
-    private static final String CORRELATION_ID = "X-CORRELATION-ID";
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
-        String correlationId = request.getHeader(CORRELATION_ID);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String correlationId = request.getHeader(AppConstant.X_CORRELATION_ID);
+
+        if (correlationId == null || correlationId.isBlank()) {
+            correlationId = SystemUtils.generateUUIDCode();
+        }
 
         try {
-            if (correlationId == null) {
 
-                correlationId = SystemUtils.generateUUIDCode();
-                request.setAttribute("X-CORRELATION-ID", correlationId);
-                response.setHeader("X-CORRELATION-ID", correlationId);
-                MDC.put("X-Correlation-ID", correlationId);
-                filterChain.doFilter(request, response);
+            MDC.put(AppConstant.X_CORRELATION_ID, correlationId);
+            MDC.put(AppConstant.REQUEST_START_TIME, String.valueOf(System.currentTimeMillis()));
+            request.setAttribute(AppConstant.X_CORRELATION_ID, correlationId);
+            response.setHeader(AppConstant.X_CORRELATION_ID, correlationId);
+            filterChain.doFilter(request, response);
 
-            }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }finally {
+        } finally {
             MDC.clear();
             UserContextHolder.clearRequestContext();
         }

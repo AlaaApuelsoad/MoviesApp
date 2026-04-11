@@ -1,0 +1,74 @@
+<configuration scan="true">
+
+    <property name="LOG_DIR" value="${user.home}/app-logs"/>
+    <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+
+    <!-- ==============================
+         CONSOLE APPENDER (colored)
+    =============================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--get X-Correlation-ID value from MDC-->
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} | %clr(%5p) | %clr(%-40.40logger{39}){cyan} | %clr([%X{X-CORRELATION-ID}]){yellow} | %clr(%msg%n){faint}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ==============================
+         INFO LOG FILE (daily rotation)
+    =============================== -->
+    <!--to make a log folder in the same project directory-->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Create a new log file every day -->
+            <fileNamePattern>${LOG_DIR}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- Keep logs for 30 days -->
+            <maxHistory>30</maxHistory>
+
+            <!-- Optional: clean up old logs on startup -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %5p | %-40.40logger{39} | [%X{X-CORRELATION-ID}] | %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- ==============================
+         ERROR LOG FILE (daily rotation)
+    =============================== -->
+    <!--to make a log folder in the same project directory-->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Create a new log file every day -->
+            <fileNamePattern>${LOG_DIR}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- Keep logs for 30 days -->
+            <maxHistory>30</maxHistory>
+
+            <!-- Optional: clean up old logs on startup -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %5p | %-40.40logger{39} | [%X{X-CORRELATION-ID}] | %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <!-- ==============================
+         ROOT LOGGER
+    =============================== -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>

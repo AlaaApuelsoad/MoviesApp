@@ -57,17 +57,17 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException e) {
-            handleJwtException(response, "Token Expired for RequestID: " + UserContextHolder.getLoggedInUserContext() , HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Token Expired for RequestID: " + UserContextHolder.getLoggedInUserContext());
 
         } catch (SignatureException e) {
-            handleJwtException(response, "Invalid Token Signature for RequestID: " + UserContextHolder.getLoggedInUserContext(), HttpServletResponse.SC_UNAUTHORIZED);
+            handleJwtException(response, "Invalid Token Signature for RequestID: " + UserContextHolder.getLoggedInUserContext());
         }
     }
 
 
-    private void handleJwtException(HttpServletResponse response, String message, int status) throws IOException {
+    private void handleJwtException(HttpServletResponse response, String message) throws IOException {
 
-        response.setStatus(status);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 

@@ -1,11 +1,14 @@
 package com.alaa.MoviesApp.service;
 
+import com.alaa.MoviesApp.dto.AppResponse;
 import com.alaa.MoviesApp.dto.AuthResponse;
 import com.alaa.MoviesApp.dto.LoginRequest;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final UserService userService;
 
-    public AuthResponse login(LoginRequest userLoginRequest) {
+    public AppResponse<AuthResponse> login(LoginRequest userLoginRequest) {
 
         User user = userService.getUser(userLoginRequest.getUsername());
         validateAccountVerification(user);
@@ -39,7 +42,7 @@ public class AuthenticationService {
         return authenticate(newLoginRequest);
     }
 
-    public AuthResponse authenticate(LoginRequest loginRequest) {
+    public AppResponse<AuthResponse> authenticate(LoginRequest loginRequest) {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
@@ -48,10 +51,12 @@ public class AuthenticationService {
         String userIdentifier = user.getUsername();
 
         String token = jwtService.generateToken(userIdentifier);
-        return AuthResponse.builder()
+         AuthResponse response = AuthResponse.builder()
                 .token(token)
                 .role(user.getRole().getRoleName())
                 .build();
+         return AppResponseBuilder.buildResponse(true,response,"Authentication Success",
+                 HttpStatus.OK,null,null);
     }
 
     public UserDetails getUserCredentials() {

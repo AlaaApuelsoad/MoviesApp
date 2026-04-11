@@ -5,19 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomPageDto<T> {
+public class MetaData {
 
-    private List<T> content;
-    private long totalElements;
-    private int totalPages;
-    private boolean isFirst;
-    private boolean isLast;
-
+    private Pagination pagination;
 
 }
