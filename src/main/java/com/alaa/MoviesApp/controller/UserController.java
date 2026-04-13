@@ -6,6 +6,7 @@ import com.alaa.MoviesApp.dto.*;
 import com.alaa.MoviesApp.service.UserService;
 import com.alaa.MoviesApp.service.VerifyService;
 import com.alaa.MoviesApp.constants.Navigation;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
 
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AppResponse<UserRegisterResponse>> userRegister(@Validated @RequestBody UserRegisterDto userRegisterDto){
+    public ResponseEntity<AppResponse<UserRegisterResponse>> userRegister(@Validated @RequestBody UserRegisterDto userRegisterDto) throws JsonProcessingException {
         return new ResponseEntity<>(userService.userRegister(userRegisterDto),HttpStatus.CREATED);
     }
 

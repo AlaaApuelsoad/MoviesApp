@@ -6,11 +6,12 @@ import com.alaa.MoviesApp.dto.UserRegisterResponse;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.BusinessException;
 import com.alaa.MoviesApp.listener.UserRegisterEvent;
-import com.alaa.MoviesApp.mapper.UserMapper;
+import com.alaa.MoviesApp.mapper.ModelMapper;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.UserRepository;
 import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import com.alaa.MoviesApp.utils.SystemUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -24,29 +25,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
     private final SystemUtils systemUtils;
     private final BCryptPasswordEncoder BCryptPasswordEncoder;
 
 
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse<UserRegisterResponse> userRegister(UserRegisterDto userRegisterDto) {
-        User user = userMapper.mapToUser(userRegisterDto);
+    public AppResponse<UserRegisterResponse> userRegister(UserRegisterDto userRegisterDto) throws JsonProcessingException {
+        User user = modelMapper.map(userRegisterDto, User.class);
         user.setType("member");
         this.userBuilder(user);
         User savedUser = userRepository.save(user);
         eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
-        return AppResponseBuilder.buildResponse(true,userMapper.mapToUserRegisterResponse(savedUser),
+        return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(savedUser),
                 "User Registered", HttpStatus.OK,null,null);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse<UserRegisterResponse> createAdmin(UserRegisterDto userRegisterDto) {
-        User user = userMapper.mapToUser(userRegisterDto);
+    public AppResponse<UserRegisterResponse> createAdmin(UserRegisterDto userRegisterDto) throws JsonProcessingException {
+        User user = modelMapper.map(userRegisterDto, User.class);
         user.setType("admin");
         this.userBuilder(user);
-        return AppResponseBuilder.buildResponse(true,userMapper.mapToUserRegisterResponse(userRepository.save(user)),
+        return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(userRepository.save(user)),
                 "Admin user created successfully",HttpStatus.OK,null,null);
     }
 

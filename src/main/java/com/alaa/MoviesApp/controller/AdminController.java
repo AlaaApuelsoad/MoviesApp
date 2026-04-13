@@ -31,7 +31,7 @@ public class AdminController {
 
     @PostMapping("/create/admin")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AppResponse<UserRegisterResponse>> createAdmin(@Validated @RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<AppResponse<UserRegisterResponse>> createAdmin(@Validated @RequestBody UserRegisterDto userRegisterDto) throws JsonProcessingException {
         return new ResponseEntity<>(userService.createAdmin(userRegisterDto), HttpStatus.CREATED);
     }
 

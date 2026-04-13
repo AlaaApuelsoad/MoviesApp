@@ -20,7 +20,7 @@ public class AuthConfiguration {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(12); //todo move to argon encoder
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
