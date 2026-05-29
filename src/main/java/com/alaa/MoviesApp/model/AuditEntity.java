@@ -2,7 +2,6 @@ package com.alaa.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.alaa.MoviesApp.context.UserContextHolder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class AuditEntity {
     private String createdBy;
 
     @Column(name = "created_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "last_modified_id")
@@ -38,7 +37,7 @@ public class AuditEntity {
     private String lastModifiedBy;
 
     @Column(name = "last_modified_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastModifiedAt;
 
     @Column(name = "deleted_by_id")
@@ -48,26 +47,20 @@ public class AuditEntity {
     private String deletedBy;
 
     @Column(name = "deleted_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime deletedAt;
 
     @PrePersist
     private void onCreate() {
-        if (UserContextHolder.getLoggedInUserContext() != null) {
-            this.createdBy = UserContextHolder.getLoggedInUserContext().getUserName();
-            this.createdById = UserContextHolder.getLoggedInUserContext().getUserId();
-        }else {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() &&
+                authentication.getPrincipal() instanceof UserDetails userDetails) {
+            this.createdBy = getCurrentUsername(userDetails);
+            this.createdById = getCurrentUserId(userDetails);
+        } else {
             this.createdBy = "SYSTEM";
             this.createdById = 0L;
         }
-
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
-//            this.createdBy = userDetails.getUsername();
-//            this.createdById = getUserIdFromUserDetails(userDetails);
-//        } else {
-//            this.createdBy = "SYSTEM";
-//            this.createdById = 0L;
-//        }
 
         this.createdAt = LocalDateTime.now();
     }
@@ -78,8 +71,8 @@ public class AuditEntity {
 
         if (authentication != null && authentication.isAuthenticated() &&
                 authentication.getPrincipal() instanceof UserDetails userDetails) {
-            this.lastModifiedBy = userDetails.getUsername();
-            this.lastModifiedById = getUserIdFromUserDetails(userDetails);
+            this.lastModifiedBy = getCurrentUsername(userDetails);
+            this.lastModifiedById = getCurrentUserId(userDetails);
         } else {
             this.lastModifiedBy = "SYSTEM";
             this.lastModifiedById = 0L;
@@ -87,26 +80,17 @@ public class AuditEntity {
         this.lastModifiedAt = LocalDateTime.now();
     }
 
-    @PreRemove
-    private void onPreRemove() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated() &&
-                authentication.getPrincipal() instanceof UserDetails userDetails) {
-            this.deletedBy = userDetails.getUsername();
-            this.deletedById = getUserIdFromUserDetails(userDetails);
-        } else {
-            this.deletedBy = "SYSTEM";
-            this.deletedById = 0L;
-        }
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    private Long getUserIdFromUserDetails(UserDetails userDetails) {
+    private Long getCurrentUserId(UserDetails userDetails) {
         if (userDetails instanceof User) {
             return ((User) userDetails).getId();
         }
-        throw new IllegalStateException("User ID not found in UserDetails implementation");
+        return 0L;
+    }
+    private String getCurrentUsername(UserDetails userDetails){
+        if (userDetails instanceof User) {
+            return userDetails.getUsername();
+        }
+        return "SYSTEM";
     }
 
 }

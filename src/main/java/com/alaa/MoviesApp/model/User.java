@@ -19,13 +19,13 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "_user")
-public class User extends AuditEntity implements UserDetails {
+@Table(name = "users")
+public class User extends AuditEntity{
 
     @Id
-    @SequenceGenerator(allocationSize = 1,name = "user_sequence",sequenceName = "user_sequence",initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_sequence")
-    @Column(name = "user_id", updatable = false, nullable = false)
+    @SequenceGenerator(allocationSize = 1,name = "USER_PK_SEQUENCE",sequenceName = "USER_PK_SEQUENCE",initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "USER_PK_SEQUENCE")
+    @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
     @Column(nullable = false,length = 50)
@@ -60,63 +60,11 @@ public class User extends AuditEntity implements UserDetails {
     private boolean isDeleted = false;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(nullable = false)
     @JsonBackReference("userRoleReference")
     private Role role;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference("userRatingReference")
     private List<MemberRating> memberRatings;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(()-> role.getRoleName());
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", saltPassword='" + saltPassword + '\'' +
-                ", verificationCode='" + verificationCode + '\'' +
-                ", isVerified=" + isVerified +
-                ", isDeleted=" + isDeleted +
-                ", role=" + role +
-                '}';
-    }
-
-
-    public static UserDetails getCredentials() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            return (UserDetails) authentication.getPrincipal();
-        } else {
-            return null;
-        }
-    }
 }

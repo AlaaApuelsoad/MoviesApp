@@ -17,10 +17,10 @@ public class Role extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id",nullable = false,updatable = false)
+    @Column(nullable = false,updatable = false)
     private long id;
 
-    @Column(name = "role_name",length = 50,unique = true,nullable = false)
+    @Column(length = 50,unique = true,nullable = false)
     private String roleName;
 
     @OneToMany(mappedBy = "role")

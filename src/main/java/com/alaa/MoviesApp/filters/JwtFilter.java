@@ -1,6 +1,6 @@
 package com.alaa.MoviesApp.filters;
 
-import com.alaa.MoviesApp.context.UserContextHolder;
+import com.alaa.MoviesApp.constants.AppConstant;
 import com.alaa.MoviesApp.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,10 +58,10 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException e) {
-            handleJwtException(response, "Token Expired for RequestID: " + UserContextHolder.getLoggedInUserContext());
+            handleJwtException(response, "Token Expired for RequestID: " + MDC.get(AppConstant.X_CORRELATION_ID));
 
         } catch (SignatureException e) {
-            handleJwtException(response, "Invalid Token Signature for RequestID: " + UserContextHolder.getLoggedInUserContext());
+            handleJwtException(response, "Invalid Token Signature for RequestID: " + MDC.get(AppConstant.X_CORRELATION_ID));
         }
     }
 
