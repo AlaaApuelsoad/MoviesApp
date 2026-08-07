@@ -12,7 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,7 @@ public class VerifyService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final SystemPropertyService systemPropertyService;
     private static final Logger logger = LogManager.getLogger(VerifyService.class);
 
     public AppResponse<String> verifyUser(String verificationCode) {
@@ -60,7 +62,9 @@ public class VerifyService {
 
     public void resendVerificationEmail(User user) {
         user.setVerificationCode(SystemUtils.generateUUIDCode());
-        user.setVerificationCodeExpiryDate(LocalDateTime.now().plusSeconds(10));
+        user.setVerificationCodeExpiryDate(Instant.now()
+                .plus(Duration.ofSeconds(systemPropertyService.
+                        getIntegerProperty("app.verification.code.expiration"))));
         userRepository.save(user);
         emailService.sendAccountVerificationEmail(new UserRegisterEvent(user));
     }
@@ -69,7 +73,7 @@ public class VerifyService {
         return userRepository.findByVerificationCode(verificationCode);
     }
 
-    private boolean isCodeExpired(LocalDateTime codeExpireDate) {
-        return LocalDateTime.now().isAfter(codeExpireDate);
+    private boolean isCodeExpired(Instant expirationDate) {
+        return Instant.now().isAfter(expirationDate);
     }
 }

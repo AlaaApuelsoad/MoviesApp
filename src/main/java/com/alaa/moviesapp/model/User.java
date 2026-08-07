@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User extends AuditEntity implements UserDetails{
+public class User extends AuditEntity implements UserDetails, Serializable {
+
 
     @Id
     @SequenceGenerator(allocationSize = 1,name = "USER_PK_SEQUENCE",sequenceName = "USER_PK_SEQUENCE",initialValue = 100)
@@ -53,7 +56,7 @@ public class User extends AuditEntity implements UserDetails{
     @Column(length = 50)
     private String verificationCode;
 
-    private LocalDateTime verificationCodeExpiryDate = LocalDateTime.now().plusSeconds(90);
+    private Instant verificationCodeExpiryDate ;
 
     private Boolean isVerified = false;
 
@@ -69,10 +72,10 @@ public class User extends AuditEntity implements UserDetails{
     private List<MemberRating> memberRatings;
 
     @Override
+    @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(
                 new SimpleGrantedAuthority(role.getRoleName())
         );
     }
-
 }

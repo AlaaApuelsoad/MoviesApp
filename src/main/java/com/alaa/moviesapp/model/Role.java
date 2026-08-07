@@ -13,7 +13,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends AuditEntity{
+public class Role extends AuditEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +30,15 @@ public class Role extends AuditEntity{
 
     @Getter
     public enum RoleEnum {
-        ADMIN("ADMIN"),
-        MEMBER("MEMBER");
+        ADMIN("ADMIN",1L),
+        MEMBER("MEMBER",2L);
 
         private final String name;
+        private Long id;
 
-        RoleEnum(String name) {
+        RoleEnum(String name,Long id) {
             this.name = name;
+            this.id = id;
         }
     }
 

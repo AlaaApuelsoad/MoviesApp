@@ -20,14 +20,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RatingService {
 
-    private final AuthenticationService authenticationService;
-    private final MovieRepository movieRepository;
-    private final MemberRatingRepository memberRatingRepository;
     private final UserService userService;
+    private final MovieRepository movieRepository;
+    private final AuthenticationService authenticationService;
+    private final MemberRatingRepository memberRatingRepository;
+
 
 
     @Transactional
-    public AppResponse<?> userRatingMovie(int ratingValue, String imdbId) {
+    public AppResponse<Object> userRatingMovie(int ratingValue, String imdbId) {
 
         if (imdbId == null || imdbId.isBlank() || ratingValue < 0 || ratingValue > 5) {
             throw new BusinessException(ErrorCode.INVALID_INPUT);

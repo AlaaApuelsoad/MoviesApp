@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class SystemPropertyService {
@@ -26,9 +28,7 @@ public class SystemPropertyService {
         return environment.getProperty(key);
     }
 
-    public String [] getActiveProfile(){
-        return environment.getActiveProfiles();
+    public Integer getIntegerProperty(String key) {
+        return Integer.parseInt(Objects.requireNonNull(environment.getProperty(key)));
     }
-
-
 }

@@ -1,6 +1,8 @@
 package com.alaa.moviesapp.utils;
 
+import com.alaa.moviesapp.model.Role;
 import com.alaa.moviesapp.model.User;
+import com.alaa.moviesapp.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApplicationInitialize implements ApplicationRunner {
 
-    private final SystemUtils systemUtils;
+    private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final com.alaa.moviesapp.repository.UserRepository userRepository;
     private final com.alaa.moviesapp.service.SystemPropertyService systemPropertyService;
@@ -33,8 +35,8 @@ public class ApplicationInitialize implements ApplicationRunner {
     public void createMainAdmin() {
         String adminUserName = "admin";
         String saltPass = SystemUtils.generateUUIDCode();
-
         if (!userRepository.existsByUsername(adminUserName)) {
+            Role role = roleService.getAdminRoleReference();
             User adminUser = User.builder()
                     .firstName("Admin")
                     .lastName("Admin")
@@ -45,7 +47,7 @@ public class ApplicationInitialize implements ApplicationRunner {
                     .isDeleted(false)
                     .type("admin")
                     .saltPassword(saltPass)
-                    .role(systemUtils.findRoleByRoleName("ADMIN"))
+                    .role(role)
                     .build();
 
             userRepository.save(adminUser);

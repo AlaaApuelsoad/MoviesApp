@@ -1,8 +1,5 @@
 package com.alaa.moviesapp.utils;
 
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.model.Role;
 import com.alaa.moviesapp.repository.RoleRepository;
 import com.alaa.moviesapp.service.SystemPropertyService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +18,6 @@ public class SystemUtils {
 
     public static String generateUUIDCode(){
         return UUID.randomUUID().toString();
-    }
-
-    public Role findRoleByRoleName(String roleName){
-        return roleRepository.findByRoleName(roleName).orElseThrow(
-                () -> new BusinessException(ErrorCode.ROLE_NOT_FOUND)
-        );
     }
 
     public Pageable buildPageableObj(Integer pageNumber) {

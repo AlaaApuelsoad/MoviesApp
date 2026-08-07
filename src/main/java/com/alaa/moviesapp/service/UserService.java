@@ -8,7 +8,6 @@ import com.alaa.moviesapp.enums.UserTypes;
 import com.alaa.moviesapp.exception.BusinessException;
 import com.alaa.moviesapp.listener.UserRegisterEvent;
 import com.alaa.moviesapp.mapper.ModelMapper;
-import com.alaa.moviesapp.model.Role;
 import com.alaa.moviesapp.model.User;
 import com.alaa.moviesapp.repository.UserRepository;
 import com.alaa.moviesapp.utils.AppResponseBuilder;
@@ -21,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.core.JacksonException;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 
 
@@ -29,11 +30,12 @@ import java.util.Objects;
 public class UserService {
 
     private final ModelMapper modelMapper;
-    private final SystemUtils systemUtils;
     private final UserRepository userRepository;
     private final MessageService messageService;
+    private final RoleService roleService;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
+    private final SystemPropertyService systemPropertyService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -62,15 +64,18 @@ public class UserService {
         String verificationCode = SystemUtils.generateUUIDCode();
 
         if (Objects.equals(user.getType(), UserTypes.ADMIN.getType())) {
-            user.setRole(systemUtils.findRoleByRoleName(Role.RoleEnum.ADMIN.getName()));
+            user.setRole(roleService.getAdminRoleReference());
             user.setIsVerified(Boolean.TRUE);
             user.setVerificationCode(null);
             user.setVerificationCodeExpiryDate(null);
         }
         if (Objects.equals(user.getType(), UserTypes.MEMBER.getType())) {
-            user.setRole(systemUtils.findRoleByRoleName(Role.RoleEnum.MEMBER.getName()));
+            user.setRole(roleService.getMemberRoleReference());
             user.setVerificationCode(verificationCode);
             user.setIsVerified(Boolean.FALSE);
+            user.setVerificationCodeExpiryDate(Instant.now()
+                    .plus(Duration.ofSeconds
+                            (systemPropertyService.getIntegerProperty("app.verification.code.expiration"))));
         }
 
         user.setSaltPassword(saltPassword);

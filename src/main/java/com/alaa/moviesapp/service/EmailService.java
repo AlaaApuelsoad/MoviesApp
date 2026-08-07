@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Year;
+import java.time.ZoneOffset;
 
 
 @Component
@@ -48,24 +49,17 @@ public class EmailService {
             helper.setText(htmlContent, true);
             mailSender.send(message);
 
-        } catch (MailSendException e) {
-            logger.error("Fail to send verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName(), e);
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-
-        } catch (MessagingException e) {
-            logger.error("Error creating MimeMessage for email to {},--- thread--> {}", to, Thread.currentThread().getName(), e);
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-
-        } catch (IOException e) {
+        } catch (MailSendException | MessagingException | IOException e) {
+            logger.error("Failed to send verification email to {}", to, e);
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        logger.info("Successfully sent verification email to {}, --- thread--> {} ", to, Thread.currentThread().getName());
+        logger.info("Successfully sent verification email to {}", to);
     }
 
     private String emailBuilder(String verificationLink) throws IOException {
         Path path = Path.of(systemPropertyService.getProperty("app.template.Account.Verification"));
         String templateContent = Files.readString(path);
         return templateContent.replace("{{verification_link}}",verificationLink)
-                .replace("{{year}}",String.valueOf(Year.now().getValue()));
+                .replace("{{year}}",String.valueOf(Year.now(ZoneOffset.UTC).getValue()));
     }
 }
