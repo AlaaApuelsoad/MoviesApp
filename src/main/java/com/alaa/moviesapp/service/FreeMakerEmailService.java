@@ -1,0 +1,56 @@
+package com.alaa.moviesapp.service;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+public class FreeMakerEmailService {
+
+    private final JavaMailSender mailSender;
+    private final Configuration freeMarkerConfigurer;
+
+    private String prepareEmailBody() throws IOException, TemplateException {
+
+        Template emailLayoutTemplate = freeMarkerConfigurer.getTemplate("email-layout.ftl");
+        Map<String, String> emailLayoutInput = new HashMap<>();
+
+        // Static English & Arabic content
+        emailLayoutInput.put("englishContent",
+                "<h2>Welcome to Movies App!</h2>" +
+                        "<p>Thank you for joining us! Please verify your account to start enjoying our services.</p>"
+        );
+
+        emailLayoutInput.put("arabicContent",
+                "<h2>مرحباً بك في موفيز!</h2>" +
+                        "<p>شكراً لانضمامك إلينا! يرجى تفعيل حسابك للبدء في استخدام خدماتنا.</p>"
+        );
+
+        StringWriter stringWriter = new StringWriter();
+        emailLayoutTemplate.process(emailLayoutInput, stringWriter);
+
+        return stringWriter.toString();
+    }
+
+    public void sendEmailNotification() throws MessagingException, IOException, TemplateException {
+        String emailBody = prepareEmailBody();
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setTo("alaaapu135@gmail.com");
+        helper.setSubject("Verify Your Account - Movies App");
+        helper.setText(emailBody, true);
+        mailSender.send(message);
+    }
+}

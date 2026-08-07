@@ -1,53 +1,33 @@
-package com.alaa.MoviesApp.utils;
+package com.alaa.moviesapp.utils;
 
-import com.alaa.MoviesApp.model.Role;
-import com.alaa.MoviesApp.model.User;
-import com.alaa.MoviesApp.repository.RoleRepository;
-import com.alaa.MoviesApp.repository.UserRepository;
-import com.alaa.MoviesApp.service.SystemPropertyService;
-import jakarta.annotation.PostConstruct;
+import com.alaa.moviesapp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
+/**
+ * Application runner is an interface that lets you execute code after the spring boot application has started
+ * and the application context has been initialized.
+ */
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationInitialize {
+public class ApplicationInitialize implements ApplicationRunner {
 
-    private final SystemPropertyService systemPropertyService;
-    private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SystemUtils systemUtils;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final com.alaa.moviesapp.repository.UserRepository userRepository;
+    private final com.alaa.moviesapp.service.SystemPropertyService systemPropertyService;
     private static final Logger logger = LogManager.getLogger(ApplicationInitialize.class);
 
-
-
-    @PostConstruct
-    public void inti(){
-        createRoles();
+    @Override
+    public void run(@NonNull ApplicationArguments args) {
         createMainAdmin();
-    }
-
-    private void createRoles() {
-
-        List<String> roleNames = Arrays.asList(Role.RoleEnum.ADMIN.name(), Role.RoleEnum.MEMBER.name());
-
-        roleNames.forEach(roleName -> {
-            if (!roleRepository.existsByRoleName(roleName)) {
-                Role role = Role.builder()
-                        .roleName(roleName)
-                        .build();
-                roleRepository.save(role);
-            } else {
-                logger.info("Role {} already exists.", roleName);
-            }
-        });
     }
 
     public void createMainAdmin() {
@@ -69,10 +49,9 @@ public class ApplicationInitialize {
                     .build();
 
             userRepository.save(adminUser);
+            logger.info("Main admin has been created");
         } else {
             logger.info("User {} already exists.", adminUserName);
         }
     }
-
-
 }

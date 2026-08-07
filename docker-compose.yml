@@ -1,33 +1,26 @@
 version: "3.9"  # Docker Compose file format version
 
 services:
-  # ---------------------------
-  # PostgreSQL Database Service
-  # ---------------------------
   db:
-    image: postgres                         # Use official postgres image
-    container_name: postgres-db-container   # Name of the running container
-
+    image: postgres
+    container_name: postgres-db-container
     ports:
-      - "5433:5432"   # Map host:container → access DB at localhost:5433
-
+      - "5433:5432"
     environment:
-      POSTGRES_USER: postgres        # Database username
-      POSTGRES_PASSWORD: hggi        # Database password
-      POSTGRES_DB: movie_app         # Database name created at startup
-
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hggi
+      POSTGRES_DB: movie_app
     networks:
-      - aabouelsoud                  # Attach to custom bridge network
-
+      - aabouelsoud
     healthcheck:                     # Ensures DB is ready before app starts
       test: ["CMD-SHELL","pg_isready -U postgres -d movie_app"]
       interval: 10s                  # Run check every 10 seconds
       timeout: 5s                    # Fail if check takes more than 5s
       retries: 5                     # Try 5 times before marking as unhealthy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-  # ---------------------------
-  # Spring Boot Backend Service
-  # ---------------------------
+
   movie_app:
     image: movie_app_backend                # App image (built from Dockerfile)
     container_name: movie-app-container
