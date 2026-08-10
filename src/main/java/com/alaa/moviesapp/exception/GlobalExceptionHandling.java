@@ -56,8 +56,8 @@ public class GlobalExceptionHandling {
         String logContextString = mapper.writeValueAsString(logContext);
         logger.error(logContextString);
 
-        return new ResponseEntity<>(AppResponseBuilder.buildResponse(false, null, ex.getMessage(), ex.getErrorCode().getHttpStatus(),
-                null, null),ex.getErrorCode().getHttpStatus());
+        return new ResponseEntity<>(AppResponseBuilder.buildResponse(false, null, ex.getMessage(),
+                ex.getErrorCode().getHttpStatus(), null, null),ex.getErrorCode().getHttpStatus());
 
     }
 

@@ -46,7 +46,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
         eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
         return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(savedUser),
-                "User Registered", HttpStatus.OK,null,null);
+                "user.created.success", HttpStatus.OK,null,null);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -55,7 +55,7 @@ public class UserService {
         user.setType(UserTypes.ADMIN.getType());
         this.userBuilder(user);
         return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(userRepository.save(user)),
-                messageService.getMessage("user.created"),HttpStatus.OK,null,null);
+                messageService.getMessage("user.created.success"),HttpStatus.OK,null,null);
     }
 
 

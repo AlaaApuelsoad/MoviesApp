@@ -32,7 +32,7 @@ public class UserRegisterDto {
 
     @NotBlank(message = "{email.validation.message}")
     @Size(min = 10,max = 100,message = "{email.validation.message}")
-    @Pattern(regexp = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", message = "{email.validation.message}")
+    @Pattern(regexp = "^[^\\s@]+@[^\\s@.]+(?:\\.[^\\s@.]+)+$", message = "{email.validation.message}")
     private String email;
 
     @NotBlank(message = "{password.validation.message}")

@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.moviesapp.securityconfiguration;
 
 import com.alaa.moviesapp.filters.JwtFilter;
 import lombok.RequiredArgsConstructor;
