@@ -1,10 +1,14 @@
 package com.alaa.moviesapp.constants;
 
-public interface Navigation {
+public final class Navigation {
 
-    String ADMIN_DASHBOARD_ROUTE = "/admin/dashboard";
-    String HOME_ROUTE = "/home";
-    String RATING_ROUTE = "/ratings";
-    String USER_ROUTE = "/users";
-    String AUTH_ROUTE = "/auth";
+    public static final String ADMIN_DASHBOARD_ROUTE = "/admin/dashboard";
+    public static final String HOME_ROUTE = "/home";
+    public static final String RATING_ROUTE = "/ratings";
+    public static final String USER_ROUTE = "/users";
+    public static final String AUTH_ROUTE = "/auth";
+
+    private Navigation() {
+        //Utility class should not have public constructor
+    }
 }

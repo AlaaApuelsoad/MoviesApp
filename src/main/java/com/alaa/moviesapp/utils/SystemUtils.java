@@ -1,6 +1,5 @@
 package com.alaa.moviesapp.utils;
 
-import com.alaa.moviesapp.repository.RoleRepository;
 import com.alaa.moviesapp.service.SystemPropertyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +12,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SystemUtils {
 
-    private final RoleRepository roleRepository;
     private final SystemPropertyService systemPropertyService;
 
     public static String generateUUIDCode(){

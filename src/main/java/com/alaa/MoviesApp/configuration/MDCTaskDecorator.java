@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * MDC is a TaskDecorator is the standard way to propagate MDC values from the submitting thread to a worker thread
- * when use @Async, ThreadPoolTaskExecutor, CompletableFuture,
+ * when use @Async, ThreadPoolTaskExecutor, CompletableFuture.
  */
 public class MDCTaskDecorator implements TaskDecorator {
     @Override

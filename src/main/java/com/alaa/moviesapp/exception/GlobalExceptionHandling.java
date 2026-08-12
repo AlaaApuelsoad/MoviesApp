@@ -102,14 +102,6 @@ public class GlobalExceptionHandling {
                         HttpStatus.BAD_REQUEST,errors,null),HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler()
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ResponseEntity<AppResponse<Object>> handleBadRequestException() {
-//        return new ResponseEntity<>(AppResponseBuilder.buildResponse(
-//                false,null, messageService.getMessage("error.bad.request"), HttpStatus.BAD_REQUEST,
-//                null,null),HttpStatus.BAD_REQUEST);
-//    }
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<AppResponse<Object>> handleDataIntegrityViolationException() {

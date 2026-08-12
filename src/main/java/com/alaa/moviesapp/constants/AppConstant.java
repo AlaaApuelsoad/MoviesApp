@@ -1,7 +1,11 @@
 package com.alaa.moviesapp.constants;
 
-public interface AppConstant {
+public final class AppConstant {
 
-     String X_CORRELATION_ID = "X-CORRELATION-ID";
-     String REQUEST_START_TIME = "Request-Start-Time";
+     public static final String X_CORRELATION_ID = "X-CORRELATION-ID";
+     public static final String REQUEST_START_TIME = "Request-Start-Time";
+
+     private AppConstant() {
+          //Utility class should not have public constructor
+     }
 }

@@ -19,7 +19,7 @@ public class RatingController {
 
     @GetMapping("/movie/{imdbId}")
     @PreAuthorize("hasAuthority('MEMBER')")
-    public ResponseEntity<AppResponse<?>> MemberRatingMovie(
+    public ResponseEntity<AppResponse<?>> memberRatingMovie(
             @RequestParam("ratingValue") int ratingValue, @PathVariable String imdbId) {
         return new ResponseEntity<>(ratingService.userRatingMovie(ratingValue,imdbId), HttpStatus.OK);
     }

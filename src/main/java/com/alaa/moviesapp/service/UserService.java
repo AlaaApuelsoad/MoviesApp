@@ -79,7 +79,7 @@ public class UserService {
         }
 
         user.setSaltPassword(saltPassword);
-        user.setPassword(bcryptPasswordEncoder.encode(user.getPassword().concat(saltPassword)));
+        user.setPassword(bcryptPasswordEncoder.encode(Objects.requireNonNull(user.getPassword()).concat(saltPassword)));
     }
 
     public User getUser(String userIdentifier){
