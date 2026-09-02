@@ -5,7 +5,7 @@ services:
     image: postgres
     container_name: postgres-db-container
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: hggi
@@ -32,31 +32,26 @@ services:
     restart: on-failure                     # Restart app if it crashes
 
     ports:
-      - "5055:5055"   # Expose app → access at http://localhost:5055
+      - "5055:5055"
 
-    environment:                            # Spring Boot config values
-      SPRING_PROFILES_ACTIVE: ${ACTIVE_PROFILE}   # e.g. dev, prod
-      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}    # jdbc URL for DB
+    environment:
+      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
 
-    depends_on:                             # Ensure DB starts first
+    depends_on:
       db:
-        condition: service_healthy          # Wait until DB healthcheck passes
+        condition: service_healthy          # Wait until DB health check passes
 
     networks:
       - aabouelsoud                         # Same network as DB for comms
 
-# ---------------------------
-# Networks
-# ---------------------------
+
 networks:
   aabouelsoud:
-    external: true   # Reuse pre-created network (must exist already!)
+    external: true
 
 
-##To tun different .env file docker compose --env-file .env.prod up --build
-##Notes
 ##Use service name (db) → when both DB and app run as Docker services in the same network.
 #Use localhost:hostPort (localhost:5433) → when the app runs locally outside Docker.
 #Never use the container name (postgres-db-container) in JDBC URL.
