@@ -3,6 +3,7 @@ package com.alaa.moviesapp.service;
 import com.alaa.moviesapp.dto.AppResponse;
 import com.alaa.moviesapp.dto.UserRegisterDto;
 import com.alaa.moviesapp.dto.UserRegisterResponse;
+import com.alaa.moviesapp.enums.EntityString;
 import com.alaa.moviesapp.enums.ErrorCode;
 import com.alaa.moviesapp.enums.UserTypes;
 import com.alaa.moviesapp.exception.BusinessException;
@@ -30,9 +31,8 @@ import java.util.Objects;
 public class UserService {
 
     private final ModelMapper modelMapper;
-    private final UserRepository userRepository;
-    private final MessageService messageService;
     private final RoleService roleService;
+    private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final SystemPropertyService systemPropertyService;
@@ -45,8 +45,9 @@ public class UserService {
         this.userBuilder(user);
         User savedUser = userRepository.save(user);
         eventPublisher.publishEvent(new UserRegisterEvent(savedUser));
-        return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(savedUser),
-                "user.created.success", HttpStatus.OK,null,null);
+        UserRegisterResponse response = modelMapper.mapToUserRegisterResponse(savedUser);
+        return AppResponseBuilder.success(response, HttpStatus.CREATED,
+                "entity.created.success", EntityString.USER.getName());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -54,9 +55,9 @@ public class UserService {
         User user = modelMapper.map(userRegisterDto, User.class);
         user.setType(UserTypes.ADMIN.getType());
         this.userBuilder(user);
-        return AppResponseBuilder.buildResponse(true,modelMapper.mapToUserRegisterResponse(userRepository.save(user)),
-                messageService.getMessage("user.created.success"),HttpStatus.OK,null,null);
-    }
+        UserRegisterResponse response = modelMapper.mapToUserRegisterResponse(userRepository.save(user));
+        return AppResponseBuilder.success(response, HttpStatus.CREATED,
+                "entity.created.success", EntityString.USER.getName());    }
 
 
     public void userBuilder(User user) {
@@ -84,7 +85,7 @@ public class UserService {
 
     public User getUser(String userIdentifier){
         return userRepository.findByUsernameOrEmail(userIdentifier).orElseThrow(
-                ()-> new BusinessException(ErrorCode.INVALID_CREDENTIALS)
+                ()-> new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
     }
 

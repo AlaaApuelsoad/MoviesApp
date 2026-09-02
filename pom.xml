@@ -166,14 +166,14 @@
 					</activeRecipes>
 				</configuration>
 
-				<dependencies>
-					<dependency>
-						<groupId>org.openrewrite.recipe</groupId>
-						<artifactId>rewrite-spring</artifactId>
-						<version>6.34.0</version>
-						<scope>runtime</scope>
-					</dependency>
-				</dependencies>
+<!--				<dependencies>-->
+<!--					<dependency>-->
+<!--						<groupId>org.openrewrite.recipe</groupId>-->
+<!--						<artifactId>rewrite-spring</artifactId>-->
+<!--						<version>6.34.0</version>-->
+<!--						<scope>runtime</scope>-->
+<!--					</dependency>-->
+<!--				</dependencies>-->
 			</plugin>
 
 		</plugins>

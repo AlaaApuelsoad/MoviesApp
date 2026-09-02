@@ -1,16 +1,17 @@
 package com.alaa.moviesapp.service;
 
 import com.alaa.moviesapp.dto.AppResponse;
+import com.alaa.moviesapp.enums.ErrorCode;
 import com.alaa.moviesapp.listener.UserRegisterEvent;
 import com.alaa.moviesapp.model.User;
 import com.alaa.moviesapp.repository.UserRepository;
 import com.alaa.moviesapp.utils.AppResponseBuilder;
 import com.alaa.moviesapp.utils.SystemUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,41 +24,36 @@ public class VerifyService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final SystemPropertyService systemPropertyService;
-    private static final Logger logger = LogManager.getLogger(VerifyService.class);
+    private static final Logger logger = LoggerFactory.getLogger(VerifyService.class);
 
+    @Transactional
     public AppResponse<String> verifyUser(String verificationCode) {
 
-        long startTime = System.currentTimeMillis();
-
         if (verificationCode == null || verificationCode.trim().isEmpty()) {
-            return AppResponseBuilder.buildResponse(false,null,"Invalid Verification Code",
-                    HttpStatus.BAD_REQUEST,null,null);
+            return AppResponseBuilder.error(ErrorCode.INVALID_VERIFICATION_CODE,"invalid.verification.code");
         }
 
         Optional<User> optionalUser = getUserByVerificationCode(verificationCode);
         if (optionalUser.isEmpty()) {
-            return AppResponseBuilder.buildResponse(false,null,"No user found with this verification code",
-                    HttpStatus.BAD_REQUEST,null,null);
+            return AppResponseBuilder.error(ErrorCode.VERIFICATION_USER_NOT_FOUND,
+                    "verification.user.not.found");
         }
 
         User user = optionalUser.get();
         if (isCodeExpired(user.getVerificationCodeExpiryDate())) {
             resendVerificationEmail(user);
-            return AppResponseBuilder.buildResponse(false,null,"Code Expired",
-                    HttpStatus.BAD_REQUEST,null,null);
+            return AppResponseBuilder.error(ErrorCode.CODE_EXPIRED,"code.expired");
         }
         user.setIsVerified(true);
         user.setVerificationCode(null);
         user.setVerificationCodeExpiryDate(null);
         userRepository.save(user);
 
-        long totalTime = System.currentTimeMillis() - startTime;
-
-        logger.info("Verification successful for user: {} Total time: {}ms", user.getEmail(), totalTime
+        logger.info("Verification successful for user: {} ", user.getEmail()
         );
 
-        return AppResponseBuilder.buildResponse(true,null, "Account verified successfully",
-                HttpStatus.OK,null,null);
+        return AppResponseBuilder.success("account.verified");
+
     }
 
     public void resendVerificationEmail(User user) {

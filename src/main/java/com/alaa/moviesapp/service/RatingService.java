@@ -9,6 +9,7 @@ import com.alaa.moviesapp.model.User;
 import com.alaa.moviesapp.repository.MemberRatingRepository;
 import com.alaa.moviesapp.repository.MovieRepository;
 import com.alaa.moviesapp.utils.AppResponseBuilder;
+import jakarta.mail.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,11 @@ public class RatingService {
     private final AuthenticationService authenticationService;
     private final MemberRatingRepository memberRatingRepository;
 
-
-
     @Transactional
     public AppResponse<Object> userRatingMovie(int ratingValue, String imdbId) {
 
         if (imdbId == null || imdbId.isBlank() || ratingValue < 0 || ratingValue > 5) {
-            throw new BusinessException(ErrorCode.INVALID_INPUT);
+            throw new BusinessException(ErrorCode.BAD_REQUEST);
         }
 
         User user = userService.getUser(authenticationService.getUserCredentials().getUsername());
@@ -54,8 +53,7 @@ public class RatingService {
             memberRatingRepository.save(memberRating);
         }
 
-        return AppResponseBuilder.buildResponse(
-                true,null,"Movie Rating successful", HttpStatus.OK,null,null);
+        return AppResponseBuilder.success("rating.success");
     }
 
 }

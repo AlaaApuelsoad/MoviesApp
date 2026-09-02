@@ -9,7 +9,6 @@ import com.alaa.moviesapp.exception.BusinessException;
 import com.alaa.moviesapp.model.User;
 import com.alaa.moviesapp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +25,6 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
     private final UserService userService;
-    private final MessageService messageService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -59,8 +57,7 @@ public class AuthenticationService {
                 .token(token)
                 .role(user.getRole().getRoleName())
                 .build();
-         return AppResponseBuilder.buildResponse(true,response,messageService.getMessage("auth.login.success"),
-                 HttpStatus.OK,null,null);
+         return AppResponseBuilder.success(response,"auth.login.success");
     }
 
     public UserDetails getUserCredentials() {

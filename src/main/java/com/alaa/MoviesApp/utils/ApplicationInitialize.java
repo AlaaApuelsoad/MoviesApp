@@ -4,9 +4,9 @@ import com.alaa.moviesapp.model.Role;
 import com.alaa.moviesapp.model.User;
 import com.alaa.moviesapp.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +25,7 @@ public class ApplicationInitialize implements ApplicationRunner {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final com.alaa.moviesapp.repository.UserRepository userRepository;
     private final com.alaa.moviesapp.service.SystemPropertyService systemPropertyService;
-    private static final Logger logger = LogManager.getLogger(ApplicationInitialize.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationInitialize.class);
 
     @Override
     public void run(@NonNull ApplicationArguments args) {

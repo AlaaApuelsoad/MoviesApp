@@ -7,7 +7,7 @@ import com.alaa.moviesapp.dto.UserRegisterDto;
 import com.alaa.moviesapp.dto.UserRegisterResponse;
 import com.alaa.moviesapp.model.Movie;
 import com.alaa.moviesapp.service.MovieService;
-import com.alaa.moviesapp.service.OmdbIntegrationService;
+import com.alaa.moviesapp.service.IntegrationService;
 import com.alaa.moviesapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import tools.jackson.core.JacksonException;
 public class AdminController {
 
     private final UserService userService;
-    private final OmdbIntegrationService omdbIntegrationService;
+    private final IntegrationService integrationService;
     private final MovieService movieService;
 
     @PostMapping("/create/admin")
@@ -37,7 +37,7 @@ public class AdminController {
     public ResponseEntity<AppResponse<IntegrationSearch>> moviesListSearch
             (@RequestParam(value = "title", required = false, defaultValue = "Dark") String title,
              @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber) throws JacksonException {
-        return new ResponseEntity<>(omdbIntegrationService.searchMovies(title, pageNumber), HttpStatus.OK);
+        return new ResponseEntity<>(integrationService.searchMovies(title, pageNumber), HttpStatus.OK);
     }
 
     @GetMapping("/add/movie/{imdbID}")

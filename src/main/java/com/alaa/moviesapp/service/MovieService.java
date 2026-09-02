@@ -3,6 +3,7 @@ package com.alaa.moviesapp.service;
 import com.alaa.moviesapp.dto.AppResponse;
 import com.alaa.moviesapp.dto.MetaData;
 import com.alaa.moviesapp.dto.MovieInfoDetails;
+import com.alaa.moviesapp.enums.EntityString;
 import com.alaa.moviesapp.enums.ErrorCode;
 import com.alaa.moviesapp.exception.BusinessException;
 import com.alaa.moviesapp.mapper.OmdbMovieMapper;
@@ -28,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
-    public final OmdbIntegrationService omdbIntegrationService;
+    public final IntegrationService integrationService;
     private final MovieRepository movieRepository;
     private final OmdbMovieMapper omdbMovieMapper;
     private final MemberRatingRepository memberRatingRepository;
@@ -42,14 +43,15 @@ public class MovieService {
             throw new BusinessException(ErrorCode.MOVIE_EXISTS);
         }
 
-        String movieResponse = omdbIntegrationService.getMovieByImdbId(imdbId);
+        String movieResponse = integrationService.getMovieByImdbId(imdbId);
         Movie movie = omdbMovieMapper.mapToMovie(movieResponse);
-        return AppResponseBuilder.buildResponse(true,movieRepository.save(movie),"Movie Added Successfully",
-                HttpStatus.OK,null,null);
+        Movie savedMovie = movieRepository.save(movie);
+        return AppResponseBuilder.success(savedMovie,HttpStatus.CREATED,"entity.created.success",
+                EntityString.MOVIE.getName());
     }
 
     @Transactional
-    public AppResponse<?> deleteMovieByImdbId(String imdbId) {
+    public AppResponse<Object> deleteMovieByImdbId(String imdbId) {
         Movie movie = movieRepository.findByIdImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
@@ -60,8 +62,8 @@ public class MovieService {
         movie.setDeleted(true);
         movie.setDeletedAt(ZonedDateTime.now(ZoneOffset.UTC).toInstant());
         movieRepository.save(movie);
-        return AppResponseBuilder.buildResponse(true,null,"Movie Deleted Successfully",
-                HttpStatus.OK,null,null);
+        return AppResponseBuilder.success(null, HttpStatus.NO_CONTENT,
+                "entity.deleted.success", EntityString.MOVIE.getName());
     }
 
 
@@ -74,9 +76,8 @@ public class MovieService {
         MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
 //        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
-        return AppResponseBuilder.buildResponse(
-                true,movieInfoDetails,"Movie details fetched successfully",HttpStatus.OK,
-                null,null);
+
+        return AppResponseBuilder.success(movieInfoDetails, "generic.get.success");
 
     }
 
@@ -84,19 +85,16 @@ public class MovieService {
     public AppResponse<List<Movie>> searchMovies(String keyword, int pageNumber) {
         Page<Movie> moviePage = movieRepository.searchForMovie(keyword, systemUtils.buildPageableObj(pageNumber));
         MetaData metaData = PaginationMetaDataMapper.fromPage(moviePage);
-        return AppResponseBuilder.buildResponse(
-                true,moviePage.getContent(),"Movies fetched successfully",HttpStatus.OK,null,metaData
-        );
+
+        return AppResponseBuilder.success(moviePage.getContent(),metaData,"generic.get.success");
     }
 
     @Transactional
     public AppResponse<List<Movie>> getAllMovies(int pageNumber) {
         Page<Movie> movies = movieRepository.getAllMovies(systemUtils.buildPageableObj(pageNumber));
         MetaData metaData = PaginationMetaDataMapper.fromPage(movies);
-        return AppResponseBuilder.buildResponse(
-                true, movies.getContent(), "Movies fetched successfully", HttpStatus.OK,
-                null, metaData
-        );
+
+        return AppResponseBuilder.success(movies.getContent(),metaData,"generic.get.success");
     }
 
 //    public int getMemberRatingForMovie(String imdbId) {

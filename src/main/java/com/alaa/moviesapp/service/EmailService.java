@@ -6,13 +6,13 @@ import com.alaa.moviesapp.listener.UserRegisterEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -23,13 +23,13 @@ import java.time.Year;
 import java.time.ZoneOffset;
 
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender mailSender;
     private final SystemPropertyService systemPropertyService;
-    private static final Logger logger = LogManager.getLogger(EmailService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Async("asyncNotification")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

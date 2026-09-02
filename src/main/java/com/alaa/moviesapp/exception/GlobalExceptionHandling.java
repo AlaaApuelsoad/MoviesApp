@@ -3,7 +3,7 @@ package com.alaa.moviesapp.exception;
 import com.alaa.moviesapp.constants.AppConstant;
 import com.alaa.moviesapp.context.LogContext;
 import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.service.MessageService;
+import com.alaa.moviesapp.enums.ErrorCode;
 import com.alaa.moviesapp.utils.AppResponseBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.StringWriter;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,65 +29,28 @@ import java.util.Map;
 public class GlobalExceptionHandling {
 
     private final ObjectMapper mapper;
-    private final MessageService messageService;
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandling.class);
 
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<AppResponse<Object>> handleBusinessException(BusinessException ex, HttpServletRequest request) throws JacksonException {
-
-        LogContext logContext = LogContext.builder()
-                .timestamp(Instant.now())
-                .correlationId(MDC.get(AppConstant.X_CORRELATION_ID))
-                .logger(logger.getName())
-                .thread(Thread.currentThread().getName())
-                .httpMethod(request.getMethod())
-                .uri(request.getRequestURI())
-                .responseStatus(ex.getErrorCode().getHttpStatus().value())
-                .responseTimMs(System.currentTimeMillis() - Long.parseLong(MDC.get(AppConstant.REQUEST_START_TIME)))
-                .errorType(ex.getClass().getSimpleName())
-                .errorMessage(ex.getMessage())
-                .rootCause(ex.getCause() != null ? ex.getCause().getMessage() : null)
-                .stackTrace(getStackTrace(ex))
-                .build();
-
-        String logContextString = mapper.writeValueAsString(logContext);
-        logger.error(logContextString);
-
-        return new ResponseEntity<>(AppResponseBuilder.buildResponse(false, null, ex.getMessage(),
-                ex.getErrorCode().getHttpStatus(), null, null),ex.getErrorCode().getHttpStatus());
+        logError(ex,request,ex.getErrorCode().getHttpStatus());
+        return new ResponseEntity<>(AppResponseBuilder.error(ex.getErrorCode(),ex.getErrorCode().getMessageKey())
+                ,ex.getErrorCode().getHttpStatus());
 
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AppResponse<Object>> handleGenericException(Exception ex, HttpServletRequest request) throws JacksonException {
-
-        LogContext logContext = LogContext.builder()
-                .timestamp(Instant.now())
-                .correlationId(MDC.get(AppConstant.X_CORRELATION_ID))
-                .logger(logger.getName())
-                .thread(Thread.currentThread().getName())
-                .httpMethod(request.getMethod())
-                .uri(request.getRequestURI())
-                .responseStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .responseTimMs(System.currentTimeMillis() - Long.parseLong(MDC.get(AppConstant.REQUEST_START_TIME)))
-                .errorType(ex.getClass().getSimpleName())
-                .errorMessage(ex.getMessage())
-                .rootCause(ex.getCause() != null ? ex.getCause().getMessage() : null)
-                .stackTrace(writeStackTrace(ex))
-                .build();
-
-        String logContextString = mapper.writeValueAsString(logContext);
-        logger.error(logContextString);
-        return new ResponseEntity<>(AppResponseBuilder.buildResponse(
-                false,null, messageService.getMessage("error.internal.server"), HttpStatus.INTERNAL_SERVER_ERROR,
-                null,null),HttpStatus.INTERNAL_SERVER_ERROR);
-
+        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        logError(ex, request, errorCode.getHttpStatus());
+        return new ResponseEntity<>(AppResponseBuilder.error(errorCode,errorCode.getMessageKey()),
+                errorCode.getHttpStatus());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<AppResponse<Object>> handleValidationException(MethodArgumentNotValidException ex) {
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         Map<String, Object> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -97,17 +58,15 @@ public class GlobalExceptionHandling {
             errors.put(fieldName, errorMessage);
         });
 
-        return new ResponseEntity<>(
-                AppResponseBuilder.buildResponse(false,null, messageService.getMessage("error.bad.request"),
-                        HttpStatus.BAD_REQUEST,errors,null),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(AppResponseBuilder.error(errorCode,errorCode.getMessageKey(),
+                errors),errorCode.getHttpStatus());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<AppResponse<Object>> handleDataIntegrityViolationException() {
-        return new ResponseEntity<>(AppResponseBuilder.buildResponse(
-                false,null,messageService.getMessage("database.unique.constraint"),HttpStatus.BAD_REQUEST,
-                null,null),HttpStatus.BAD_REQUEST);
+        ErrorCode errorCode = ErrorCode.DATA_INTEGRITY_VIOLATION;
+        return new ResponseEntity<>(AppResponseBuilder.error(errorCode,errorCode.getMessageKey()),
+                errorCode.getHttpStatus());
     }
 
     private String getStackTrace(Exception exception) {
@@ -122,9 +81,26 @@ public class GlobalExceptionHandling {
         return "Unknown Origin";
     }
 
-    private String writeStackTrace(Exception exception) {
-        StringWriter sw = new StringWriter();
-        exception.printStackTrace(new java.io.PrintWriter(sw));
-        return sw.toString();
+    private void logError(Exception ex, HttpServletRequest request, HttpStatus status) throws JacksonException {
+
+        if (!logger.isErrorEnabled()){
+            return;
+        }
+        LogContext logContext = LogContext.builder()
+                .timestamp(Instant.now())
+                .correlationId(MDC.get(AppConstant.X_CORRELATION_ID))
+                .logger(logger.getName())
+                .thread(Thread.currentThread().getName())
+                .httpMethod(request.getMethod())
+                .uri(request.getRequestURI())
+                .responseStatus(status.value())
+                .responseTimMs(System.currentTimeMillis() - Long.parseLong(MDC.get(AppConstant.REQUEST_START_TIME)))
+                .errorType(ex.getClass().getSimpleName())
+                .errorMessage(ex.getMessage())
+                .rootCause(ex.getCause() != null ? ex.getCause().getMessage() : null)
+                .stackTrace(getStackTrace(ex))
+                .build();
+
+        logger.error(mapper.writeValueAsString(logContext));
     }
 }
