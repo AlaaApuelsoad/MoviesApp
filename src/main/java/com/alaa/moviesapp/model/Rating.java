@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.model;
+package com.alaa.MoviesApp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

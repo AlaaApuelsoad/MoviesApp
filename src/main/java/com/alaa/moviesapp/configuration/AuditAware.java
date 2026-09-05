@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.MoviesApp.configuration;
 
-import com.alaa.moviesapp.model.User;
+import com.alaa.MoviesApp.model.User;
 import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

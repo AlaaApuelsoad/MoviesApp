@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.MoviesApp.configuration;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

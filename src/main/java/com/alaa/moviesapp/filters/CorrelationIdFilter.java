@@ -1,8 +1,7 @@
-package com.alaa.moviesapp.filters;
+package com.alaa.MoviesApp.filters;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.context.UserContextHolder;
-import com.alaa.moviesapp.utils.SystemUtils;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.utils.SystemUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +38,6 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
 
         } finally {
             MDC.clear();
-            UserContextHolder.clearRequestContext();
         }
 
     }

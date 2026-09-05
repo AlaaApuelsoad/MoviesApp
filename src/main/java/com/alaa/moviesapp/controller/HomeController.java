@@ -1,12 +1,12 @@
-package com.alaa.moviesapp.controller;
+package com.alaa.MoviesApp.controller;
 
-import com.alaa.moviesapp.constants.Navigation;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.MovieInfoDetails;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.model.Movie;
-import com.alaa.moviesapp.service.MovieService;
+import com.alaa.MoviesApp.constants.Navigation;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.MovieInfoDetails;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.model.Movie;
+import com.alaa.MoviesApp.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package com.alaa.moviesapp.filters;
+package com.alaa.MoviesApp.filters;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.service.JwtService;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;

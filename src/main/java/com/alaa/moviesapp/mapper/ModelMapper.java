@@ -1,7 +1,7 @@
-package com.alaa.moviesapp.mapper;
+package com.alaa.MoviesApp.mapper;
 
-import com.alaa.moviesapp.dto.UserRegisterResponse;
-import com.alaa.moviesapp.model.User;
+import com.alaa.MoviesApp.dto.UserRegisterResponse;
+import com.alaa.MoviesApp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;

@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.repository;
+package com.alaa.MoviesApp.repository;
 
-import com.alaa.moviesapp.model.Movie;
+import com.alaa.MoviesApp.model.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

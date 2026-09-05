@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

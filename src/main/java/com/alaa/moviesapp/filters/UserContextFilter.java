@@ -1,8 +1,8 @@
-package com.alaa.moviesapp.filters;
+package com.alaa.MoviesApp.filters;
 
-import com.alaa.moviesapp.context.LoggedInUserContext;
-import com.alaa.moviesapp.context.UserContextHolder;
-import com.alaa.moviesapp.model.User;
+import com.alaa.MoviesApp.context.LoggedInUserContext;
+import com.alaa.MoviesApp.context.UserContextHolder;
+import com.alaa.MoviesApp.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

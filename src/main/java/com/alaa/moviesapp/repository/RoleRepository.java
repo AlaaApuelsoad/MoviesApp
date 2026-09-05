@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.repository;
+package com.alaa.MoviesApp.repository;
 
-import com.alaa.moviesapp.model.Role;
+import com.alaa.MoviesApp.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

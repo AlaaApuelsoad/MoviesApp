@@ -1,10 +1,10 @@
-package com.alaa.moviesapp.mapper;
+package com.alaa.MoviesApp.mapper;
 
-import com.alaa.moviesapp.dto.IntegrationSearch;
-import com.alaa.moviesapp.dto.MovieInfoDetails;
-import com.alaa.moviesapp.dto.MovieOMDBInfo;
-import com.alaa.moviesapp.model.Movie;
-import com.alaa.moviesapp.model.Rating;
+import com.alaa.MoviesApp.dto.IntegrationSearch;
+import com.alaa.MoviesApp.dto.MovieInfoDetails;
+import com.alaa.MoviesApp.dto.MovieOMDBInfo;
+import com.alaa.MoviesApp.model.Movie;
+import com.alaa.MoviesApp.model.Rating;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;

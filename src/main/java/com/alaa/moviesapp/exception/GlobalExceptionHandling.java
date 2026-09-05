@@ -1,10 +1,10 @@
-package com.alaa.moviesapp.exception;
+package com.alaa.MoviesApp.exception;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.context.LogContext;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.context.LogContext;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

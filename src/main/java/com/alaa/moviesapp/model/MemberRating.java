@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.model;
+package com.alaa.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

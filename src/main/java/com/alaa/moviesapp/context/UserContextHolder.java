@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.context;
+package com.alaa.MoviesApp.context;
 
 public class UserContextHolder {
 

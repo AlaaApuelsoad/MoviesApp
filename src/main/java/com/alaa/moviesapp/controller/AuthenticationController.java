@@ -1,10 +1,10 @@
-package com.alaa.moviesapp.controller;
+package com.alaa.MoviesApp.controller;
 
-import com.alaa.moviesapp.constants.Navigation;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.AuthResponse;
-import com.alaa.moviesapp.dto.LoginRequest;
-import com.alaa.moviesapp.service.AuthenticationService;
+import com.alaa.MoviesApp.constants.Navigation;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.AuthResponse;
+import com.alaa.MoviesApp.dto.LoginRequest;
+import com.alaa.MoviesApp.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.Cookie;

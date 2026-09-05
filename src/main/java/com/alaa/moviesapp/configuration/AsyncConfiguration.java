@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.MoviesApp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

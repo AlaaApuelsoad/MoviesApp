@@ -1,7 +1,7 @@
-package com.alaa.moviesapp.mapper;
+package com.alaa.MoviesApp.mapper;
 
-import com.alaa.moviesapp.dto.MetaData;
-import com.alaa.moviesapp.dto.Pagination;
+import com.alaa.MoviesApp.dto.MetaData;
+import com.alaa.MoviesApp.dto.Pagination;
 import org.springframework.data.domain.Page;
 
 public class PaginationMetaDataMapper {
