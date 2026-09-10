@@ -1,5 +1,6 @@
 package com.alaa.MoviesApp.service;
 
+import com.alaa.MoviesApp.context.UserContextHolder;
 import com.alaa.MoviesApp.dto.AppResponse;
 import com.alaa.MoviesApp.dto.MetaData;
 import com.alaa.MoviesApp.dto.MovieInfoDetails;
@@ -29,12 +30,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
-    public final IntegrationService integrationService;
+    private final SystemUtils systemUtils;
     private final MovieRepository movieRepository;
     private final OmdbMovieMapper omdbMovieMapper;
+    public final IntegrationService integrationService;
     private final MemberRatingRepository memberRatingRepository;
-    private final UserService userService;
-    private final SystemUtils systemUtils;
 
 
     @Transactional
@@ -59,6 +59,7 @@ public class MovieService {
             throw new BusinessException(ErrorCode.ALREADY_DELETED);
         }
 
+//        movie.setDeletedById(Objects.requireNonNull(UserContextHolder.getLoggedInUserContext().getUserId()));
         movie.setDeleted(true);
         movie.setDeletedAt(ZonedDateTime.now(ZoneOffset.UTC).toInstant());
         movieRepository.save(movie);
@@ -74,7 +75,7 @@ public class MovieService {
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
         MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
-//        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
+        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
 
         return AppResponseBuilder.success(movieInfoDetails, "generic.get.success");
@@ -97,10 +98,9 @@ public class MovieService {
         return AppResponseBuilder.success(movies.getContent(),metaData,"generic.get.success");
     }
 
-//    public int getMemberRatingForMovie(String imdbId) {
-//        String username = Objects.requireNonNull(User.getCredentials()).getUsername();
-//        User user = userService.getUser(username);
-//        Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
-//        return rating != null ? rating : 0;
-//    }
+    public int getMemberRatingForMovie(String imdbId) {
+        Long userId = UserContextHolder.getLoggedInUserContext().getUserId();
+        Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId,userId);
+        return rating != null ? rating : 0;
+    }
 }

@@ -1,5 +1,6 @@
 package com.alaa.MoviesApp.utils;
 
+import com.alaa.MoviesApp.enums.UserTypes;
 import com.alaa.MoviesApp.model.Role;
 import com.alaa.MoviesApp.model.User;
 import com.alaa.MoviesApp.repository.UserRepository;
@@ -47,7 +48,7 @@ public class ApplicationInitialize implements ApplicationRunner {
                     .email(systemPropertyService.getProperty("app.admin.email"))
                     .isVerified(true)
                     .isDeleted(false)
-                    .type("admin")
+                    .type(UserTypes.ADMIN.getType())
                     .saltPassword(saltPass)
                     .role(role)
                     .build();

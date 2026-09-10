@@ -8,37 +8,45 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// @Component
-// @Order(3)
+@Component
+@Order(3)
 public class UserContextFilter extends OncePerRequestFilter {
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().startsWith("/auth/login");
+    }
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.isAuthenticated()){
-            User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            // fill user context
-            LoggedInUserContext context = LoggedInUserContext.builder()
-                    .userId(loggedInUser.getId())
-                    .userName(loggedInUser.getUsername())
-                    .role(loggedInUser.getRole().getRoleName())
-                    .type(loggedInUser.getType())
-                    .email(loggedInUser.getEmail())
-                    .build();
-
-            UserContextHolder.setLoggedInUserContext(context);
-        }
         try {
+            if (authentication != null
+                    && authentication.isAuthenticated()
+                    && authentication.getPrincipal() instanceof User loggedInUser){ //check and create
+                LoggedInUserContext context = LoggedInUserContext.builder()
+                        .userId(loggedInUser.getId())
+                        .userName(loggedInUser.getUsername())
+                        .role(loggedInUser.getRole().getRoleName())
+                        .type(loggedInUser.getType())
+                        .email(loggedInUser.getEmail())
+                        .build();
+
+                UserContextHolder.setLoggedInUserContext(context);
+            }
             filterChain.doFilter(request,response);
-        }finally {
+        } finally {
             UserContextHolder.clearRequestContext();
         }
     }
