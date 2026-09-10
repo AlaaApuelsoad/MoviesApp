@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.listener;
+package com.alaa.MoviesApp.listener;
 
-import com.alaa.moviesapp.model.User;
+import com.alaa.MoviesApp.model.User;
 import lombok.Getter;
 import lombok.Setter;
 

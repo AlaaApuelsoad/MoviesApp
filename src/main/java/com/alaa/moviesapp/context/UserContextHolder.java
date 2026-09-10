@@ -1,6 +1,10 @@
-package com.alaa.moviesapp.context;
+package com.alaa.MoviesApp.context;
 
 public class UserContextHolder {
+
+    private UserContextHolder() {
+        /* This utility class should not be instantiated */
+    }
 
     private static final ThreadLocal<LoggedInUserContext> userContext = new ThreadLocal<>();
 

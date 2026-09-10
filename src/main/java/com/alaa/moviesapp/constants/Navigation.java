@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.constants;
+package com.alaa.MoviesApp.constants;
 
 public final class Navigation {
 

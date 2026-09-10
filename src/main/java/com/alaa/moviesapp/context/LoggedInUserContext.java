@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.context;
+package com.alaa.MoviesApp.context;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

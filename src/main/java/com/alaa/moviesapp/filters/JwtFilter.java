@@ -1,9 +1,8 @@
-package com.alaa.moviesapp.filters;
+package com.alaa.MoviesApp.filters;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.service.JwtService;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.exception.GlobalExceptionHandling;
+import com.alaa.MoviesApp.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final GlobalExceptionHandling global;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().startsWith("/auth/login");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -58,22 +64,9 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
 
-        } catch (ExpiredJwtException e) {
-            handleJwtException(response, "Token Expired for RequestID: " + MDC.get(AppConstant.X_CORRELATION_ID));
-
-        } catch (SignatureException e) {
-            handleJwtException(response, "Invalid Token Signature for RequestID: " + MDC.get(AppConstant.X_CORRELATION_ID));
+        } catch (Exception e) {
+            global.handleJwtException(response, "Invalid JWT Token for RequestID: " + MDC.get(AppConstant.X_CORRELATION_ID));
+            global.logError(e, request, HttpStatus.UNAUTHORIZED);
         }
-    }
-
-
-    private void handleJwtException(HttpServletResponse response, String message) throws IOException {
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        String jsonResponse = String.format("{\"error\": \"%s\", \"message\": \"%s\"}", "Authentication error", message);
-        response.getWriter().write(jsonResponse);
     }
 }

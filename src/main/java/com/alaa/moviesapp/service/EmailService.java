@@ -1,8 +1,8 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.listener.UserRegisterEvent;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.listener.UserRegisterEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

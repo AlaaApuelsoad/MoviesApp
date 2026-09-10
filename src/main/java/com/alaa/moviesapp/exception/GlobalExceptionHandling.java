@@ -1,11 +1,12 @@
-package com.alaa.moviesapp.exception;
+package com.alaa.MoviesApp.exception;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.context.LogContext;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.context.LogContext;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,7 +83,17 @@ public class GlobalExceptionHandling {
         return "Unknown Origin";
     }
 
-    private void logError(Exception ex, HttpServletRequest request, HttpStatus status) throws JacksonException {
+    public void handleJwtException(HttpServletResponse response, String message) throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String jsonResponse = String.format("{\"error\": \"%s\", \"message\": \"%s\"}", "Authentication error", message);
+        response.getWriter().write(jsonResponse);
+    }
+
+    public void logError(Exception ex, HttpServletRequest request, HttpStatus status) throws JacksonException {
 
         if (!logger.isErrorEnabled()){
             return;

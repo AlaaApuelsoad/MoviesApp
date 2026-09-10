@@ -1,7 +1,7 @@
-package com.alaa.moviesapp.interceptors;
+package com.alaa.MoviesApp.interceptors;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.context.LogContext;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.context.LogContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

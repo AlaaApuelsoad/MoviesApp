@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.dto;
+package com.alaa.MoviesApp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

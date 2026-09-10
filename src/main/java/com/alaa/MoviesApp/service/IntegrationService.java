@@ -1,9 +1,9 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.IntegrationSearch;
-import com.alaa.moviesapp.mapper.OmdbMovieMapper;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.IntegrationSearch;
+import com.alaa.MoviesApp.mapper.OmdbMovieMapper;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

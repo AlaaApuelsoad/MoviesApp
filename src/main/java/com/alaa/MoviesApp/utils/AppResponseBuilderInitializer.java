@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.utils;
+package com.alaa.MoviesApp.utils;
 
-import com.alaa.moviesapp.service.MessageService;
+import com.alaa.MoviesApp.service.MessageService;
 import org.springframework.stereotype.Component;
 
 @Component

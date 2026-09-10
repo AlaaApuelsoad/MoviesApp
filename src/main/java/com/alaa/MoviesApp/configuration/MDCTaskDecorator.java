@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.MoviesApp.configuration;
 
 import org.jspecify.annotations.NullMarked;
 import org.slf4j.MDC;

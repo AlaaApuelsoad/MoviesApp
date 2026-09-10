@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.securityconfiguration;
+package com.alaa.MoviesApp.securityconfiguration;
 
-import com.alaa.moviesapp.repository.UserRepository;
+import com.alaa.MoviesApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

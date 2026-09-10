@@ -1,12 +1,12 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class SystemPropertyService {
 

@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.securityconfiguration;
+package com.alaa.MoviesApp.securityconfiguration;
 
-import com.alaa.moviesapp.filters.JwtFilter;
+import com.alaa.MoviesApp.filters.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

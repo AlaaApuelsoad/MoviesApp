@@ -1,17 +1,15 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.model.MemberRating;
-import com.alaa.moviesapp.model.Movie;
-import com.alaa.moviesapp.model.User;
-import com.alaa.moviesapp.repository.MemberRatingRepository;
-import com.alaa.moviesapp.repository.MovieRepository;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
-import jakarta.mail.Message;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.model.MemberRating;
+import com.alaa.MoviesApp.model.Movie;
+import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.repository.MemberRatingRepository;
+import com.alaa.MoviesApp.repository.MovieRepository;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
