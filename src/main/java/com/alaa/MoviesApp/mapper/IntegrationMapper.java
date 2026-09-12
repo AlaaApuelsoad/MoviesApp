@@ -11,14 +11,15 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class OmdbMovieMapper {
+public class IntegrationMapper {
 
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
@@ -49,7 +50,7 @@ public class OmdbMovieMapper {
         movie.setDvd(jsonNode.get("DVD").asString());
         movie.setBoxOffice(jsonNode.get("BoxOffice").asString());
         movie.setProduction(jsonNode.get("Production").asString());
-        movie.setAddedAt(Instant.now());
+        movie.setAddedAt(LocalDate.now(ZoneOffset.UTC));
 
         movie.setRatings(mapRatings(jsonNode.get("Ratings")));
 

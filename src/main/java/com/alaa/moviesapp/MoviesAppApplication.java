@@ -1,4 +1,4 @@
-package com.alaa.moviesapp;
+package com.alaa.MoviesApp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
