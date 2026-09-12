@@ -7,7 +7,7 @@ import com.alaa.MoviesApp.dto.MovieInfoDetails;
 import com.alaa.MoviesApp.enums.EntityString;
 import com.alaa.MoviesApp.enums.ErrorCode;
 import com.alaa.MoviesApp.exception.BusinessException;
-import com.alaa.MoviesApp.mapper.OmdbMovieMapper;
+import com.alaa.MoviesApp.mapper.IntegrationMapper;
 import com.alaa.MoviesApp.mapper.PaginationMetaDataMapper;
 import com.alaa.MoviesApp.model.Movie;
 import com.alaa.MoviesApp.repository.MemberRatingRepository;
@@ -32,7 +32,7 @@ public class MovieService {
 
     private final SystemUtils systemUtils;
     private final MovieRepository movieRepository;
-    private final OmdbMovieMapper omdbMovieMapper;
+    private final IntegrationMapper integrationMapper;
     public final IntegrationService integrationService;
     private final MemberRatingRepository memberRatingRepository;
 
@@ -44,7 +44,7 @@ public class MovieService {
         }
 
         String movieResponse = integrationService.getMovieByImdbId(imdbId);
-        Movie movie = omdbMovieMapper.mapToMovie(movieResponse);
+        Movie movie = integrationMapper.mapToMovie(movieResponse);
         Movie savedMovie = movieRepository.save(movie);
         return AppResponseBuilder.success(savedMovie,HttpStatus.CREATED,"entity.created.success",
                 EntityString.MOVIE.getName());
@@ -74,7 +74,7 @@ public class MovieService {
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
-        MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
+        MovieInfoDetails movieInfoDetails = integrationMapper.mapToMovieInfoDetails(movie);
         movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
 

@@ -2,7 +2,7 @@ package com.alaa.MoviesApp.filters;
 
 import com.alaa.MoviesApp.context.LoggedInUserContext;
 import com.alaa.MoviesApp.context.UserContextHolder;
-import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.securityconfiguration.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class UserContextFilter extends OncePerRequestFilter {
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return request.getServletPath().startsWith("/auth/login");
     }
 
@@ -34,12 +34,11 @@ public class UserContextFilter extends OncePerRequestFilter {
         try {
             if (authentication != null
                     && authentication.isAuthenticated()
-                    && authentication.getPrincipal() instanceof User loggedInUser){ //check and create
+                    && authentication.getPrincipal() instanceof CustomUserDetails loggedInUser){ //check and create
                 LoggedInUserContext context = LoggedInUserContext.builder()
                         .userId(loggedInUser.getId())
                         .userName(loggedInUser.getUsername())
-                        .role(loggedInUser.getRole().getRoleName())
-                        .type(loggedInUser.getType())
+                        .role(loggedInUser.getRole())
                         .email(loggedInUser.getEmail())
                         .build();
 
