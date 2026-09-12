@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.utils;
+package com.alaa.MoviesApp.utils;
 
-import com.alaa.moviesapp.service.SystemPropertyService;
+import com.alaa.MoviesApp.service.SystemPropertyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

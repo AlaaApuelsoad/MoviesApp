@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.configuration;
+package com.alaa.MoviesApp.configuration;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;

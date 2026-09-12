@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.repository;
+package com.alaa.MoviesApp.repository;
 
-import com.alaa.moviesapp.model.User;
+import com.alaa.MoviesApp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String adminUserName);
 
     @Transactional
-    @Query("SELECT u FROM User u WHERE u.username = :userIdentifier OR u.email = :userIdentifier")
+    @Query(value = "SELECT * FROM users u WHERE u.username = :userIdentifier OR u.email = :userIdentifier",
+            nativeQuery = true)
     Optional<User> findByUsernameOrEmail(@Param("userIdentifier") String userIdentifier);
 
     @Transactional

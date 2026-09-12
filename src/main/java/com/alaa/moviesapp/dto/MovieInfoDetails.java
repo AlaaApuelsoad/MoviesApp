@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.dto;
+package com.alaa.MoviesApp.dto;
 
-import com.alaa.moviesapp.model.Rating;
+import com.alaa.MoviesApp.model.Rating;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Lob;
@@ -11,10 +11,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
-
-/*
-Movie Information Details shown when a user click on a movie
- */
 
 @Getter
 @Setter

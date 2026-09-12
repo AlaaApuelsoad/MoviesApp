@@ -1,7 +1,6 @@
-package com.alaa.moviesapp.service;
-
-import com.alaa.moviesapp.model.Role;
-import com.alaa.moviesapp.repository.RoleRepository;
+package com.alaa.MoviesApp.service;
+import com.alaa.MoviesApp.model.Role;
+import com.alaa.MoviesApp.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

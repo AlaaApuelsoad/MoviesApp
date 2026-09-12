@@ -1,13 +1,13 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.AuthResponse;
-import com.alaa.moviesapp.dto.LoginRequest;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.enums.UserTypes;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.model.User;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.AuthResponse;
+import com.alaa.MoviesApp.dto.LoginRequest;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.enums.UserTypes;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

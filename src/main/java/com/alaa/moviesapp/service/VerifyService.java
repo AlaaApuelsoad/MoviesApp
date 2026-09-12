@@ -1,12 +1,12 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.listener.UserRegisterEvent;
-import com.alaa.moviesapp.model.User;
-import com.alaa.moviesapp.repository.UserRepository;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
-import com.alaa.moviesapp.utils.SystemUtils;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.listener.UserRegisterEvent;
+import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.repository.UserRepository;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.utils.SystemUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

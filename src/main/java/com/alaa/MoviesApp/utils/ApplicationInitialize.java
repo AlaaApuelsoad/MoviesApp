@@ -1,8 +1,11 @@
-package com.alaa.moviesapp.utils;
+package com.alaa.MoviesApp.utils;
 
-import com.alaa.moviesapp.model.Role;
-import com.alaa.moviesapp.model.User;
-import com.alaa.moviesapp.service.RoleService;
+import com.alaa.MoviesApp.enums.UserTypes;
+import com.alaa.MoviesApp.model.Role;
+import com.alaa.MoviesApp.model.User;
+import com.alaa.MoviesApp.repository.UserRepository;
+import com.alaa.MoviesApp.service.RoleService;
+import com.alaa.MoviesApp.service.SystemPropertyService;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -23,8 +26,8 @@ public class ApplicationInitialize implements ApplicationRunner {
 
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final com.alaa.moviesapp.repository.UserRepository userRepository;
-    private final com.alaa.moviesapp.service.SystemPropertyService systemPropertyService;
+    private final UserRepository userRepository;
+    private final SystemPropertyService systemPropertyService;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationInitialize.class);
 
     @Override
@@ -45,7 +48,7 @@ public class ApplicationInitialize implements ApplicationRunner {
                     .email(systemPropertyService.getProperty("app.admin.email"))
                     .isVerified(true)
                     .isDeleted(false)
-                    .type("admin")
+                    .type(UserTypes.ADMIN.getType())
                     .saltPassword(saltPass)
                     .role(role)
                     .build();

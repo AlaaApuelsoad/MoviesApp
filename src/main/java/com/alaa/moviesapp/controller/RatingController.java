@@ -1,8 +1,8 @@
-package com.alaa.moviesapp.controller;
+package com.alaa.MoviesApp.controller;
 
-import com.alaa.moviesapp.constants.Navigation;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.service.RatingService;
+import com.alaa.MoviesApp.constants.Navigation;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

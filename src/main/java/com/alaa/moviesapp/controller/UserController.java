@@ -1,11 +1,11 @@
-package com.alaa.moviesapp.controller;
+package com.alaa.MoviesApp.controller;
 
-import com.alaa.moviesapp.constants.Navigation;
-import com.alaa.moviesapp.dto.*;
-import com.alaa.moviesapp.dto.UserRegisterDto;
-import com.alaa.moviesapp.dto.UserRegisterResponse;
-import com.alaa.moviesapp.service.UserService;
-import com.alaa.moviesapp.service.VerifyService;
+import com.alaa.MoviesApp.constants.Navigation;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.UserRegisterDto;
+import com.alaa.MoviesApp.dto.UserRegisterResponse;
+import com.alaa.MoviesApp.service.UserService;
+import com.alaa.MoviesApp.service.VerifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

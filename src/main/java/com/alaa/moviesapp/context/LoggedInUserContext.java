@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.context;
+package com.alaa.MoviesApp.context;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +17,5 @@ public class LoggedInUserContext {
     private String userName;
     private String email;
     private String role;
-    private String type;
 
 }

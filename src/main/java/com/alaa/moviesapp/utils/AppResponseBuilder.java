@@ -1,10 +1,10 @@
-package com.alaa.moviesapp.utils;
+package com.alaa.MoviesApp.utils;
 
-import com.alaa.moviesapp.constants.AppConstant;
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.MetaData;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.service.MessageService;
+import com.alaa.MoviesApp.constants.AppConstant;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.MetaData;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.service.MessageService;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
@@ -22,11 +22,11 @@ public final class AppResponseBuilder {
         AppResponseBuilder.messageService = messageService;
     }
 
-    public static <T> AppResponse<T> success(T data, HttpStatus status, String message,Object ...args) {
+    public static <T> AppResponse<T> success(T data, HttpStatus status, String message, Object ...args) {
         return buildResponse(true, data, null, status, null, null,message,args);
     }
 
-    public static <T> AppResponse<T> success(T data,MetaData metaData, HttpStatus status, String message, Object ...args) {
+    public static <T> AppResponse<T> success(T data, MetaData metaData, HttpStatus status, String message, Object ...args) {
         return buildResponse(true, data, metaData, status, null, null,message,args);
     }
 

@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.context;
+package com.alaa.MoviesApp.context;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

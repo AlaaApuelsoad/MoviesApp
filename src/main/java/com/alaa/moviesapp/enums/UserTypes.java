@@ -1,4 +1,4 @@
-package com.alaa.moviesapp.enums;
+package com.alaa.MoviesApp.enums;
 
 import lombok.Getter;
 

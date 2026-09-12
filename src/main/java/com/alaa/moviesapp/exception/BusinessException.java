@@ -1,6 +1,6 @@
-package com.alaa.moviesapp.exception;
+package com.alaa.MoviesApp.exception;
 
-import com.alaa.moviesapp.enums.ErrorCode;
+import com.alaa.MoviesApp.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter

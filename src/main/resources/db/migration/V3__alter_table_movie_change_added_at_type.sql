@@ -1,0 +1,3 @@
+ALTER TABLE movie
+ALTER COLUMN added_at TYPE DATE
+USING added_at::DATE;

@@ -1,8 +1,7 @@
-package com.alaa.moviesapp.enums;
+package com.alaa.MoviesApp.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor

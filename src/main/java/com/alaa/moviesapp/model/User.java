@@ -1,18 +1,12 @@
-package com.alaa.moviesapp.model;
+package com.alaa.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.jspecify.annotations.NullMarked;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -22,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User extends AuditEntity implements UserDetails, Serializable {
+public class User extends AuditEntity implements Serializable {
 
 
     @Id
@@ -71,11 +65,4 @@ public class User extends AuditEntity implements UserDetails, Serializable {
     @JsonManagedReference("userRatingReference")
     private List<MemberRating> memberRatings;
 
-    @Override
-    @NullMarked
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(
-                new SimpleGrantedAuthority(role.getRoleName())
-        );
-    }
 }

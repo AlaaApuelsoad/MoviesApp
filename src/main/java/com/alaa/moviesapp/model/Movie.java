@@ -1,11 +1,11 @@
-package com.alaa.moviesapp.model;
+package com.alaa.MoviesApp.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -76,7 +76,7 @@ public class Movie extends AuditEntity{
 
     @Column(name = "added_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private Instant addedAt;
+    private LocalDate addedAt;
 
     private boolean isDeleted = false;
 

@@ -1,18 +1,19 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.MetaData;
-import com.alaa.moviesapp.dto.MovieInfoDetails;
-import com.alaa.moviesapp.enums.EntityString;
-import com.alaa.moviesapp.enums.ErrorCode;
-import com.alaa.moviesapp.exception.BusinessException;
-import com.alaa.moviesapp.mapper.OmdbMovieMapper;
-import com.alaa.moviesapp.mapper.PaginationMetaDataMapper;
-import com.alaa.moviesapp.model.Movie;
-import com.alaa.moviesapp.repository.MemberRatingRepository;
-import com.alaa.moviesapp.repository.MovieRepository;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
-import com.alaa.moviesapp.utils.SystemUtils;
+import com.alaa.MoviesApp.context.UserContextHolder;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.MetaData;
+import com.alaa.MoviesApp.dto.MovieInfoDetails;
+import com.alaa.MoviesApp.enums.EntityString;
+import com.alaa.MoviesApp.enums.ErrorCode;
+import com.alaa.MoviesApp.exception.BusinessException;
+import com.alaa.MoviesApp.mapper.IntegrationMapper;
+import com.alaa.MoviesApp.mapper.PaginationMetaDataMapper;
+import com.alaa.MoviesApp.model.Movie;
+import com.alaa.MoviesApp.repository.MemberRatingRepository;
+import com.alaa.MoviesApp.repository.MovieRepository;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.utils.SystemUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,12 +30,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
-    public final IntegrationService integrationService;
-    private final MovieRepository movieRepository;
-    private final OmdbMovieMapper omdbMovieMapper;
-    private final MemberRatingRepository memberRatingRepository;
-    private final UserService userService;
     private final SystemUtils systemUtils;
+    private final MovieRepository movieRepository;
+    private final IntegrationMapper integrationMapper;
+    public final IntegrationService integrationService;
+    private final MemberRatingRepository memberRatingRepository;
 
 
     @Transactional
@@ -44,7 +44,7 @@ public class MovieService {
         }
 
         String movieResponse = integrationService.getMovieByImdbId(imdbId);
-        Movie movie = omdbMovieMapper.mapToMovie(movieResponse);
+        Movie movie = integrationMapper.mapToMovie(movieResponse);
         Movie savedMovie = movieRepository.save(movie);
         return AppResponseBuilder.success(savedMovie,HttpStatus.CREATED,"entity.created.success",
                 EntityString.MOVIE.getName());
@@ -59,6 +59,7 @@ public class MovieService {
             throw new BusinessException(ErrorCode.ALREADY_DELETED);
         }
 
+//        movie.setDeletedById(Objects.requireNonNull(UserContextHolder.getLoggedInUserContext().getUserId()));
         movie.setDeleted(true);
         movie.setDeletedAt(ZonedDateTime.now(ZoneOffset.UTC).toInstant());
         movieRepository.save(movie);
@@ -73,8 +74,8 @@ public class MovieService {
         Movie movie = movieRepository.getMovieByImdbId(imdbId).orElseThrow(
                 () -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND)
         );
-        MovieInfoDetails movieInfoDetails = omdbMovieMapper.mapToMovieInfoDetails(movie);
-//        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
+        MovieInfoDetails movieInfoDetails = integrationMapper.mapToMovieInfoDetails(movie);
+        movieInfoDetails.setMemberRating(getMemberRatingForMovie(imdbId));
         movieInfoDetails.setAverageRating(movie.getAverageRating());
 
         return AppResponseBuilder.success(movieInfoDetails, "generic.get.success");
@@ -97,10 +98,9 @@ public class MovieService {
         return AppResponseBuilder.success(movies.getContent(),metaData,"generic.get.success");
     }
 
-//    public int getMemberRatingForMovie(String imdbId) {
-//        String username = Objects.requireNonNull(User.getCredentials()).getUsername();
-//        User user = userService.getUser(username);
-//        Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId, user.getId());
-//        return rating != null ? rating : 0;
-//    }
+    public int getMemberRatingForMovie(String imdbId) {
+        Long userId = UserContextHolder.getLoggedInUserContext().getUserId();
+        Integer rating = memberRatingRepository.getMemberRatingForAMovie(imdbId,userId);
+        return rating != null ? rating : 0;
+    }
 }

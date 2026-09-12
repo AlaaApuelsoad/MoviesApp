@@ -1,9 +1,9 @@
-package com.alaa.moviesapp.service;
+package com.alaa.MoviesApp.service;
 
-import com.alaa.moviesapp.dto.AppResponse;
-import com.alaa.moviesapp.dto.IntegrationSearch;
-import com.alaa.moviesapp.mapper.OmdbMovieMapper;
-import com.alaa.moviesapp.utils.AppResponseBuilder;
+import com.alaa.MoviesApp.dto.AppResponse;
+import com.alaa.MoviesApp.dto.IntegrationSearch;
+import com.alaa.MoviesApp.mapper.IntegrationMapper;
+import com.alaa.MoviesApp.utils.AppResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +14,7 @@ import tools.jackson.core.JacksonException;
 public class IntegrationService {
 
     private final RestTemplate restTemplate;
-    private final OmdbMovieMapper omdbMovieMapper;
+    private final IntegrationMapper integrationMapper;
     private final SystemPropertyService systemPropertyService;
 
     public AppResponse<IntegrationSearch> searchMovies(String title, int pageNumber) throws JacksonException {
@@ -23,7 +23,7 @@ public class IntegrationService {
                 + "&s=" + title
                 + "&page=" + pageNumber;
         String response = restTemplate.getForObject(url, String.class);
-        IntegrationSearch integrationSearch = omdbMovieMapper.mapSearchResponse(response);
+        IntegrationSearch integrationSearch = integrationMapper.mapSearchResponse(response);
 
         return AppResponseBuilder.success(integrationSearch, "generic.get.success");
     }
