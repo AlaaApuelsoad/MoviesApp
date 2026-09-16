@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Component
@@ -16,6 +18,11 @@ public class SystemUtils {
 
     public static String generateUUIDCode(){
         return UUID.randomUUID().toString();
+    }
+
+    public static String generateCorrelationId() {
+        String dateStr = LocalDateTime.now(ZoneOffset.UTC).toString();
+        return UUID.randomUUID() + "_" + dateStr;
     }
 
     public Pageable buildPageableObj(Integer pageNumber) {

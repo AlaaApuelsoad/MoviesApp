@@ -59,8 +59,8 @@ public class MovieService {
             throw new BusinessException(ErrorCode.ALREADY_DELETED);
         }
 
-//        movie.setDeletedById(Objects.requireNonNull(UserContextHolder.getLoggedInUserContext().getUserId()));
         movie.setDeleted(true);
+        movie.setDeletedById(UserContextHolder.getLoggedInUserContext().getUserId());
         movie.setDeletedAt(ZonedDateTime.now(ZoneOffset.UTC).toInstant());
         movieRepository.save(movie);
         return AppResponseBuilder.success(null, HttpStatus.NO_CONTENT,

@@ -26,7 +26,7 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
         String correlationId = request.getHeader(AppConstant.X_CORRELATION_ID);
 
         if (correlationId == null || correlationId.isBlank()) {
-            correlationId = SystemUtils.generateUUIDCode();
+            correlationId = SystemUtils.generateCorrelationId();
         }
 
         try {
