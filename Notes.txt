@@ -1,0 +1,56 @@
+Since your application.properties contain:
+
+spring.datasource.password=${DB_PASSWORD}
+
+you provide DB_PASSWORD when starting the container.
+
+Simple example
+docker run -p 8080:8080 -e DB_PASSWORD="your_password" movies-app:1.0
+
+Spring Boot will see:
+
+DB_PASSWORD=your_password
+
+and resolve:
+
+spring.datasource.password=${DB_PASSWORD}
+
+to:
+
+spring.datasource.password=your_password
+If you have multiple environment variables
+
+For example:
+
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+Run:
+
+docker run -p 8080:8080 \
+  -e DB_URL="jdbc:postgresql://host.docker.internal:5432/movies" \
+  -e DB_USERNAME="postgres" \
+  -e DB_PASSWORD="your_password" \
+  movies-app:1.0
+
+On Windows PowerShell:
+
+docker run `
+  -p 8080:8080 `
+  -e DB_URL="jdbc:postgresql://host.docker.internal:5432/movies" `
+  -e DB_USERNAME="postgres" `
+  -e DB_PASSWORD="your_password" `
+  movies-app:1.0
+Better: use an .env file
+
+Create:
+
+.env
+DB_URL=jdbc:postgresql://host.docker.internal:5432/movies
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+
+Then:
+
+docker run --env-file .env -p 8080:8080 movies-app:1.0
