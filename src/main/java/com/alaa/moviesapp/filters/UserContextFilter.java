@@ -1,5 +1,6 @@
 package com.alaa.MoviesApp.filters;
 
+import com.alaa.MoviesApp.constants.AppConstant;
 import com.alaa.MoviesApp.context.LoggedInUserContext;
 import com.alaa.MoviesApp.context.UserContextHolder;
 import com.alaa.MoviesApp.securityconfiguration.CustomUserDetails;
@@ -30,6 +31,7 @@ public class UserContextFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userAgent = request.getHeader(AppConstant.USER_AGENT);
 
         try {
             if (authentication != null
@@ -40,6 +42,7 @@ public class UserContextFilter extends OncePerRequestFilter {
                         .userName(loggedInUser.getUsername())
                         .role(loggedInUser.getRole())
                         .email(loggedInUser.getEmail())
+                        .userAgent(userAgent)
                         .build();
 
                 UserContextHolder.setLoggedInUserContext(context);

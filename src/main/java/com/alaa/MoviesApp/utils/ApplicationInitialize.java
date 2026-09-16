@@ -25,9 +25,9 @@ import org.springframework.stereotype.Component;
 public class ApplicationInitialize implements ApplicationRunner {
 
     private final RoleService roleService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final SystemPropertyService systemPropertyService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationInitialize.class);
 
     @Override
